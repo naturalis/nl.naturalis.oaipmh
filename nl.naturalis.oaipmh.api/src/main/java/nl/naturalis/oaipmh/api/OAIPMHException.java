@@ -1,20 +1,21 @@
-package nl.naturalis.oaipmh;
+package nl.naturalis.oaipmh.api;
+
+import static nl.naturalis.oaipmh.api.ObjectFactories.oaiFactory;
 
 import java.util.Arrays;
 import java.util.List;
-
-import nl.naturalis.oaipmh.rest.OAIPMHResource;
 
 import org.openarchives.oai._2.OAIPMHerrorType;
 import org.openarchives.oai._2.OAIPMHerrorcodeType;
 
 /**
- * An {@code OAIPMHException} is thrown in response to an error condition explicitly
- * mentioned by the OAI-PMH specs. These error conditions do not result in abnormal
- * responses. The server still responds with HTTP 200 (OK), and the response body still
- * contains valid OAI-PMH XML.
+ * An {@code OAIPMHException} is thrown in response to an error condition
+ * explicitly mentioned by the OAI-PMH specs. These error conditions do not
+ * result in abnormal responses. The server still responds with HTTP 200 (OK),
+ * and the response body still contains valid OAI-PMH XML.
  * 
- * @see http://www.openarchives.org/OAI/openarchivesprotocol.html#ErrorConditions
+ * @see http
+ *      ://www.openarchives.org/OAI/openarchivesprotocol.html#ErrorConditions
  * 
  * @author Ayco Holleman
  *
@@ -24,7 +25,7 @@ public class OAIPMHException extends Exception {
 
 	public static OAIPMHerrorType createError(OAIPMHerrorcodeType code, String message)
 	{
-		OAIPMHerrorType error = OAIPMHResource.OAI_FACTORY.createOAIPMHerrorType();
+		OAIPMHerrorType error = oaiFactory.createOAIPMHerrorType();
 		error.setCode(code);
 		error.setValue(message);
 		return error;

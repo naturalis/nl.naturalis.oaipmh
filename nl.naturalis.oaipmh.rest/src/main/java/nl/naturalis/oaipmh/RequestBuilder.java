@@ -1,13 +1,13 @@
 package nl.naturalis.oaipmh;
 
-import static nl.naturalis.oaipmh.Argument.FROM;
-import static nl.naturalis.oaipmh.Argument.IDENTIFIER;
-import static nl.naturalis.oaipmh.Argument.METADATA_PREFIX;
-import static nl.naturalis.oaipmh.Argument.RESUMPTION_TOKEN;
-import static nl.naturalis.oaipmh.Argument.SET;
-import static nl.naturalis.oaipmh.Argument.UNTIL;
-import static nl.naturalis.oaipmh.Argument.VERB;
-import static nl.naturalis.oaipmh.OAIPMHException.createError;
+import static nl.naturalis.oaipmh.api.Argument.FROM;
+import static nl.naturalis.oaipmh.api.Argument.IDENTIFIER;
+import static nl.naturalis.oaipmh.api.Argument.METADATA_PREFIX;
+import static nl.naturalis.oaipmh.api.Argument.RESUMPTION_TOKEN;
+import static nl.naturalis.oaipmh.api.Argument.SET;
+import static nl.naturalis.oaipmh.api.Argument.UNTIL;
+import static nl.naturalis.oaipmh.api.Argument.VERB;
+import static nl.naturalis.oaipmh.api.OAIPMHException.createError;
 import static org.openarchives.oai._2.OAIPMHerrorcodeType.BAD_ARGUMENT;
 import static org.openarchives.oai._2.OAIPMHerrorcodeType.BAD_RESUMPTION_TOKEN;
 import static org.openarchives.oai._2.OAIPMHerrorcodeType.BAD_VERB;
@@ -22,6 +22,8 @@ import java.util.Set;
 
 import javax.ws.rs.core.UriInfo;
 
+import nl.naturalis.oaipmh.api.Argument;
+import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.rest.OAIPMHResource;
 
 import org.domainobject.util.CollectionUtil;

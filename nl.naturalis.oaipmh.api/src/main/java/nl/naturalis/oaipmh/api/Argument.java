@@ -1,4 +1,4 @@
-package nl.naturalis.oaipmh;
+package nl.naturalis.oaipmh.api;
 
 import static org.openarchives.oai._2.VerbType.GET_RECORD;
 import static org.openarchives.oai._2.VerbType.IDENTIFY;

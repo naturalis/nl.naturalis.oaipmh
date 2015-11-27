@@ -1,7 +1,7 @@
 package nl.naturalis.oaipmh.rest;
 
-import static nl.naturalis.oaipmh.Argument.FROM;
-import static nl.naturalis.oaipmh.Argument.UNTIL;
+import static nl.naturalis.oaipmh.api.Argument.FROM;
+import static nl.naturalis.oaipmh.api.Argument.UNTIL;
 
 import java.io.InputStream;
 import java.util.GregorianCalendar;
@@ -20,13 +20,13 @@ import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import nl.naturalis.oaipmh.Argument;
-import nl.naturalis.oaipmh.OAIPMHRequest;
 import nl.naturalis.oaipmh.RepositoryFactory;
 import nl.naturalis.oaipmh.RequestBuilder;
 import nl.naturalis.oaipmh.RequestContext;
-import nl.naturalis.oaipmh.ResourceException;
-import nl.naturalis.oaipmh.IRepository;
+import nl.naturalis.oaipmh.api.Argument;
+import nl.naturalis.oaipmh.api.IRepository;
+import nl.naturalis.oaipmh.api.OAIPMHRequest;
+import nl.naturalis.oaipmh.api.RepositoryException;
 
 import org.domainobject.util.StringUtil;
 import org.openarchives.oai._2.OAIPMHtype;
@@ -75,7 +75,7 @@ public class OAIPMHResource {
 		try {
 			IRepository repo = RepositoryFactory.getInstance().create(repository);
 		}
-		catch (ResourceException e) {
+		catch (RepositoryException e) {
 
 		}
 		catch (Throwable t) {

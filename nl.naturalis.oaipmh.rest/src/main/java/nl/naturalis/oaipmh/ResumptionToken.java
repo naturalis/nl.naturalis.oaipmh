@@ -2,9 +2,12 @@ package nl.naturalis.oaipmh;
 
 import java.util.Date;
 
+import nl.naturalis.oaipmh.api.Argument;
+import nl.naturalis.oaipmh.api.OAIPMHRequest;
+
 import org.domainobject.util.ArrayUtil;
 
-import static nl.naturalis.oaipmh.Argument.*;
+import static nl.naturalis.oaipmh.api.Argument.*;
 
 /**
  * Class used to create and decompose OAI-PMH resumption tokens.
@@ -18,7 +21,7 @@ public class ResumptionToken implements IResumptionToken {
 	 * Since all parts of the resumption token have been converted to
 	 * hexadecimal strings, we can use "g" as a delimiter.
 	 */
-	private static final String DELIMITER = "^^^";
+	private static final String DELIMITER = "^|^";
 	private static final int FROM_PART = 0;
 	private static final int UNTIL_PART = 1;
 	private static final int SET_PART = 2;

@@ -1,7 +1,9 @@
 package nl.naturalis.oaipmh;
 
+import nl.naturalis.oaipmh.api.RepositoryException;
+
 @SuppressWarnings("serial")
-public class RepositoryInitializationException extends ResourceException {
+public class RepositoryInitializationException extends RepositoryException {
 
 	public RepositoryInitializationException(String message)
 	{

@@ -1,4 +1,4 @@
-package nl.naturalis.oaipmh;
+package nl.naturalis.oaipmh.api;
 
 import java.util.Date;
 

@@ -2,6 +2,8 @@ package nl.naturalis.oaipmh;
 
 import java.util.HashMap;
 
+import nl.naturalis.oaipmh.api.IRepository;
+
 import org.domainobject.util.ConfigObject;
 
 public class RepositoryFactory {

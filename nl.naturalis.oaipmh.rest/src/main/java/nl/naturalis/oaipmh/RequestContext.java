@@ -3,6 +3,8 @@ package nl.naturalis.oaipmh;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.naturalis.oaipmh.api.OAIPMHRequest;
+
 import org.openarchives.oai._2.OAIPMHerrorType;
 
 public class RequestContext {
