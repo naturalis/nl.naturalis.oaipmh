@@ -1,22 +1,27 @@
-package nl.naturalis.oaipmh;
+package nl.naturalis.oaipmh.api.util;
+
+import static nl.naturalis.oaipmh.api.Argument.FROM;
+import static nl.naturalis.oaipmh.api.Argument.UNTIL;
 
 import java.util.Date;
 
 import nl.naturalis.oaipmh.api.Argument;
 import nl.naturalis.oaipmh.api.BadResumptionTokenException;
+import nl.naturalis.oaipmh.api.IResumptionTokenReader;
+import nl.naturalis.oaipmh.api.IResumptionTokenWriter;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 
 import org.domainobject.util.ArrayUtil;
 
-import static nl.naturalis.oaipmh.api.Argument.*;
-
 /**
- * Class used to create and decompose OAI-PMH resumption tokens.
+ * An implementation of {@link IResumptionTokenReader} and
+ * {@link IResumptionTokenWriter} that is propably suitable for most
+ * {@link _Repository repository} implementations.
  * 
  * @author Ayco Holleman
  *
  */
-public class ResumptionToken implements IResumptionToken {
+public class ResumptionToken implements IResumptionTokenReader, IResumptionTokenWriter {
 
 	/*
 	 * Since all parts of the resumption token have been converted to
@@ -34,9 +39,18 @@ public class ResumptionToken implements IResumptionToken {
 	}
 
 	@Override
-	public void decompose(String token, OAIPMHRequest request) throws BadResumptionTokenException
+	public OAIPMHRequest read(String resumptionToken) throws BadResumptionTokenException
 	{
-		String[] slices = token.split(DELIMITER);
+		OAIPMHRequest request = new OAIPMHRequest();
+		request.setResumptionToken(resumptionToken);
+		read(request);
+		return request;
+	}
+
+	@Override
+	public void read(OAIPMHRequest request) throws BadResumptionTokenException
+	{
+		String[] slices = request.getResumptionToken().split(DELIMITER);
 		if (slices.length != 5)
 			throw new BadResumptionTokenException();
 		request.setFrom(parseDate(FROM, slices[FROM_PART]));
@@ -57,7 +71,7 @@ public class ResumptionToken implements IResumptionToken {
 	}
 
 	@Override
-	public String compose(OAIPMHRequest request)
+	public String write(OAIPMHRequest request)
 	{
 		String[] parts = new String[5];
 		parts[PAGE_PART] = Integer.toHexString(request.getPage() + 1);

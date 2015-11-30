@@ -3,8 +3,6 @@ package nl.naturalis.oaipmh.api;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openarchives.oai._2.OAIPMHerrorType;
-
 /**
  * An {@code OAIPMHException} is thrown in response to an error condition
  * explicitly mentioned by the OAI-PMH specs. These error conditions do not
@@ -36,12 +34,23 @@ public class OAIPMHException extends Exception {
 	}
 
 	/**
-	 * Returns the OAI-PMH errors captured by this instance.
+	 * Returns the errors captured by this instance.
 	 * 
 	 * @return
 	 */
 	public List<OAIPMHError> getErrors()
 	{
 		return errors;
+	}
+
+	/**
+	 * Returns the first error captured by this instance. Convenient if you
+	 * <i>know</i> it is the only error captured by this instance.
+	 * 
+	 * @return
+	 */
+	public OAIPMHError getError()
+	{
+		return errors.get(0);
 	}
 }

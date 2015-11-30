@@ -25,8 +25,10 @@ import nl.naturalis.oaipmh.api.Argument;
 import nl.naturalis.oaipmh.api.BadArgumentError;
 import nl.naturalis.oaipmh.api.BadResumptionTokenException;
 import nl.naturalis.oaipmh.api.BadVerbError;
+import nl.naturalis.oaipmh.api.IResumptionTokenReader;
 import nl.naturalis.oaipmh.api.OAIPMHError;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
+import nl.naturalis.oaipmh.api.util.ResumptionToken;
 
 import org.domainobject.util.CollectionUtil;
 import org.openarchives.oai._2.OAIPMHerrorType;
@@ -46,7 +48,7 @@ public class RequestBuilder {
 	private List<OAIPMHError> errors;
 
 	// TODO Retrieve & inject from outside somehow
-	private IResumptionToken resToken = new ResumptionToken();
+	private IResumptionTokenReader resToken = new ResumptionToken();
 
 	private RequestBuilder()
 	{
@@ -194,7 +196,6 @@ public class RequestBuilder {
 
 	private void processResumptionToken()
 	{
-		String token = getArg(RESUMPTION_TOKEN);
 		if (request.getResumptionToken() != null) {
 			String fmt = "resumptionToken argument cannot be combined with %s argument";
 			if (request.getFrom() != null)
@@ -209,7 +210,7 @@ public class RequestBuilder {
 				errors.add(new BadArgumentError(String.format(fmt, IDENTIFIER)));
 			if (errors.size() == 0) {
 				try {
-					resToken.decompose(token, request);
+					resToken.read(request);
 				}
 				catch (BadResumptionTokenException e) {
 					errors.add(e.getErrors().get(0));
