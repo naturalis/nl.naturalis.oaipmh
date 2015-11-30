@@ -1,18 +1,17 @@
 package nl.naturalis.oaipmh.api;
 
-import static nl.naturalis.oaipmh.api.ObjectFactories.oaiFactory;
-
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openarchives.oai._2.OAIPMHerrorType;
-import org.openarchives.oai._2.OAIPMHerrorcodeType;
 
 /**
  * An {@code OAIPMHException} is thrown in response to an error condition
  * explicitly mentioned by the OAI-PMH specs. These error conditions do not
- * result in abnormal responses. The server still responds with HTTP 200 (OK),
- * and the response body still contains valid OAI-PMH XML.
+ * result in abnormal HTTP responses. The server still responds with HTTP 200
+ * (OK), and the response body still contains valid OAI-PMH XML. Error
+ * conditions not explicitly mentioned in the specs should result in a
+ * {@link RepositoryException}.
  * 
  * @see http
  *      ://www.openarchives.org/OAI/openarchivesprotocol.html#ErrorConditions
@@ -23,32 +22,25 @@ import org.openarchives.oai._2.OAIPMHerrorcodeType;
 @SuppressWarnings("serial")
 public class OAIPMHException extends Exception {
 
-	public static OAIPMHerrorType createError(OAIPMHerrorcodeType code, String message)
+	private final List<OAIPMHError> errors;
+
+	public OAIPMHException(OAIPMHError error)
 	{
-		OAIPMHerrorType error = oaiFactory.createOAIPMHerrorType();
-		error.setCode(code);
-		error.setValue(message);
-		return error;
+		errors = new ArrayList<OAIPMHError>(1);
+		errors.add(error);
 	}
 
-	private List<OAIPMHerrorType> errors;
-
-	public OAIPMHException(OAIPMHerrorcodeType code, String message)
-	{
-		this(createError(code, message));
-	}
-
-	public OAIPMHException(OAIPMHerrorType error)
-	{
-		errors = Arrays.asList(error);
-	}
-
-	public OAIPMHException(List<OAIPMHerrorType> errors)
+	public OAIPMHException(List<OAIPMHError> errors)
 	{
 		this.errors = errors;
 	}
 
-	public List<OAIPMHerrorType> getErrors()
+	/**
+	 * Returns the OAI-PMH errors captured by this instance.
+	 * 
+	 * @return
+	 */
+	public List<OAIPMHError> getErrors()
 	{
 		return errors;
 	}

@@ -1,5 +1,11 @@
-package nl.naturalis.oaipmh.api;
+package nl.naturalis.oaipmh.api.util;
 
+/**
+ * Provides JAXB object factories.
+ * 
+ * @author Ayco Holleman
+ *
+ */
 public class ObjectFactories {
 
 	public static final org.openarchives.oai._2.ObjectFactory oaiFactory;

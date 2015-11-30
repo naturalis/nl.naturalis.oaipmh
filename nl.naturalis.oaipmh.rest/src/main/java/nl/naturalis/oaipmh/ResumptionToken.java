@@ -3,6 +3,7 @@ package nl.naturalis.oaipmh;
 import java.util.Date;
 
 import nl.naturalis.oaipmh.api.Argument;
+import nl.naturalis.oaipmh.api.BadResumptionTokenException;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 
 import org.domainobject.util.ArrayUtil;

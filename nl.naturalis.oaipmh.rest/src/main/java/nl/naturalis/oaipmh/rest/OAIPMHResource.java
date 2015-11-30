@@ -22,11 +22,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import nl.naturalis.oaipmh.RepositoryFactory;
 import nl.naturalis.oaipmh.RequestBuilder;
-import nl.naturalis.oaipmh.RequestContext;
 import nl.naturalis.oaipmh.api.Argument;
 import nl.naturalis.oaipmh.api.IRepository;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.RepositoryException;
+import nl.naturalis.oaipmh.api.util.ObjectFactories;
 
 import org.domainobject.util.StringUtil;
 import org.openarchives.oai._2.OAIPMHtype;
@@ -38,19 +38,7 @@ import org.slf4j.LoggerFactory;
 public class OAIPMHResource {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger;
-
-	// JAXB object factories
-	public static final org.openarchives.oai._2.ObjectFactory OAI_FACTORY;
-	public static final org.openarchives.oai._2_0.oai_dc.ObjectFactory OAI_DC_FACTORY;
-	public static final org.purl.dc.elements._1.ObjectFactory DC_FACTORY;
-
-	static {
-		logger = LoggerFactory.getLogger(OAIPMHResource.class);
-		OAI_FACTORY = new org.openarchives.oai._2.ObjectFactory();
-		OAI_DC_FACTORY = new org.openarchives.oai._2_0.oai_dc.ObjectFactory();
-		DC_FACTORY = new org.purl.dc.elements._1.ObjectFactory();
-	}
+	private static final Logger logger = LoggerFactory.getLogger(OAIPMHResource.class);
 
 	@Context
 	private HttpServletRequest request;
@@ -65,10 +53,10 @@ public class OAIPMHResource {
 	@Path("/{repo}")
 	public Response handleRequest(@PathParam("repo") String repository)
 	{
-		RequestBuilder rb = RequestBuilder.newInstance();
-		oaiRequest = rb.build(uriInfo);
-		if (rb.getErrors().size() != 0) {
-			responseBody.getError().addAll(rb.getErrors());
+		RequestBuilder requestBuilder = RequestBuilder.newInstance();
+		oaiRequest = requestBuilder.build(uriInfo);
+		if (requestBuilder.getErrors().size() != 0) {
+			responseBody.getError().addAll(requestBuilder.getErrors());
 			return RestUtil.jaxbResponse(responseBody);
 		}
 		responseBody = createResponseSkeleton();
@@ -99,7 +87,7 @@ public class OAIPMHResource {
 
 	private OAIPMHtype createResponseSkeleton()
 	{
-		OAIPMHtype response = OAI_FACTORY.createOAIPMHtype();
+		OAIPMHtype response = ObjectFactories.oaiFactory.createOAIPMHtype();
 		response.setResponseDate(newXMLGregorianCalendar());
 		response.setRequest(echoRequest());
 		return response;
@@ -107,7 +95,7 @@ public class OAIPMHResource {
 
 	private RequestType echoRequest()
 	{
-		RequestType echo = OAI_FACTORY.createRequestType();
+		RequestType echo = ObjectFactories.oaiFactory.createRequestType();
 		String requestUrl = uriInfo.getAbsolutePath().toString();
 		echo.setValue(requestUrl);
 		echo.setVerb(oaiRequest.getVerb());

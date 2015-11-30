@@ -7,13 +7,12 @@ import static nl.naturalis.oaipmh.api.Argument.RESUMPTION_TOKEN;
 import static nl.naturalis.oaipmh.api.Argument.SET;
 import static nl.naturalis.oaipmh.api.Argument.UNTIL;
 import static nl.naturalis.oaipmh.api.Argument.VERB;
-import static nl.naturalis.oaipmh.api.OAIPMHException.createError;
-import static org.openarchives.oai._2.OAIPMHerrorcodeType.BAD_ARGUMENT;
-import static org.openarchives.oai._2.OAIPMHerrorcodeType.BAD_RESUMPTION_TOKEN;
-import static org.openarchives.oai._2.OAIPMHerrorcodeType.BAD_VERB;
+import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateFormat;
+import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateFormatter;
+import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormat;
+import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormatter;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -23,39 +22,17 @@ import java.util.Set;
 import javax.ws.rs.core.UriInfo;
 
 import nl.naturalis.oaipmh.api.Argument;
+import nl.naturalis.oaipmh.api.BadArgumentError;
+import nl.naturalis.oaipmh.api.BadResumptionTokenException;
+import nl.naturalis.oaipmh.api.BadVerbError;
+import nl.naturalis.oaipmh.api.OAIPMHError;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
-import nl.naturalis.oaipmh.rest.OAIPMHResource;
 
 import org.domainobject.util.CollectionUtil;
 import org.openarchives.oai._2.OAIPMHerrorType;
 import org.openarchives.oai._2.VerbType;
 
 public class RequestBuilder {
-
-	/**
-	 * Datetime pattern used for the XML response and possibly also by clients
-	 * in the request URL.
-	 */
-	public static final String OAI_DATETIME_PATTERN;
-	/**
-	 * Formats dates according to {@link #OAI_DATETIME_PATTERN}.
-	 */
-	public static final SimpleDateFormat oaiDateTimeFormatter;
-	/**
-	 * Datetime pattern possibly used by clients in the request URL.
-	 */
-	public static final String OAI_DATE_PATTERN;
-	/**
-	 * Formats dates according to {@link #OAI_DATE_PATTERN}.
-	 */
-	public static final SimpleDateFormat oaiDateFormatter;
-
-	static {
-		OAI_DATETIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-		OAI_DATE_PATTERN = "yyyy-MM-dd";
-		oaiDateTimeFormatter = new SimpleDateFormat(OAI_DATETIME_PATTERN);
-		oaiDateFormatter = new SimpleDateFormat(OAI_DATE_PATTERN);
-	}
 
 	public static RequestBuilder newInstance()
 	{
@@ -66,7 +43,7 @@ public class RequestBuilder {
 
 	private UriInfo uriInfo;
 	private OAIPMHRequest request;
-	private List<OAIPMHerrorType> errors;
+	private List<OAIPMHError> errors;
 
 	// TODO Retrieve & inject from outside somehow
 	private IResumptionToken resToken = new ResumptionToken();
@@ -80,6 +57,7 @@ public class RequestBuilder {
 		this.uriInfo = uriInfo;
 		this.request = new OAIPMHRequest();
 		this.errors = new ArrayList<>();
+		request.setRequestUri(uriInfo.getAbsolutePath());
 		request.setMetadataPrefix(getArg(METADATA_PREFIX));
 		request.setIdentifier(getArg(IDENTIFIER));
 		request.setSet(getArg(SET));
@@ -95,14 +73,17 @@ public class RequestBuilder {
 
 	public List<OAIPMHerrorType> getErrors()
 	{
-		return errors;
+		List<OAIPMHerrorType> result = new ArrayList<>(errors.size());
+		for (OAIPMHError error : errors)
+			result.add(error.toXML());
+		return result;
 	}
 
 	private void setVerb()
 	{
 		String arg = getArg(VERB);
 		if (arg == null) {
-			errors.add(createError(BAD_VERB, "Missing verb"));
+			errors.add(new BadVerbError());
 		}
 		else {
 			try {
@@ -110,7 +91,7 @@ public class RequestBuilder {
 				request.setVerb(verb);
 			}
 			catch (IllegalArgumentException e) {
-				errors.add(createError(BAD_VERB, "Bad verb: " + arg));
+				errors.add(new BadVerbError(arg));
 			}
 		}
 	}
@@ -120,23 +101,43 @@ public class RequestBuilder {
 		String arg = getArg(FROM);
 		if (arg == null)
 			return;
-		Date from = parseDate(arg);
-		if (from == null)
-			errors.add(badDate(arg));
-		else
-			request.setFrom(from);
+		try {
+			Date date = dateTimeFormatter.parse(arg);
+			request.setFrom(date);
+			request.setDateFormatFrom(dateTimeFormat);
+		}
+		catch (ParseException e) {
+			try {
+				Date date = dateFormatter.parse(arg);
+				request.setFrom(date);
+				request.setDateFormatFrom(dateFormat);
+			}
+			catch (ParseException e2) {
+				errors.add(badDate(arg));
+			}
+		}
 	}
 
 	private void setUntil()
 	{
-		String arg = getArg(UNTIL);
+		String arg = getArg(FROM);
 		if (arg == null)
 			return;
-		Date until = parseDate(arg);
-		if (until == null)
-			errors.add(badDate(arg));
-		else
-			request.setUntil(until);
+		try {
+			Date date = dateTimeFormatter.parse(arg);
+			request.setUntil(date);
+			request.setDateFormatUntil(dateTimeFormat);
+		}
+		catch (ParseException e) {
+			try {
+				Date date = dateFormatter.parse(arg);
+				request.setUntil(date);
+				request.setDateFormatUntil(dateFormat);
+			}
+			catch (ParseException e2) {
+				errors.add(badDate(arg));
+			}
+		}
 	}
 
 	/*
@@ -151,17 +152,17 @@ public class RequestBuilder {
 			Argument arg = Argument.parse(param);
 			if (arg == null) {
 				String msg = "Illegal argument: " + param;
-				errors.add(createError(BAD_ARGUMENT, msg));
+				errors.add(new BadArgumentError(msg));
 			}
 			else {
 				List<String> values = uriInfo.getQueryParameters().get(param);
 				if (values == null || values.size() == 0) {
 					String msg = "Empty argument: " + param;
-					errors.add(createError(BAD_ARGUMENT, msg));
+					errors.add(new BadArgumentError(msg));
 				}
 				else if (values.size() != 1) {
 					String msg = "Duplicate argument: " + param;
-					errors.add(createError(BAD_ARGUMENT, msg));
+					errors.add(new BadArgumentError(msg));
 				}
 				if (arg != VERB) {
 					args.add(arg);
@@ -169,7 +170,7 @@ public class RequestBuilder {
 					if (verb != null && !arg.isOptional(verb)) {
 						String fmt = "Argument %s not allowed for verb %s";
 						String msg = String.format(fmt, arg, verb.value());
-						errors.add(createError(BAD_ARGUMENT, msg));
+						errors.add(new BadArgumentError(msg));
 					}
 				}
 			}
@@ -187,7 +188,7 @@ public class RequestBuilder {
 		if (required.size() != 0) {
 			String missing = CollectionUtil.implode(required);
 			String msg = "Missing required argument(s): " + missing;
-			errors.add(createError(BAD_ARGUMENT, msg));
+			errors.add(new BadArgumentError(msg));
 		}
 	}
 
@@ -197,21 +198,21 @@ public class RequestBuilder {
 		if (request.getResumptionToken() != null) {
 			String fmt = "resumptionToken argument cannot be combined with %s argument";
 			if (request.getFrom() != null)
-				errors.add(createError(BAD_ARGUMENT, String.format(fmt, FROM)));
+				errors.add(new BadArgumentError(String.format(fmt, FROM)));
 			if (request.getUntil() != null)
-				errors.add(createError(BAD_ARGUMENT, String.format(fmt, UNTIL)));
+				errors.add(new BadArgumentError(String.format(fmt, UNTIL)));
 			if (request.getMetadataPrefix() != null)
-				errors.add(createError(BAD_ARGUMENT, String.format(fmt, METADATA_PREFIX)));
+				errors.add(new BadArgumentError(String.format(fmt, METADATA_PREFIX)));
 			if (request.getSet() != null)
-				errors.add(createError(BAD_ARGUMENT, String.format(fmt, SET)));
+				errors.add(new BadArgumentError(String.format(fmt, SET)));
 			if (request.getIdentifier() != null)
-				errors.add(createError(BAD_ARGUMENT, String.format(fmt, IDENTIFIER)));
+				errors.add(new BadArgumentError(String.format(fmt, IDENTIFIER)));
 			if (errors.size() == 0) {
 				try {
 					resToken.decompose(token, request);
 				}
 				catch (BadResumptionTokenException e) {
-					errors.add(createError(BAD_RESUMPTION_TOKEN, e.getMessage()));
+					errors.add(e.getErrors().get(0));
 				}
 			}
 		}
@@ -225,29 +226,11 @@ public class RequestBuilder {
 		return s;
 	}
 
-	private static Date parseDate(String value)
+	private static OAIPMHError badDate(String param)
 	{
-		try {
-			return oaiDateTimeFormatter.parse(value);
-		}
-		catch (ParseException e) {
-			try {
-				return oaiDateFormatter.parse(value);
-			}
-			catch (ParseException e2) {
-				return null;
-			}
-		}
-	}
-
-	private static OAIPMHerrorType badDate(String param)
-	{
-		OAIPMHerrorType error = OAIPMHResource.OAI_FACTORY.createOAIPMHerrorType();
-		String fmt = "Bad format for parameter \"%s\" (must be either \"%s\" or \"%s\")";
-		String msg = String.format(fmt, OAI_DATETIME_PATTERN, OAI_DATE_PATTERN);
-		error.setCode(BAD_ARGUMENT);
-		error.setValue(msg);
-		return error;
+		String fmt = "Invalid or illegal date format for parameter \"%s\" (must be either \"%s\" or \"%s\")";
+		String msg = String.format(fmt, dateTimeFormat, dateFormat);
+		return new BadArgumentError(msg);
 	}
 
 }

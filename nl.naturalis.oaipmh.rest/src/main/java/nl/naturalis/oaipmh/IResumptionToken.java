@@ -1,5 +1,6 @@
 package nl.naturalis.oaipmh;
 
+import nl.naturalis.oaipmh.api.BadResumptionTokenException;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 
 public interface IResumptionToken {
