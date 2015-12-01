@@ -4,7 +4,7 @@ import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
 /**
- * JAX-RS framework plumbing.
+ * JAX-RS framework plumbing class.
  * 
  * @author Ayco Holleman
  *

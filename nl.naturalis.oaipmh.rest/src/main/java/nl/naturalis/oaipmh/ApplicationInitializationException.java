@@ -1,8 +1,8 @@
 package nl.naturalis.oaipmh;
 
 /**
- * Exception thrown if anything goes wrong while configuring and initializing the
- * application.
+ * Exception thrown if anything goes wrong while configuring and initializing
+ * REST service.
  * 
  * @see Registry
  * 

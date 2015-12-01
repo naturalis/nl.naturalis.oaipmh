@@ -9,6 +9,12 @@ import javax.ws.rs.core.Response;
 import org.domainobject.util.debug.BeanPrinter;
 import static org.domainobject.util.ExceptionUtil.*;
 
+/**
+ * Provides common functionality for the REST service.
+ * 
+ * @author Ayco Holleman
+ *
+ */
 public class RESTUtil {
 
 	private RESTUtil()

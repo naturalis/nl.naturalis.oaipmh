@@ -8,17 +8,19 @@ import org.domainobject.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class responsible for configuring the REST service and handing out various
+ * types of objects to interested classes.
+ * 
+ * @author Ayco Holleman
+ *
+ */
 public class Registry {
 
-	public static void main(String[] args)
-	{
-		System.out.println(Registry.class.getResource(""));
-	}
-
 	/*
-	 * System property that tells us where the configuration directory (containing
-	 * purl.properties) is. When using Wildfly, this system property is probably set in
-	 * standalone.xml
+	 * System property that tells us where the configuration directory
+	 * (containing purl.properties) is. When using Wildfly, this system property
+	 * is probably set in standalone.xml
 	 */
 	private static final String SYSPROP_CONFIG_DIR = "nl.naturalis.oaipmh.conf.dir";
 	/*
@@ -30,6 +32,14 @@ public class Registry {
 
 	private static Registry instance;
 
+	/**
+	 * Instantiates and initializes a {@code Registry} instance. This method
+	 * must be called before handling any PURL request. If anything goes wrong
+	 * while initializing the {@code Registry}, an
+	 * {@link ApplicationInitializationException} is thrown, causing the PURL
+	 * server to die during startup. An explanation of what went wrong is
+	 * written to the Wildfly log (standalone/log/server.log).
+	 */
 	public static void initialize()
 	{
 		if (instance == null) {
@@ -37,6 +47,12 @@ public class Registry {
 		}
 	}
 
+	/**
+	 * Returns a {@code Registry} instance. Will call {@link #initialize()}
+	 * first.
+	 * 
+	 * @return A {@code Registry} instance.
+	 */
 	public static Registry getInstance()
 	{
 		initialize();
@@ -53,7 +69,8 @@ public class Registry {
 	}
 
 	/**
-	 * Get a {@link ConfigObject} for the main configuration file (purl.properties).
+	 * Get a {@link ConfigObject} for the main configuration file
+	 * (oaipmh-rest.properties).
 	 * 
 	 * @return
 	 */
@@ -63,9 +80,9 @@ public class Registry {
 	}
 
 	/**
-	 * Get the directory designated to contain the application's configuration files. This
-	 * directory will contain at least purl.properties, but may contain additional files
-	 * that the application expects to be there.
+	 * Get the directory designated to contain the application's configuration
+	 * files. This directory will contain at least purl.properties, but may
+	 * contain additional files that the application expects to be there.
 	 * 
 	 * @return
 	 */
