@@ -4,6 +4,13 @@ import static org.openarchives.oai._2.OAIPMHerrorcodeType.CANNOT_DISSEMINATE_FOR
 
 import org.openarchives.oai._2.OAIPMHerrorType;
 
+/**
+ * Narrows the JAXB {@OAIPMHerrorType} class to one for
+ * CannotDisseminateFormat errors.
+ * 
+ * @author Ayco Holleman
+ *
+ */
 public class CannotDisseminateFormatError extends OAIPMHerrorType {
 
 	public CannotDisseminateFormatError(String metadataPrefix)

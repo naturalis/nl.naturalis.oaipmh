@@ -4,6 +4,13 @@ import static org.openarchives.oai._2.OAIPMHerrorcodeType.ID_DOES_NOT_EXIST;
 
 import org.openarchives.oai._2.OAIPMHerrorType;
 
+/**
+ * Narrows the JAXB {@OAIPMHerrorType} class to one for
+ * IdDoesNotExist errors.
+ * 
+ * @author Ayco Holleman
+ *
+ */
 public class IdDoesNotExistError extends OAIPMHerrorType {
 
 	public IdDoesNotExistError(String id)

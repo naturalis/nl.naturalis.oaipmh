@@ -4,7 +4,6 @@ import java.util.List;
 
 import nl.naturalis.oaipmh.api.util.ResumptionToken;
 
-import org.openarchives.oai._2.AboutType;
 import org.openarchives.oai._2.GetRecordType;
 import org.openarchives.oai._2.IdentifyType;
 import org.openarchives.oai._2.ListIdentifiersType;
@@ -14,13 +13,13 @@ import org.openarchives.oai._2.ListSetsType;
 import org.openarchives.oai._2.OAIPMHerrorType;
 
 /**
- * Life-cycle interface for OAI-PMH service requests. For each request the REST
- * layer cycles through the following calls against the repository:
+ * Life-cycle interface for OAI-PMH service requests. For each OAI-PMH request
+ * the REST layer cycles through the following calls against the repository:
  * <ol>
  * <li>If it is one of the ListXXX requests (e.g. ListRecords), call
  * {@link #getResumptionTokenParser()} to decompose the resumption token into
  * its constituent parts.
- * <li>Call one of the five protocol request implementations (depending on the
+ * <li>Call one of the six protocol request implementations (depending on the
  * value of the verb parameter).
  * <li>If it is one of the ListXXX requests, call
  * {@link #getResumptionTokenWriter()} to generate a resumption token for the
