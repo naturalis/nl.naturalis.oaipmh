@@ -25,8 +25,8 @@ import nl.naturalis.oaipmh.api.Argument;
 import nl.naturalis.oaipmh.api.BadArgumentError;
 import nl.naturalis.oaipmh.api.BadResumptionTokenException;
 import nl.naturalis.oaipmh.api.BadVerbError;
-import nl.naturalis.oaipmh.api.IResumptionTokenReader;
-import nl.naturalis.oaipmh.api.OAIPMHError;
+import nl.naturalis.oaipmh.api.IRepository;
+import nl.naturalis.oaipmh.api.IResumptionTokenParser;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.util.ResumptionToken;
 
@@ -34,26 +34,57 @@ import org.domainobject.util.CollectionUtil;
 import org.openarchives.oai._2.OAIPMHerrorType;
 import org.openarchives.oai._2.VerbType;
 
+/**
+ * Builds {@link OAIPMHRequest} objects from HTTP URLs.
+ * 
+ * @author Ayco Holleman
+ *
+ */
 public class RequestBuilder {
 
+	/*
+	 * This currently just returns a new instance, but in the future we might
+	 * want to retrieve configuration data just before creating the first
+	 * instance.
+	 */
 	public static RequestBuilder newInstance()
 	{
-		// TODO Load config data once, e.g. specifying the _ResumptionToken impl
-		// class
 		return new RequestBuilder();
 	}
 
 	private UriInfo uriInfo;
 	private OAIPMHRequest request;
-	private List<OAIPMHError> errors;
+	private List<OAIPMHerrorType> errors;
 
-	// TODO Retrieve & inject from outside somehow
-	private IResumptionTokenReader resToken = new ResumptionToken();
+	private IResumptionTokenParser rtParser;
 
 	private RequestBuilder()
 	{
 	}
 
+	/**
+	 * Sets the resumption token parser used to decompose the resumptionToken
+	 * query parameter (if any). You would ordinarily retrieve the parser from
+	 * an {@link IRepository} implementation. If this method is not called
+	 * before calling {@link #build(UriInfo)}, the {@link ResumptionToken
+	 * default parser} is used.
+	 * 
+	 * @param parser
+	 * @return
+	 */
+	public RequestBuilder setResumptionTokenParser(IResumptionTokenParser parser)
+	{
+		this.rtParser = parser;
+		return this;
+	}
+
+	/**
+	 * Build the {@code OAIPMHRequest} from the specified {@link UriInfo}
+	 * object.
+	 * 
+	 * @param uriInfo
+	 * @return
+	 */
 	public OAIPMHRequest build(UriInfo uriInfo)
 	{
 		this.uriInfo = uriInfo;
@@ -73,12 +104,15 @@ public class RequestBuilder {
 		return request;
 	}
 
+	/**
+	 * Return the errors encountered while building the {@code OAIPMHRequest}
+	 * object.
+	 * 
+	 * @return
+	 */
 	public List<OAIPMHerrorType> getErrors()
 	{
-		List<OAIPMHerrorType> result = new ArrayList<>(errors.size());
-		for (OAIPMHError error : errors)
-			result.add(error.toXML());
-		return result;
+		return errors;
 	}
 
 	private void setVerb()
@@ -210,7 +244,9 @@ public class RequestBuilder {
 				errors.add(new BadArgumentError(String.format(fmt, IDENTIFIER)));
 			if (errors.size() == 0) {
 				try {
-					resToken.read(request);
+					if (rtParser == null)
+						rtParser = new ResumptionToken();
+					rtParser.decompose(request);
 				}
 				catch (BadResumptionTokenException e) {
 					errors.add(e.getErrors().get(0));
@@ -227,7 +263,7 @@ public class RequestBuilder {
 		return s;
 	}
 
-	private static OAIPMHError badDate(String param)
+	private static OAIPMHerrorType badDate(String param)
 	{
 		String fmt = "Invalid or illegal date format for parameter \"%s\" (must be either \"%s\" or \"%s\")";
 		String msg = String.format(fmt, dateTimeFormat, dateFormat);

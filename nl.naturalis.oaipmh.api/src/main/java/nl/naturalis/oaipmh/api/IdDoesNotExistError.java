@@ -1,12 +1,16 @@
 package nl.naturalis.oaipmh.api;
 
-import static org.openarchives.oai._2.OAIPMHerrorcodeType.*;
+import static org.openarchives.oai._2.OAIPMHerrorcodeType.ID_DOES_NOT_EXIST;
 
-public class IdDoesNotExistError extends OAIPMHError {
+import org.openarchives.oai._2.OAIPMHerrorType;
+
+public class IdDoesNotExistError extends OAIPMHerrorType {
 
 	public IdDoesNotExistError(String id)
 	{
-		super(ID_DOES_NOT_EXIST, "No such id: \"" + id + "\"");
+		super();
+		this.code = ID_DOES_NOT_EXIST;
+		this.value = "No such id: \"" + id + "\"";
 	}
 
 	public IdDoesNotExistError(OAIPMHRequest request)

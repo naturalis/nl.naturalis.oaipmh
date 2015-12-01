@@ -1,0 +1,30 @@
+package nl.naturalis.oaipmh.api;
+
+/**
+ * Interface defining the capacity to decompose a resumption token into its
+ * constitutent parts.
+ * 
+ * @author Ayco Holleman
+ *
+ */
+public interface IResumptionTokenParser {
+
+	/**
+	 * Decompose the specified resumption token into its constituent parts and
+	 * create a new {@link OAIPMHRequest} instance from them.
+	 * 
+	 * @param resumptionToken
+	 * @return
+	 */
+	OAIPMHRequest decompose(String resumptionToken) throws BadResumptionTokenException;
+
+	/**
+	 * Decompose the resumption token within the specified request object into
+	 * its constituent parts and use them to set the other properties in the
+	 * request object.
+	 * 
+	 * @param request
+	 */
+	void decompose(OAIPMHRequest request) throws BadResumptionTokenException;
+
+}

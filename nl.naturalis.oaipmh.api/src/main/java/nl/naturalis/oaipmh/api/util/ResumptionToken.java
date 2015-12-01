@@ -7,21 +7,21 @@ import java.util.Date;
 
 import nl.naturalis.oaipmh.api.Argument;
 import nl.naturalis.oaipmh.api.BadResumptionTokenException;
-import nl.naturalis.oaipmh.api.IResumptionTokenReader;
-import nl.naturalis.oaipmh.api.IResumptionTokenWriter;
+import nl.naturalis.oaipmh.api.IResumptionTokenParser;
+import nl.naturalis.oaipmh.api.IResumptionTokenGenerator;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 
 import org.domainobject.util.ArrayUtil;
 
 /**
- * An implementation of {@link IResumptionTokenReader} and
- * {@link IResumptionTokenWriter} that is propably suitable for most
+ * An implementation of {@link IResumptionTokenParser} and
+ * {@link IResumptionTokenGenerator} that is propably suitable for most
  * {@link _Repository repository} implementations.
  * 
  * @author Ayco Holleman
  *
  */
-public class ResumptionToken implements IResumptionTokenReader, IResumptionTokenWriter {
+public class ResumptionToken implements IResumptionTokenParser, IResumptionTokenGenerator {
 
 	/*
 	 * Since all parts of the resumption token have been converted to
@@ -39,16 +39,16 @@ public class ResumptionToken implements IResumptionTokenReader, IResumptionToken
 	}
 
 	@Override
-	public OAIPMHRequest read(String resumptionToken) throws BadResumptionTokenException
+	public OAIPMHRequest decompose(String resumptionToken) throws BadResumptionTokenException
 	{
 		OAIPMHRequest request = new OAIPMHRequest();
 		request.setResumptionToken(resumptionToken);
-		read(request);
+		decompose(request);
 		return request;
 	}
 
 	@Override
-	public void read(OAIPMHRequest request) throws BadResumptionTokenException
+	public void decompose(OAIPMHRequest request) throws BadResumptionTokenException
 	{
 		String[] slices = request.getResumptionToken().split(DELIMITER);
 		if (slices.length != 5)

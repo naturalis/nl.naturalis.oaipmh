@@ -2,16 +2,22 @@ package nl.naturalis.oaipmh.api;
 
 import static org.openarchives.oai._2.OAIPMHerrorcodeType.BAD_VERB;
 
-public class BadVerbError extends OAIPMHError {
+import org.openarchives.oai._2.OAIPMHerrorType;
+
+public class BadVerbError extends OAIPMHerrorType {
 
 	public BadVerbError(String verbArg)
 	{
-		super(BAD_VERB, "Bad verb: \"" + verbArg + "\"");
+		super();
+		this.code = BAD_VERB;
+		this.value = "Bad verb: \"" + verbArg + "\"";
 	}
 
 	public BadVerbError()
 	{
-		super(BAD_VERB, "Missing verb");
+		super();
+		this.code = BAD_VERB;
+		this.value = "Missing verb";
 	}
 
 }
