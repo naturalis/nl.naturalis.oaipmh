@@ -5,7 +5,7 @@ import static org.openarchives.oai._2.OAIPMHerrorcodeType.BAD_VERB;
 import org.openarchives.oai._2.OAIPMHerrorType;
 
 /**
- * Narrows the JAXB {@OAIPMHerrorType} class to one for
+ * Convenience class narrowing the JAXB {@code OAIPMHerrorType} class to one for
  * BadVerb errors.
  * 
  * @author Ayco Holleman

@@ -5,7 +5,7 @@ import static org.openarchives.oai._2.OAIPMHerrorcodeType.BAD_ARGUMENT;
 import org.openarchives.oai._2.OAIPMHerrorType;
 
 /**
- * Narrows the JAXB {@OAIPMHerrorType} class to one for
+ * Convenience class narrowing the JAXB {@code OAIPMHerrorType} class to one for
  * BadArgument errors.
  * 
  * @author Ayco Holleman

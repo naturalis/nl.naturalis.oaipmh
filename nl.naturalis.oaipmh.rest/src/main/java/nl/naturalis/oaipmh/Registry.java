@@ -9,8 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Class responsible for configuring the REST service and handing out various
- * types of objects to interested classes.
+ * Class responsible for configuring the REST service.
  * 
  * @author Ayco Holleman
  *
@@ -34,11 +33,11 @@ public class Registry {
 
 	/**
 	 * Instantiates and initializes a {@code Registry} instance. This method
-	 * must be called before handling any PURL request. If anything goes wrong
-	 * while initializing the {@code Registry}, an
-	 * {@link ApplicationInitializationException} is thrown, causing the PURL
-	 * server to die during startup. An explanation of what went wrong is
-	 * written to the Wildfly log (standalone/log/server.log).
+	 * must be called before servicing any request. If anything goes wrong while
+	 * initializing the {@code Registry}, an
+	 * {@link ApplicationInitializationException} is thrown and the application
+	 * dies already during startup. An explanation of what went wrong is written
+	 * to the Wildfly log (standalone/log/server.log).
 	 */
 	public static void initialize()
 	{

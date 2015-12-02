@@ -13,22 +13,24 @@ import org.openarchives.oai._2.ListSetsType;
 import org.openarchives.oai._2.OAIPMHerrorType;
 
 /**
- * Life-cycle interface defining the capacities of an OAI repository. For each
- * OAI-PMH request the REST layer cycles through the following calls against the
- * repository:
+ * Life-cycle interface defining the capacities of an OAI repository. This is
+ * the only interface that OAI repositories <b>must</b> implement, although they
+ * can optionally implement a few other interfaces (e.g.
+ * {@link IResumptionTokenParser}). For each OAI-PMH request the REST layer
+ * cycles through the following calls against the repository:
  * <ol>
  * <li>If it is one of the ListXXX requests (e.g. ListRecords), call
  * {@link #getResumptionTokenParser()} to decompose the resumption token into
  * its constituent parts.
  * <li>Call one of the six protocol request implementations (depending on the
- * value of the verb parameter).
+ * value of the {@link Argument verb argument}).
  * <li>If it is one of the ListXXX requests, call
  * {@link #getResumptionTokenWriter()} to generate a resumption token for the
  * next request.
  * <li>Call {@link #getErrors()} to generate the &lt;error&gt; elements.
  * </ol>
  * Besides implementing the interface methods, OAI repository implementations
- * <b>must</p> have a no-arg constructor.
+ * <b>must</b> have a no-arg constructor.
  * 
  * @author Ayco Holleman
  *

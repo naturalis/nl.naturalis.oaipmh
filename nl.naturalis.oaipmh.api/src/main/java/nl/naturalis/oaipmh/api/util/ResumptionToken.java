@@ -72,7 +72,7 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 	}
 
 	@Override
-	public String write(OAIPMHRequest request)
+	public String compose(OAIPMHRequest request)
 	{
 		String[] parts = new String[5];
 		parts[PAGE_PART] = Integer.toHexString(request.getCursor() + 1);
