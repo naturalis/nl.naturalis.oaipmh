@@ -71,10 +71,26 @@
 <!-- ========= END OF TOP NAVBAR ========= -->
 <div class="header">
 <h1 class="title">Naturalis OAI-PMH REST services framework</h1>
-<p>Java framework for hosting and exposing multiple OAI through a single REST service. New OAI repositories can be added
-simply by dropping the jar file containing the repository implementation into the web server's classpath. The REST service
-will automatically pick them up. Repository implementations can remain totally unaware of the REST service or the HTTP URL
-through which they are accessed. They only need a dependency on the nl.naturalis.oaipmh.api package</p>
+<p>
+Java framework for hosting and exposing multiple OAI repositories through a single REST service.
+New OAI repositories can be added simply by dropping the jar file containing the repository implementation
+into the web server's classpath. The REST service will automatically pick them up. Repository
+implementations can remain totally unaware of the REST service or the HTTP URL through which they are
+accessed. They only need a dependency on the nl.naturalis.oaipmh.api package.
+</p>
+<h2>Implementing an OAI repository</h2>
+To create an OAI repository and expose it through the REST service, you must create a Java library
+containing at least:
+<ol>
+<li>An implementation of <a href="../../../../index.html?nl/naturalis/oaipmh/api/IOAIRepository.html">IOAIRepository</a></li>
+<li>Provide a Java properties file called oai-repo.&lt;your-repo-name&gt;.properties. You can choose
+any repository name you like. If you choose "foo-repository", and the base URL of the REST
+service is http://example.com/home, then your repository can be accessed through
+http://example.com/home/foo-repository. The properties file must be on the web server's classpath
+(e.g. the src/main/resources directory of your library) and it must contain at least one property:
+repo.impl.class, specifying the fully qualified name of the class within your library that implements
+IOAIRepository.
+</ol>
 </div>
 <div class="contentContainer">
 <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Packages table, listing packages, and an explanation">
