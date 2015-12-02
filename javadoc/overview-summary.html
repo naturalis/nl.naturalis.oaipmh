@@ -83,10 +83,10 @@ To create an OAI repository and expose it through the REST service, you must cre
 containing at least:
 <ol>
 <li>An implementation of the <a href="http://naturalis.github.io/nl.naturalis.oaipmh/javadoc/nl/naturalis/oaipmh/api/IOAIRepository.html">IOAIRepository</a> interface</li>
-<li>A Java properties file called oai-repo.&lt;your-repo-name&gt;.properties. You can choose
-any repository name you like. If you choose the name "foo" for your OAI repository, and the base
-URL of the REST service is http://example.com/home, then your repository can be accessed through
-http://example.com/home/foo (e.g. http://example.com/home/foo/?verb=ListRecord&metadataPrefix=oai_dc).
+<li>A Java properties file called <code>oai-repo.&lt;your-repo-name&gt;.properties</code>. You can
+choose any repository name you like. If you choose the name "foo" for your OAI repository, and the base
+URL of the REST service is <code>http://example.com/home</code>, then your repository can be accessed at
+<code>http://example.com/home/foo</code> (e.g. <code>http://example.com/home/foo/?verb=ListRecord&metadataPrefix=oai_dc</code>).
 The properties file must be on the web server's classpath (e.g. the src/main/resources directory of
 your library) and it must contain at least one property: repo.impl.class, specifying the fully
 qualified name of the class within your library that implements the IOAIRepository interface.
