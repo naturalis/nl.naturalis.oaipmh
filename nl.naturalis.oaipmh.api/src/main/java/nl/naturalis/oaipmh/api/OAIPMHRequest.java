@@ -8,19 +8,21 @@ import nl.naturalis.oaipmh.api.util.OAIPMHUtil;
 import org.openarchives.oai._2.VerbType;
 
 /**
- * Class modeling an OAI-PMH request. Besides the OAI-PMH verb and the 6 OAI-PMH
- * arguments (metadataPrefix, identifier, from, until, set, resumptionToken),
- * this class provides the following extra information:
+ * Standard Java bean modeling an OAI-PMH request. Instances of this class are
+ * the only objects crossing the border from the REST layer to the
+ * {@link IOAIRepository OAI repository}. The REST layer creates them, the OAI
+ * repository reads them. Besides the 6 OAI-PMH &#34;arguments&#34; (verb,
+ * metadataPrefix, identifier, from, until, set, resumptionToken), this class
+ * provides the following extra information:
  * <ol>
- * <li>{@code page} - The requested page number when paging through large data
- * sets using resumption token.
- * <li>{@code requestUri} - A URI instance wrapping the original HTTP request
- * URL.
- * <li>{@code dateFormatFrom} - The date format used for the from argument. This
- * will be either {@link OAIPMHUtil#dateTimeFormat} or
+ * <li>{@code cursor} - Record offset in the result set being served (used when
+ * paging through large data sets using resumption tokens).
+ * <li>{@code requestUri} - The original HTTP request URL.
+ * <li>{@code dateFormatFrom} - The date format used by the client for the from
+ * argument. This will be either {@link OAIPMHUtil#dateTimeFormat} or
  * {@link OAIPMHUtil#dateFormat}.
- * <li>{@code dateFormatUntil} - The date format used for the until argument.
- * This will be either {@link OAIPMHUtil#dateTimeFormat} or
+ * <li>{@code dateFormatUntil} - The date format used by the client for the
+ * until argument. This will be either {@link OAIPMHUtil#dateTimeFormat} or
  * {@link OAIPMHUtil#dateFormat}.
  * </ol>
  * 
@@ -36,7 +38,7 @@ public class OAIPMHRequest {
 	private Date until;
 	private String set;
 	private String resumptionToken;
-	private int page;
+	private int cursor;
 	private URI requestUri;
 	private String dateFormatFrom;
 	private String dateFormatUntil;
@@ -111,14 +113,14 @@ public class OAIPMHRequest {
 		this.resumptionToken = resumptionToken;
 	}
 
-	public int getPage()
+	public int getCursor()
 	{
-		return page;
+		return cursor;
 	}
 
-	public void setPage(int page)
+	public void setCursor(int cursor)
 	{
-		this.page = page;
+		this.cursor = cursor;
 	}
 
 	public URI getRequestUri()

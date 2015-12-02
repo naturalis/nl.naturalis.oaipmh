@@ -7,6 +7,7 @@ import java.util.Date;
 
 import nl.naturalis.oaipmh.api.Argument;
 import nl.naturalis.oaipmh.api.BadResumptionTokenException;
+import nl.naturalis.oaipmh.api.IOAIRepository;
 import nl.naturalis.oaipmh.api.IResumptionTokenParser;
 import nl.naturalis.oaipmh.api.IResumptionTokenGenerator;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
@@ -16,7 +17,7 @@ import org.domainobject.util.ArrayUtil;
 /**
  * An implementation of {@link IResumptionTokenParser} and
  * {@link IResumptionTokenGenerator} that is propably suitable for most
- * {@link _Repository repository} implementations.
+ * {@link IOAIRepository} implementations.
  * 
  * @author Ayco Holleman
  *
@@ -61,7 +62,7 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 			request.setSet(slices[METADATA_PREFIX_PART]);
 		try {
 			int page = Integer.parseInt(slices[PAGE_PART], 16);
-			request.setPage(page);
+			request.setCursor(page);
 		}
 		catch (NumberFormatException e) {
 			String fmt = "Failed to extract page from resumption token (bad number: \"%s\")";
@@ -74,7 +75,7 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 	public String write(OAIPMHRequest request)
 	{
 		String[] parts = new String[5];
-		parts[PAGE_PART] = Integer.toHexString(request.getPage() + 1);
+		parts[PAGE_PART] = Integer.toHexString(request.getCursor() + 1);
 		if (request.getFrom() != null)
 			parts[FROM_PART] = Long.toHexString(request.getFrom().getTime());
 		if (request.getUntil() != null)

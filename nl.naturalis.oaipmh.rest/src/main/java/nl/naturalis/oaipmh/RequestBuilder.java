@@ -25,7 +25,7 @@ import nl.naturalis.oaipmh.api.Argument;
 import nl.naturalis.oaipmh.api.BadArgumentError;
 import nl.naturalis.oaipmh.api.BadResumptionTokenException;
 import nl.naturalis.oaipmh.api.BadVerbError;
-import nl.naturalis.oaipmh.api.IRepository;
+import nl.naturalis.oaipmh.api.IOAIRepository;
 import nl.naturalis.oaipmh.api.IResumptionTokenParser;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.util.ResumptionToken;
@@ -65,7 +65,7 @@ public class RequestBuilder {
 	/**
 	 * Sets the resumption token parser used to decompose the resumptionToken
 	 * query parameter (if any). You would ordinarily retrieve the parser from
-	 * an {@link IRepository} implementation. If this method is not called
+	 * an {@link IOAIRepository} implementation. If this method is not called
 	 * before calling {@link #build(UriInfo)}, the {@link ResumptionToken
 	 * default parser} is used.
 	 * 

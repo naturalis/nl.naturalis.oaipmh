@@ -1,12 +1,11 @@
 package nl.naturalis.oaipmh;
 
+import nl.naturalis.oaipmh.api.IOAIRepository;
 import nl.naturalis.oaipmh.api.RepositoryException;
 
 /**
- * Exception thrown if anything goes wrong while configuring and initializing
- * the REST layer.
- * 
- * @see Registry
+ * Exception thrown if anything goes wrong while configuring and initializing an
+ * {@link IOAIRepository OAI repository}.
  * 
  * @author Ayco Holleman
  *

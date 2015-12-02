@@ -14,9 +14,10 @@ import java.util.Set;
 import org.openarchives.oai._2.VerbType;
 
 /**
- * An enumeration of the 6 OAI-PMH arguments. Note that, of these 6 arguments, the verb
- * argument actually is rather more like the name of the function being called than a
- * function argument.
+ * An enumeration of the seven URL query parameters allowed in a OAI-PMH
+ * request. These are called &#34;arguments&#34; in the OAI-PMH specifications.
+ * Note that, of these 7 arguments, the verb argument actually is more like the
+ * name of the function being called than a function argument.
  * 
  * @author Ayco Holleman
  *
@@ -53,7 +54,8 @@ public enum Argument {
 	}
 
 	/**
-	 * Returns the enum constant corresponding to the specified HTTP request parameter.
+	 * Returns the enum constant corresponding to the specified HTTP request
+	 * parameter.
 	 * 
 	 * @param param
 	 * @return
@@ -86,7 +88,8 @@ public enum Argument {
 	}
 
 	/**
-	 * Whether or not this argument is an optional argument for the specified verb.
+	 * Whether or not this argument is an optional argument for the specified
+	 * verb.
 	 * 
 	 * @param verb
 	 * @return
@@ -97,7 +100,8 @@ public enum Argument {
 	}
 
 	/**
-	 * Returns the name of the HTTP request parameter used to specify the argument.
+	 * Returns the name of the HTTP request parameter used to specify the
+	 * argument.
 	 * 
 	 * @return
 	 */
@@ -107,7 +111,8 @@ public enum Argument {
 	}
 
 	/**
-	 * Returns the name of the HTTP request parameter used to specify the argument.
+	 * Returns the name of the HTTP request parameter used to specify the
+	 * argument.
 	 * 
 	 * @return
 	 */

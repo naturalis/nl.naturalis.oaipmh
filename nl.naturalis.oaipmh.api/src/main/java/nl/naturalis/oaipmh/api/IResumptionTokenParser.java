@@ -1,8 +1,14 @@
 package nl.naturalis.oaipmh.api;
 
+import nl.naturalis.oaipmh.api.util.ResumptionToken;
+
 /**
  * Interface defining the capacity to decompose a resumption token into its
- * constitutent parts.
+ * constitutent parts. Repositories that have special ways of paging through
+ * large result sets can implement this interface and return an instance of it
+ * in their implementation of {@link IOAIRepository#getResumptionTokenParser()}.
+ * This instance will then be used to decompose the resumption token. Otherwise
+ * the REST layer will use the {@link ResumptionToken default implementation}.
  * 
  * @author Ayco Holleman
  *

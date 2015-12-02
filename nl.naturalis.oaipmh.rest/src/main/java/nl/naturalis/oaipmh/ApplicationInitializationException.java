@@ -2,7 +2,7 @@ package nl.naturalis.oaipmh;
 
 /**
  * Exception thrown if anything goes wrong while configuring and initializing
- * REST service.
+ * the REST service.
  * 
  * @see Registry
  * 

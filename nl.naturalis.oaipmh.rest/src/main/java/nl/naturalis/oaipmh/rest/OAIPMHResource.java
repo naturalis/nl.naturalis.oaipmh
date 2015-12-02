@@ -23,7 +23,7 @@ import javax.ws.rs.core.UriInfo;
 
 import nl.naturalis.oaipmh.RepositoryFactory;
 import nl.naturalis.oaipmh.RequestBuilder;
-import nl.naturalis.oaipmh.api.IRepository;
+import nl.naturalis.oaipmh.api.IOAIRepository;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.RepositoryException;
 
@@ -36,7 +36,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * REST resource for all OAI-PMH requests.
+ * REST resource handling all OAI-PMH requests for all OAI repositories. Each
+ * OAI repository is accessed through a sub-resource of this REST resource. In
+ * other words, if the base URL of this REST service is http://example.com/home,
+ * then http://example.com/home/repo1 will access the repo1 repository and
+ * http://example.com/home/repo2 will access the repo2 repository.
  * 
  * @author Ayco Holleman
  *
@@ -64,7 +68,7 @@ public class OAIPMHResource {
 	public Response handleRequest(@PathParam("repo") String repoName)
 	{
 		try {
-			IRepository repo = RepositoryFactory.getInstance().create(repoName);
+			IOAIRepository repo = RepositoryFactory.getInstance().create(repoName);
 			RequestBuilder requestBuilder = RequestBuilder.newInstance();
 			requestBuilder.setResumptionTokenParser(repo.getResumptionTokenParser());
 			OAIPMHRequest oaiRequest = requestBuilder.build(uriInfo);
@@ -84,7 +88,7 @@ public class OAIPMHResource {
 		}
 	}
 
-	private static void setPayload(OAIPMHtype response, OAIPMHRequest request, IRepository repo)
+	private static void setPayload(OAIPMHtype response, OAIPMHRequest request, IOAIRepository repo)
 			throws RepositoryException
 	{
 		VerbType verb = request.getVerb();
