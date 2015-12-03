@@ -1,4 +1,5 @@
-package nl.naturalis.oaipmh;
+package nl.naturalis.oaipmh.rest;
+
 
 /**
  * Exception thrown if anything goes wrong while configuring and initializing

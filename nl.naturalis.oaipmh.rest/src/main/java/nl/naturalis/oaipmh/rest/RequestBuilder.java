@@ -1,4 +1,4 @@
-package nl.naturalis.oaipmh;
+package nl.naturalis.oaipmh.rest;
 
 import static nl.naturalis.oaipmh.api.Argument.FROM;
 import static nl.naturalis.oaipmh.api.Argument.IDENTIFIER;

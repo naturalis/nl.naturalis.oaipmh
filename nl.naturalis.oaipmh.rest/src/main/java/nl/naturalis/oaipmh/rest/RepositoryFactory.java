@@ -1,11 +1,10 @@
-package nl.naturalis.oaipmh;
+package nl.naturalis.oaipmh.rest;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
 
 import nl.naturalis.oaipmh.api.IOAIRepository;
-import nl.naturalis.oaipmh.rest.OAIPMHResource;
 
 import org.domainobject.util.ConfigObject;
 

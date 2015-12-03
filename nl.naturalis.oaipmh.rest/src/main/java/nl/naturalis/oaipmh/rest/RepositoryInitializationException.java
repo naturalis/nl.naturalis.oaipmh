@@ -1,4 +1,4 @@
-package nl.naturalis.oaipmh;
+package nl.naturalis.oaipmh.rest;
 
 import nl.naturalis.oaipmh.api.IOAIRepository;
 import nl.naturalis.oaipmh.api.RepositoryException;

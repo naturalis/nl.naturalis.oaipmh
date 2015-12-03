@@ -1,4 +1,4 @@
-package nl.naturalis.oaipmh;
+package nl.naturalis.oaipmh.rest;
 
 import java.io.File;
 import java.io.IOException;

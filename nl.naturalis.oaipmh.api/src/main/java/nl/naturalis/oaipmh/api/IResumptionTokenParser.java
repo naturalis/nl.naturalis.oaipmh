@@ -26,7 +26,7 @@ public interface IResumptionTokenParser {
 
 	/**
 	 * Decompose the resumption token within the specified request object into
-	 * its constituent parts and use them to set the other properties in the
+	 * its constituent parts and use these to set the other properties in the
 	 * request object.
 	 * 
 	 * @param request

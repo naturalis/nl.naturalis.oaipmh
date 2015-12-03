@@ -21,8 +21,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import nl.naturalis.oaipmh.RepositoryFactory;
-import nl.naturalis.oaipmh.RequestBuilder;
 import nl.naturalis.oaipmh.api.IOAIRepository;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.RepositoryException;
@@ -72,6 +70,7 @@ public class OAIPMHResource {
 			RequestBuilder requestBuilder = RequestBuilder.newInstance();
 			requestBuilder.setResumptionTokenParser(repo.getResumptionTokenParser());
 			OAIPMHRequest oaiRequest = requestBuilder.build(uriInfo);
+			repo.init(oaiRequest);
 			OAIPMHtype oaiResponse = createResponseSkeleton(oaiRequest);
 			if (requestBuilder.getErrors().size() != 0) {
 				oaiResponse.getError().addAll(requestBuilder.getErrors());
@@ -93,17 +92,17 @@ public class OAIPMHResource {
 	{
 		VerbType verb = request.getVerb();
 		if (verb == LIST_RECORDS)
-			response.setListRecords(repo.listRecords(request));
+			response.setListRecords(repo.listRecords());
 		else if (verb == GET_RECORD)
-			response.setGetRecord(repo.getRecord(request));
+			response.setGetRecord(repo.getRecord());
 		else if (verb == LIST_IDENTIFIERS)
-			response.setListIdentifiers(repo.listIdentifiers(request));
+			response.setListIdentifiers(repo.listIdentifiers());
 		else if (verb == IDENTIFY)
-			response.setIdentify(repo.identify(request));
+			response.setIdentify(repo.identify());
 		else if (verb == LIST_SETS)
-			response.setListSets(repo.listSets(request));
+			response.setListSets(repo.listSets());
 		else if (verb == LIST_METADATA_FORMATS)
-			response.setListMetadataFormats(repo.listMetaDataFormats(request));
+			response.setListMetadataFormats(repo.listMetaDataFormats());
 	}
 
 	/**

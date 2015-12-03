@@ -1,7 +1,7 @@
 /**
  * 
- * REST layer support classes and classes mediating between the REST layer and
- * the OAI repository.
+ * REST application classes and classes mediating between the REST layer and the
+ * OAI repository.
  * 
  * @author Ayco Holleman
  *

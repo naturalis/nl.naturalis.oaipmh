@@ -13,29 +13,48 @@ import org.openarchives.oai._2.ListSetsType;
 import org.openarchives.oai._2.OAIPMHerrorType;
 
 /**
+ * <p>
  * Life-cycle interface defining the capacities of an OAI repository. This is
  * the only interface that OAI repositories <b>must</b> implement, although they
  * can optionally implement a few other interfaces (e.g.
- * {@link IResumptionTokenParser}). For each OAI-PMH request the REST layer
- * cycles through the following calls against the repository:
+ * {@link IResumptionTokenParser}). OAI repositories do not provide the full
+ * OAI-PMH XML response. The REST layer sets up an XML skeleton and embeds the
+ * response from methods like {@link #listRecords()} and {@link #getErrors()}
+ * within the skeleton.
+ * </p>
+ * <h3>Life Cycle</h3>
+ * <p>
+ * For each OAI-PMH request the REST layer cycles through the following calls
+ * against the repository:
  * <ol>
- * <li>If it is one of the ListXXX requests (e.g. ListRecords), call
- * {@link #getResumptionTokenParser()} to decompose the resumption token into
- * its constituent parts.
+ * <li>Call {@link #getResumptionTokenParser()} to parse the value of the
+ * resumptionToken query parameter (if present).
+ * <li>Call the {@link #init(OAIPMHRequest) init} method, passing it an
+ * {@link OAIPMHRequest} object.
  * <li>Call one of the six protocol request implementations (depending on the
  * value of the {@link Argument verb argument}).
- * <li>If it is one of the ListXXX requests, call
- * {@link #getResumptionTokenWriter()} to generate a resumption token for the
- * next request.
  * <li>Call {@link #getErrors()} to generate the &lt;error&gt; elements.
+ * <li>Call {@link #done()} to signify that a response has been sent back to
+ * client and that the request cycle is complete.
  * </ol>
+ * </p>
+ * <p>
  * Besides implementing the interface methods, OAI repository implementations
  * <b>must</b> have a no-arg constructor.
+ * </p>
  * 
  * @author Ayco Holleman
  *
  */
 public interface IOAIRepository {
+
+	/**
+	 * Allows the repository to prepare fore and itnitialize itself for a new
+	 * OAI-PMH request.
+	 * 
+	 * @param request
+	 */
+	void init(OAIPMHRequest request);
 
 	/**
 	 * Provide a resumption token reader. Used to decompose a resumption token
@@ -53,7 +72,7 @@ public interface IOAIRepository {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	GetRecordType getRecord(OAIPMHRequest request) throws RepositoryException;
+	GetRecordType getRecord() throws RepositoryException;
 
 	/**
 	 * Implement the ListRecords protocol request.
@@ -62,7 +81,7 @@ public interface IOAIRepository {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	ListRecordsType listRecords(OAIPMHRequest request) throws RepositoryException;
+	ListRecordsType listRecords() throws RepositoryException;
 
 	/**
 	 * Implement the ListIdentifiers protocol request.
@@ -71,7 +90,7 @@ public interface IOAIRepository {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	ListIdentifiersType listIdentifiers(OAIPMHRequest request) throws RepositoryException;
+	ListIdentifiersType listIdentifiers() throws RepositoryException;
 
 	/**
 	 * Implement the ListMetaDataFormats protocol request.
@@ -80,7 +99,7 @@ public interface IOAIRepository {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	ListMetadataFormatsType listMetaDataFormats(OAIPMHRequest request) throws RepositoryException;
+	ListMetadataFormatsType listMetaDataFormats() throws RepositoryException;
 
 	/**
 	 * Implement the ListSets protocol request.
@@ -89,7 +108,7 @@ public interface IOAIRepository {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	ListSetsType listSets(OAIPMHRequest request) throws RepositoryException;
+	ListSetsType listSets() throws RepositoryException;
 
 	/**
 	 * Implement the Identify protocol request.
@@ -98,7 +117,7 @@ public interface IOAIRepository {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	IdentifyType identify(OAIPMHRequest request) throws RepositoryException;
+	IdentifyType identify() throws RepositoryException;
 
 	/**
 	 * Return OAI-PMH specific errors. Implementations may return {@code null}
@@ -109,5 +128,12 @@ public interface IOAIRepository {
 	 * @return
 	 */
 	List<OAIPMHerrorType> getErrors();
+
+	/**
+	 * Called just after a response has been sent back to the client. Allows
+	 * repository implentations the close resources created for the request, if
+	 * necessary.
+	 */
+	void done();
 
 }

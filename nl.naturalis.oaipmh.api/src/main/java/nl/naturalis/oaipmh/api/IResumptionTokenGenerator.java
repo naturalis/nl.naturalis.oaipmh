@@ -27,7 +27,7 @@ public interface IResumptionTokenGenerator {
 	 * Generate a resumption token for the request <i>following</i> the
 	 * specified request. For example, assuming the repository is configured to
 	 * hand out 50 records per request and the specified request's
-	 * {@link OAIPMHRequest#getCursor() record offset} is 300, then a resumption
+	 * {@link OAIPMHRequest#getPage() record offset} is 300, then a resumption
 	 * token must be generated with a record offset of 350.
 	 * 
 	 * @param request

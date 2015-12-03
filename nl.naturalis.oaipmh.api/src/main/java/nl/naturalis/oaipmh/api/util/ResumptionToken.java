@@ -17,7 +17,15 @@ import org.domainobject.util.ArrayUtil;
 /**
  * An implementation of {@link IResumptionTokenParser} and
  * {@link IResumptionTokenGenerator} that is propably suitable for most
- * {@link IOAIRepository} implementations.
+ * {@link IOAIRepository} implementations. This implementation encodes/decodes
+ * the following information into/from the resumption token:
+ * <ol>
+ * <li>The {@link OAIPMHRequest#getFrom() from date}
+ * <li>The {@link OAIPMHRequest#getUntil() until date}
+ * <li>The requested {@link OAIPMHRequest#getSet() data set}
+ * <li>The requested {@link OAIPMHRequest#getPage() page}
+ * <li>The {@link OAIPMHRequest#getMetadataPrefix() metadataPrefix}
+ * </ol>
  * 
  * @author Ayco Holleman
  *
@@ -62,7 +70,7 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 			request.setSet(slices[METADATA_PREFIX_PART]);
 		try {
 			int page = Integer.parseInt(slices[PAGE_PART], 16);
-			request.setCursor(page);
+			request.setPage(page);
 		}
 		catch (NumberFormatException e) {
 			String fmt = "Failed to extract page from resumption token (bad number: \"%s\")";
@@ -75,7 +83,7 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 	public String compose(OAIPMHRequest request)
 	{
 		String[] parts = new String[5];
-		parts[PAGE_PART] = Integer.toHexString(request.getCursor() + 1);
+		parts[PAGE_PART] = Integer.toHexString(request.getPage() + 1);
 		if (request.getFrom() != null)
 			parts[FROM_PART] = Long.toHexString(request.getFrom().getTime());
 		if (request.getUntil() != null)
