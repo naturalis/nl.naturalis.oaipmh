@@ -5,6 +5,7 @@
 	<projects>
 		<project>org.domainobject.util</project>
 		<project>nl.naturalis.oaipmh.api</project>
+		<project>nl.naturalis.lims2.oaipmh</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

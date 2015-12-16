@@ -88,13 +88,19 @@ public class RepositoryFactory {
 			if (repoConfigFile == null) {
 				repoConfigFile = "oai-repo." + repoDescriptor + ".properties";
 				InputStream is = getClass().getResourceAsStream(repoConfigFile);
-				if (is != null)
+				if (is == null) {
+					repoConfigFile = "/oai-repo." + repoDescriptor + ".properties";
+					is = getClass().getResourceAsStream(repoConfigFile);
+				}
+				if (is != null) {
 					repoConfig = new ConfigObject(is);
+				}
 			}
 			else {
 				File f = new File(repoConfigFile);
-				if (f.isFile())
+				if (f.isFile()) {
 					repoConfig = new ConfigObject(f);
+				}
 			}
 			if (repoConfig == null) {
 				String fmt = "Missing configuration file for OAI repository \"%s\"";
@@ -111,8 +117,9 @@ public class RepositoryFactory {
 				repoClass = (Class<IOAIRepository>) Class.forName(repoClassName);
 			}
 			catch (ClassNotFoundException e) {
-				String fmt = "Missing implementation for OAI repository \"%s\" (%s)";
-				String msg = String.format(fmt, repoDescriptor, repoClassName);
+				String fmt = "The repository implementation class specified "
+						+ "in %s (%s) was not found on the classpath";
+				String msg = String.format(fmt, repoConfigFile, repoClassName);
 				throw new RepositoryInitializationException(msg);
 			}
 			try {

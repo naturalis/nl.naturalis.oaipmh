@@ -11,6 +11,9 @@
         <dependent-module archiveName="nl.naturalis.oaipmh.api.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/nl.naturalis.oaipmh.api/nl.naturalis.oaipmh.api">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="nl.naturalis.lims2.oaipmh.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/nl.naturalis.lims2.oaipmh/nl.naturalis.lims2.oaipmh">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/nl.naturalis.oaipmh.rest/build/classes"/>
         <property name="context-root" value="nl.naturalis.oaipmh.rest"/>
     </wb-module>
