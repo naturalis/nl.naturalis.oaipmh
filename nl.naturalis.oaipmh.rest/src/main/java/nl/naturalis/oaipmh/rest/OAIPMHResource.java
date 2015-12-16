@@ -34,11 +34,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <p>
  * REST resource handling all OAI-PMH requests for all OAI repositories. Each
  * OAI repository is accessed through a sub-resource of this REST resource. In
- * other words, if the base URL of this REST service is http://example.com/home,
- * then http://example.com/home/repo1 will access the repo1 repository and
- * http://example.com/home/repo2 will access the repo2 repository.
+ * other words, if the base URL of this REST service is
+ * http://example.com/oaipmh, then http://example.com/oaipmh/geneious will
+ * access the geneious repository and http://example.com/oaipmh/medialib will
+ * access the medialib repository.
+ * </p>
+ * <h3>Grouping repositories</h3>
+ * <p>
+ * You can group similar repositories by using an extra path segment, for
+ * example as follows:<br>
+ * http://example.com/oaipmh/geneious/specimens<br>
+ * http://example.com/oaipmh/geneious/dna-extracts<br>
+ * http://example.com/oaipmh/geneious/dna-slides<br>
+ * This is explained in the comments for {@link RepositoryFactory}.
+ * </p>
  * 
  * @author Ayco Holleman
  *
@@ -57,16 +69,30 @@ public class OAIPMHResource {
 	/**
 	 * Handles an OAI-PMH request for the specified OAI repository.
 	 * 
-	 * @param repoName
+	 * @param repoDescriptor
 	 * @return
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
-	@Path("/{repo}")
-	public Response handleRequest(@PathParam("repo") String repoName)
+	@Path("/{descriptor}")
+	public Response handleRequest(@PathParam("descriptor") String repoDescriptor)
+	{
+		return handle(repoDescriptor, null);
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_XML)
+	@Path("/{descriptor}/{name}")
+	public Response handleRequest(@PathParam("descriptor") String repoDescriptor,
+			@PathParam("name") String repoName)
+	{
+		return handle(repoDescriptor, repoName);
+	}
+
+	private Response handle(String repoDescriptor, String repoName)
 	{
 		try {
-			IOAIRepository repo = RepositoryFactory.getInstance().create(repoName);
+			IOAIRepository repo = RepositoryFactory.getInstance().create(repoDescriptor, repoName);
 			RequestBuilder requestBuilder = RequestBuilder.newInstance();
 			requestBuilder.setResumptionTokenParser(repo.getResumptionTokenParser());
 			OAIPMHRequest oaiRequest = requestBuilder.build(uriInfo);

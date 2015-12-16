@@ -4,6 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>org.domainobject.util</project>
+		<project>nl.naturalis.oaipmh.api</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

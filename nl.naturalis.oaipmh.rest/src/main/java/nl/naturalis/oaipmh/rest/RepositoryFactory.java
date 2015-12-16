@@ -44,37 +44,49 @@ public class RepositoryFactory {
 	 * <ul>
 	 * <li>
 	 * First the configuration file for the REST service is checked to see if it
-	 * contains a property named <b>repository.${repoName}.config</b>. If so,
-	 * its value is taken to be the full path to the configuration file for the
-	 * OAI repository.
-	 * <li>If the configuration for the REST service does <i>not</i> contain
-	 * this property, the classpath is searched for the repository configuration
-	 * file. The name of the repository configuration file then is assumed to be
-	 * <b>oai-repo.${repoName}.properties</b>.
+	 * contains a property named <b>repository.${repoDescriptor}.config</b>.
+	 * Thus, given a base URL of http://example.com/oaipmh, a request for
+	 * http://example.com/oaipmh/repo1 first results in oaipmh.properties being
+	 * searched for a property named repository.repo1.config. If this property
+	 * is present, its value is taken to be the <i>full path</i> to the
+	 * configuration file for the OAI repository.
+	 * <li>If oaipmh.properties does <i>not</i> contain this property, the
+	 * classpath is searched for the repository configuration file. The name of
+	 * the repository configuration file then is assumed to be
+	 * <b>oai-repo.${repoDescriptor}.properties</b>.
 	 * <li>The repository configuration file must be a standard Java properties
-	 * file and it <b>must</b> contain at least one property:
-	 * <b>repo.impl.class</b>, which must specify the fully-qualified name of
-	 * the class implementing {@link IOAIRepository}.
-	 * <li>This class is then instantiated using its (assumed-to-be-present)
-	 * no-arg constructor.
+	 * file and it must contain at least one property: if the {@code repoName}
+	 * argument is {@code null}, the property must be named
+	 * <b>repo.impl.class</b>; if the {@code repoName} argument is not
+	 * {@code null}, it must be named <b>${repoName}.repo.impl.class</b>. In
+	 * either case it must specify the fully-qualified name of the class
+	 * implementing {@link IOAIRepository}. Note that this implies that multiple
+	 * repositories can share the same configuration file, allowing similar
+	 * repositories to be configured in one place. One configuration file can
+	 * specify multiple {@link IOAIRepository} implementations.
+	 * <li>Finally, the class specified by repo.impl.class property or
+	 * ${repoName}.repo.impl.class property is instantiated using its
+	 * assumed-to-be-present no-arg constructor.
 	 * </ul>
 	 * 
+	 * @param repoDescriptor
 	 * @param repoName
 	 * @return
 	 * @throws RepositoryInitializationException
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
-	public IOAIRepository create(String repoName) throws RepositoryInitializationException
+	public IOAIRepository create(String repoDescriptor, String repoName)
+			throws RepositoryInitializationException
 	{
-		IOAIRepository repo = cache.get(repoName);
+		IOAIRepository repo = cache.get(repoDescriptor);
 		if (repo == null) {
 			ConfigObject restConfig = Registry.getInstance().getConfig();
-			String property = "repository." + repoName + ".config";
+			String property = "repository." + repoDescriptor + ".config";
 			String repoConfigFile = restConfig.get(property);
 			ConfigObject repoConfig = null;
 			if (repoConfigFile == null) {
-				repoConfigFile = "oai-repo." + repoName + ".properties";
+				repoConfigFile = "oai-repo." + repoDescriptor + ".properties";
 				InputStream is = getClass().getResourceAsStream(repoConfigFile);
 				if (is != null)
 					repoConfig = new ConfigObject(is);
@@ -86,22 +98,26 @@ public class RepositoryFactory {
 			}
 			if (repoConfig == null) {
 				String fmt = "Missing configuration file for OAI repository \"%s\"";
-				String msg = String.format(fmt, repoName);
+				String msg = String.format(fmt, repoDescriptor);
 				throw new RepositoryInitializationException(msg);
 			}
-			String repoClassName = repoConfig.required("repo.impl.class");
+			String repoClassName;
+			if (repoName == null)
+				repoClassName = repoConfig.required("repo.impl.class");
+			else
+				repoClassName = repoConfig.required(repoName + ".repo.impl.class");
 			Class<IOAIRepository> repoClass;
 			try {
 				repoClass = (Class<IOAIRepository>) Class.forName(repoClassName);
 			}
 			catch (ClassNotFoundException e) {
 				String fmt = "Missing implementation for OAI repository \"%s\" (%s)";
-				String msg = String.format(fmt, repoName, repoClassName);
+				String msg = String.format(fmt, repoDescriptor, repoClassName);
 				throw new RepositoryInitializationException(msg);
 			}
 			try {
 				repo = repoClass.newInstance();
-				cache.put(repoName, repo);
+				cache.put(repoDescriptor, repo);
 			}
 			catch (InstantiationException | IllegalAccessException e) {
 				throw new RepositoryInitializationException(e);
