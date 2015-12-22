@@ -9,7 +9,6 @@ import static org.openarchives.oai._2.VerbType.LIST_RECORDS;
 import static org.openarchives.oai._2.VerbType.LIST_SETS;
 
 import java.io.InputStream;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -27,8 +26,6 @@ import nl.naturalis.oaipmh.api.RepositoryException;
 
 import org.domainobject.util.ExceptionUtil;
 import org.domainobject.util.StringUtil;
-import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
-import org.openarchives.oai._2.OAIPMHerrorType;
 import org.openarchives.oai._2.OAIPMHtype;
 import org.openarchives.oai._2.VerbType;
 import org.slf4j.Logger;

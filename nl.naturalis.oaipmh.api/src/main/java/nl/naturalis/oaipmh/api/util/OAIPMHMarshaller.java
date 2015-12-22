@@ -3,7 +3,6 @@ package nl.naturalis.oaipmh.api.util;
 import static javax.xml.bind.Marshaller.JAXB_SCHEMA_LOCATION;
 
 import java.io.StringWriter;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -55,7 +54,7 @@ public class OAIPMHMarshaller {
 
 	/**
 	 * Add a package containing JAXB classes. The following packages are
-	 * automatically added:
+	 * automatical ly added:
 	 * <ol>
 	 * <li>org.openarchives.oai._2 (OAI-PMH schema)
 	 * <li>org.openarchives.oai._2_0.oai_dc (oai_dc container)
