@@ -1,16 +1,6 @@
 package nl.naturalis.oaipmh.api;
 
-import java.util.List;
-
 import nl.naturalis.oaipmh.api.util.ResumptionToken;
-
-import org.openarchives.oai._2.GetRecordType;
-import org.openarchives.oai._2.IdentifyType;
-import org.openarchives.oai._2.ListIdentifiersType;
-import org.openarchives.oai._2.ListMetadataFormatsType;
-import org.openarchives.oai._2.ListRecordsType;
-import org.openarchives.oai._2.ListSetsType;
-import org.openarchives.oai._2.OAIPMHerrorType;
 
 /**
  * <p>
@@ -72,7 +62,7 @@ public interface IOAIRepository {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	GetRecordType getRecord() throws RepositoryException;
+	String getRecord() throws RepositoryException;
 
 	/**
 	 * Implement the ListRecords protocol request.
@@ -81,7 +71,7 @@ public interface IOAIRepository {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	ListRecordsType listRecords() throws RepositoryException;
+	String listRecords() throws RepositoryException;
 
 	/**
 	 * Implement the ListIdentifiers protocol request.
@@ -90,7 +80,7 @@ public interface IOAIRepository {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	ListIdentifiersType listIdentifiers() throws RepositoryException;
+	String listIdentifiers() throws RepositoryException;
 
 	/**
 	 * Implement the ListMetaDataFormats protocol request.
@@ -99,7 +89,7 @@ public interface IOAIRepository {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	ListMetadataFormatsType listMetaDataFormats() throws RepositoryException;
+	String listMetaDataFormats() throws RepositoryException;
 
 	/**
 	 * Implement the ListSets protocol request.
@@ -108,7 +98,7 @@ public interface IOAIRepository {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	ListSetsType listSets() throws RepositoryException;
+	String listSets() throws RepositoryException;
 
 	/**
 	 * Implement the Identify protocol request.
@@ -117,17 +107,7 @@ public interface IOAIRepository {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	IdentifyType identify() throws RepositoryException;
-
-	/**
-	 * Return OAI-PMH specific errors. Implementations may return {@code null}
-	 * or an empty list to indicate that there were no errors. Returning a
-	 * non-empty list while also return a non-{@code null} response for the
-	 * applicable protocol request is also allowed.
-	 * 
-	 * @return
-	 */
-	List<OAIPMHerrorType> getErrors();
+	String identify() throws RepositoryException;
 
 	/**
 	 * Called just after a response has been sent back to the client. Allows

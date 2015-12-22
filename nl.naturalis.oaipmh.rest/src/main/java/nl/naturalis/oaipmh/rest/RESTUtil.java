@@ -89,6 +89,18 @@ public class RESTUtil {
 
 	/**
 	 * Generate a 200 (OK) response with a Content-Type header of
+	 * application/xml and the specified XML string in the response body.
+	 * 
+	 * @param xml
+	 * @return
+	 */
+	public static Response xmlResponse(String xml)
+	{
+		return Response.ok(xml, MediaType.APPLICATION_XML).build();
+	}
+
+	/**
+	 * Generate a 200 (OK) response with a Content-Type header of
 	 * application/xml and the specified JAXB object converted to XML in the
 	 * response body.
 	 * 

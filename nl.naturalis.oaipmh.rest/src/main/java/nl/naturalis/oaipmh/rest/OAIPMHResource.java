@@ -27,6 +27,7 @@ import nl.naturalis.oaipmh.api.RepositoryException;
 
 import org.domainobject.util.ExceptionUtil;
 import org.domainobject.util.StringUtil;
+import org.jboss.resteasy.annotations.providers.jaxb.Wrapped;
 import org.openarchives.oai._2.OAIPMHerrorType;
 import org.openarchives.oai._2.OAIPMHtype;
 import org.openarchives.oai._2.VerbType;
@@ -102,33 +103,28 @@ public class OAIPMHResource {
 				oaiResponse.getError().addAll(requestBuilder.getErrors());
 				return RESTUtil.jaxbResponse(oaiResponse);
 			}
-			setPayload(oaiResponse, oaiRequest, repo);
-			List<OAIPMHerrorType> errors = repo.getErrors();
-			if (errors != null && errors.size() != 0)
-				oaiResponse.getError().addAll(errors);
-			return RESTUtil.jaxbResponse(oaiResponse);
+			return RESTUtil.xmlResponse(getPayload(repo, oaiRequest.getVerb()));
 		}
 		catch (Throwable t) {
 			return RESTUtil.serverError(ExceptionUtil.rootStackTrace(t));
 		}
 	}
 
-	private static void setPayload(OAIPMHtype response, OAIPMHRequest request, IOAIRepository repo)
-			throws RepositoryException
+	private static String getPayload(IOAIRepository repo, VerbType verb) throws RepositoryException
 	{
-		VerbType verb = request.getVerb();
 		if (verb == LIST_RECORDS)
-			response.setListRecords(repo.listRecords());
+			return repo.listRecords();
 		else if (verb == GET_RECORD)
-			response.setGetRecord(repo.getRecord());
+			return repo.getRecord();
 		else if (verb == LIST_IDENTIFIERS)
-			response.setListIdentifiers(repo.listIdentifiers());
+			return repo.listIdentifiers();
 		else if (verb == IDENTIFY)
-			response.setIdentify(repo.identify());
+			return repo.identify();
 		else if (verb == LIST_SETS)
-			response.setListSets(repo.listSets());
+			return repo.listSets();
 		else if (verb == LIST_METADATA_FORMATS)
-			response.setListMetadataFormats(repo.listMetaDataFormats());
+			return repo.listMetaDataFormats();
+		return null;
 	}
 
 	/**
