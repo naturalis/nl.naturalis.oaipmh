@@ -25,8 +25,13 @@ public class RepositoryFactory {
 	 */
 	public static RepositoryFactory getInstance()
 	{
-		if (instance == null)
+		if (instance == null) {
 			instance = new RepositoryFactory();
+		}
+		/*
+		 * Singletons don't behave nicely within Wildfly container, so we just
+		 * create a new instance every time this method is called.
+		 */
 		return instance;
 	}
 
@@ -69,27 +74,28 @@ public class RepositoryFactory {
 	 * assumed-to-be-present no-arg constructor.
 	 * </ul>
 	 * 
-	 * @param repoDescriptor
+	 * @param repoGroup
 	 * @param repoName
 	 * @return
 	 * @throws RepositoryInitializationException
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
-	public IOAIRepository create(String repoDescriptor, String repoName)
+	public IOAIRepository create(String repoGroup, String repoName)
 			throws RepositoryInitializationException
 	{
-		IOAIRepository repo = cache.get(repoDescriptor);
+		String cacheKey = "%" + repoGroup + "/" + repoName + "%";
+		IOAIRepository repo = cache.get(cacheKey);
 		if (repo == null) {
 			ConfigObject restConfig = Registry.getInstance().getConfig();
-			String property = "repository." + repoDescriptor + ".config";
+			String property = "repository." + repoGroup + ".config";
 			String repoConfigFile = restConfig.get(property);
 			ConfigObject repoConfig = null;
 			if (repoConfigFile == null) {
-				repoConfigFile = "oai-repo." + repoDescriptor + ".properties";
+				repoConfigFile = "oai-repo." + repoGroup + ".properties";
 				InputStream is = getClass().getResourceAsStream(repoConfigFile);
 				if (is == null) {
-					repoConfigFile = "/oai-repo." + repoDescriptor + ".properties";
+					repoConfigFile = "/oai-repo." + repoGroup + ".properties";
 					is = getClass().getResourceAsStream(repoConfigFile);
 				}
 				if (is != null) {
@@ -104,7 +110,7 @@ public class RepositoryFactory {
 			}
 			if (repoConfig == null) {
 				String fmt = "Missing configuration file for OAI repository \"%s\"";
-				String msg = String.format(fmt, repoDescriptor);
+				String msg = String.format(fmt, repoGroup);
 				throw new RepositoryInitializationException(msg);
 			}
 			String repoClassName;
@@ -124,7 +130,7 @@ public class RepositoryFactory {
 			}
 			try {
 				repo = repoClass.newInstance();
-				cache.put(repoDescriptor, repo);
+				cache.put(repoGroup, repo);
 			}
 			catch (InstantiationException | IllegalAccessException e) {
 				throw new RepositoryInitializationException(e);

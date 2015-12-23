@@ -3,10 +3,13 @@ package nl.naturalis.oaipmh.rest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 
 import org.domainobject.util.debug.BeanPrinter;
+
 import static org.domainobject.util.ExceptionUtil.*;
 
 /**
@@ -101,13 +104,25 @@ public class RESTUtil {
 
 	/**
 	 * Generate a 200 (OK) response with a Content-Type header of
+	 * application/xml and the specified XML string in the response body.
+	 * 
+	 * @param xml
+	 * @return
+	 */
+	public static Response xmlResponse(StreamingOutput stream)
+	{
+		return Response.ok(stream, MediaType.APPLICATION_XML).build();
+	}
+
+	/**
+	 * Generate a 200 (OK) response with a Content-Type header of
 	 * application/xml and the specified JAXB object converted to XML in the
 	 * response body.
 	 * 
 	 * @param jaxbObject
 	 * @return
 	 */
-	public static Response jaxbResponse(Object jaxbObject)
+	public static Response xmlResponse(Object jaxbObject)
 	{
 		return Response.ok(jaxbObject, MediaType.APPLICATION_XML).build();
 	}

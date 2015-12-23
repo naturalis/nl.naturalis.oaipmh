@@ -1,5 +1,7 @@
 package nl.naturalis.oaipmh.api;
 
+import java.io.OutputStream;
+
 import nl.naturalis.oaipmh.api.util.ResumptionToken;
 
 /**
@@ -39,17 +41,39 @@ import nl.naturalis.oaipmh.api.util.ResumptionToken;
 public interface IOAIRepository {
 
 	/**
-	 * Return the contents of the XML schema definition corresponding to the
-	 * specified namespace prefix.
+	 * Informs the OAI repository under which URL it operates. OAI repositories
+	 * may need this information to generate xsi:schemaLocation attributes. The
+	 * repository base URL is the base URL of the OAI-PMH REST service plus the
+	 * subsequent path segment(s) identifying the repository itself. So, if the
+	 * base URL of the OAI-PMH REST service would be
+	 * {@code http://example.com/oaipmh}, then the <i>repository</i> base URL
+	 * would be {@code http://example.com/oaipmh/repo-name} or
+	 * {@code http://example.com/oaipmh/repo-group/repo-name}. For example, for
+	 * Geneious DNA extracts the repository base URL would be
+	 * {@code http://example.com/oaipmh/geneious/dna-extracts}. Clients could
+	 * then make requests for custom XSDs at this location:
+	 * {@code http://example.com/oaipmh/geneious/dna-extracts/xsd/<metadataPrefix>.xsd}
+	 * (e.g.
+	 * {@code http://example.com/oaipmh/geneious/dna-extracts/xsd/lims2.xsd}).
+	 * This location therefore is a valid value for the xsi:schemaLocation
+	 * attribute for the lims2 namespace.
 	 * 
-	 * @param namespacePrefix
-	 * @return
+	 * @param url
 	 */
-	String getXSDForNamespacePrefix(String namespacePrefix);
+	void setRepositoryBaseUrl(String url);
 
 	/**
-	 * Allows the repository to prepare fore and itnitialize itself for a new
-	 * OAI-PMH request.
+	 * Write the contents of the XML schema definition corresponding to the
+	 * specified metadataPrefix to the specified output stream.
+	 * 
+	 * @param output
+	 * @param metadataPrefix
+	 */
+	void getXSDForMetadataPrefix(OutputStream output, String metadataPrefix)
+			throws RepositoryException;
+
+	/**
+	 * Prepare and initialize for a new OAI-PMH request.
 	 * 
 	 * @param request
 	 */
@@ -65,58 +89,66 @@ public interface IOAIRepository {
 	IResumptionTokenParser getResumptionTokenParser();
 
 	/**
-	 * Implement the GetRecord protocol request.
+	 * Implement the GetRecord protocol request. The resulting OAI-PMH should be
+	 * written to the specified output stream.
 	 * 
-	 * @param request
-	 * @return
+	 * @param output
 	 * @throws RepositoryException
 	 */
-	String getRecord() throws RepositoryException;
+	void getRecord(OutputStream output) throws OAIPMHException, RepositoryException;
 
 	/**
-	 * Implement the ListRecords protocol request.
+	 * Implement the ListRecords protocol request. The resulting OAI-PMH should
+	 * be written to the specified output stream.
 	 * 
-	 * @param request
-	 * @return
+	 * @param output
 	 * @throws RepositoryException
 	 */
-	String listRecords() throws RepositoryException;
+	void listRecords(OutputStream output) throws OAIPMHException, RepositoryException;
 
 	/**
-	 * Implement the ListIdentifiers protocol request.
+	 * Implement the ListIdentifiers protocol request. The resulting OAI-PMH
+	 * should be written to the specified output stream.
 	 * 
 	 * @param request
 	 * @return
 	 * @throws RepositoryException
 	 */
-	String listIdentifiers() throws RepositoryException;
+	/**
+	 * Implement the ListIdentifiers protocol request. The resulting OAI-PMH
+	 * should be written to the specified output stream.
+	 * 
+	 * @param output
+	 * @throws RepositoryException
+	 */
+	void listIdentifiers(OutputStream output) throws OAIPMHException, RepositoryException;
 
 	/**
-	 * Implement the ListMetaDataFormats protocol request.
+	 * Implement the ListMetaDataFormats protocol request. The resulting OAI-PMH
+	 * should be written to the specified output stream.
 	 * 
-	 * @param request
-	 * @return
+	 * @param output
 	 * @throws RepositoryException
 	 */
-	String listMetaDataFormats() throws RepositoryException;
+	void listMetaDataFormats(OutputStream output) throws OAIPMHException, RepositoryException;
 
 	/**
-	 * Implement the ListSets protocol request.
+	 * Implement the ListSets protocol request. The resulting OAI-PMH should be
+	 * written to the specified output stream.
 	 * 
-	 * @param request
-	 * @return
+	 * @param output
 	 * @throws RepositoryException
 	 */
-	String listSets() throws RepositoryException;
+	void listSets(OutputStream output) throws OAIPMHException, RepositoryException;
 
 	/**
-	 * Implement the Identify protocol request.
+	 * Implement the Identify protocol request. The resulting OAI-PMH should be
+	 * written to the specified output stream.
 	 * 
-	 * @param request
-	 * @return
+	 * @param output
 	 * @throws RepositoryException
 	 */
-	String identify() throws RepositoryException;
+	void identify(OutputStream output) throws OAIPMHException, RepositoryException;
 
 	/**
 	 * Called just after a response has been sent back to the client. Allows

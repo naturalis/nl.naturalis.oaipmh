@@ -2,7 +2,7 @@ package nl.naturalis.oaipmh.api.util;
 
 import static javax.xml.bind.Marshaller.JAXB_SCHEMA_LOCATION;
 
-import java.io.StringWriter;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -95,12 +95,12 @@ public class OAIPMHMarshaller {
 	}
 
 	/**
-	 * Write out the OAI-PMH.
+	 * Write the OAI-PMH to the specified output stream.
 	 * 
 	 * @return
 	 * @throws JAXBException
 	 */
-	public String marshal() throws JAXBException
+	public void marshal(OutputStream out) throws JAXBException
 	{
 		JAXBContext ctx = JAXBContext.newInstance(CollectionUtil.implode(pkgs, ":"));
 		Marshaller marshaller = ctx.createMarshaller();
@@ -115,9 +115,7 @@ public class OAIPMHMarshaller {
 			xsds.append(schemas.get(ns));
 		}
 		marshaller.setProperty(JAXB_SCHEMA_LOCATION, xsds.toString());
-		StringWriter sw = new StringWriter(2048);
-		marshaller.marshal(root, sw);
-		return sw.toString();
+		marshaller.marshal(root, out);
 	}
 
 }
