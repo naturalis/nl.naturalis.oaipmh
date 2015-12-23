@@ -39,6 +39,15 @@ import nl.naturalis.oaipmh.api.util.ResumptionToken;
 public interface IOAIRepository {
 
 	/**
+	 * Return the contents of the XML schema definition corresponding to the
+	 * specified namespace prefix.
+	 * 
+	 * @param namespacePrefix
+	 * @return
+	 */
+	String getXSDForNamespacePrefix(String namespacePrefix);
+
+	/**
 	 * Allows the repository to prepare fore and itnitialize itself for a new
 	 * OAI-PMH request.
 	 * 

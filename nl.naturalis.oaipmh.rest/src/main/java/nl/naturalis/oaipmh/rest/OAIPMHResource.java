@@ -80,6 +80,29 @@ public class OAIPMHResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
+	@Path("/{descriptor}/{name}/xsd/{namespace-prefix}.xsd")
+	@SuppressWarnings("static-method")
+	public Response getXSD(@PathParam("descriptor") String repoDescriptor,
+			@PathParam("name") String repoName, @PathParam("namespace-prefix") String prefix)
+	{
+		try {
+			RepositoryFactory rf = RepositoryFactory.getInstance();
+			IOAIRepository repo = rf.create(repoDescriptor, repoName);
+			String xsd = repo.getXSDForNamespacePrefix(prefix);
+			if (xsd == null) {
+				String fmt = "No XSD found for namespace prefix \"%s\"";
+				String msg = String.format(fmt, prefix);
+				return RESTUtil.plainTextResponse(404, msg);
+			}
+			return RESTUtil.xmlResponse(xsd);
+		}
+		catch (Throwable t) {
+			return RESTUtil.serverError(ExceptionUtil.rootStackTrace(t));
+		}
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_XML)
 	@Path("/{descriptor}/{name}")
 	public Response handleRequest(@PathParam("descriptor") String repoDescriptor,
 			@PathParam("name") String repoName)
@@ -90,7 +113,8 @@ public class OAIPMHResource {
 	private Response handle(String repoDescriptor, String repoName)
 	{
 		try {
-			IOAIRepository repo = RepositoryFactory.getInstance().create(repoDescriptor, repoName);
+			RepositoryFactory rf = RepositoryFactory.getInstance();
+			IOAIRepository repo = rf.create(repoDescriptor, repoName);
 			RequestBuilder requestBuilder = RequestBuilder.newInstance();
 			requestBuilder.setResumptionTokenParser(repo.getResumptionTokenParser());
 			OAIPMHRequest oaiRequest = requestBuilder.build(uriInfo);
