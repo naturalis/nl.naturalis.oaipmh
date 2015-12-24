@@ -1,14 +1,9 @@
 package nl.naturalis.oaipmh.rest;
 
 import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.createResponseSkeleton;
+import static nl.naturalis.oaipmh.rest.RESTUtil.plainTextResponse;
 import static nl.naturalis.oaipmh.rest.RESTUtil.serverError;
 import static nl.naturalis.oaipmh.rest.RESTUtil.xmlResponse;
-import static org.openarchives.oai._2.VerbType.GET_RECORD;
-import static org.openarchives.oai._2.VerbType.IDENTIFY;
-import static org.openarchives.oai._2.VerbType.LIST_IDENTIFIERS;
-import static org.openarchives.oai._2.VerbType.LIST_METADATA_FORMATS;
-import static org.openarchives.oai._2.VerbType.LIST_RECORDS;
-import static org.openarchives.oai._2.VerbType.LIST_SETS;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,14 +23,12 @@ import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
 
 import nl.naturalis.oaipmh.api.IOAIRepository;
-import nl.naturalis.oaipmh.api.OAIPMHException;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.RepositoryException;
 import nl.naturalis.oaipmh.api.XSDNotFoundException;
 
 import org.domainobject.util.IOUtil;
 import org.openarchives.oai._2.OAIPMHtype;
-import org.openarchives.oai._2.VerbType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +65,7 @@ public class OAIPMHResource {
 	private static final Logger logger = LoggerFactory.getLogger(OAIPMHResource.class);
 
 	@Context
-	private HttpServletRequest request;
+	private HttpServletRequest httpServletRequest;
 	@Context
 	private UriInfo uriInfo;
 
@@ -97,6 +90,14 @@ public class OAIPMHResource {
 		};
 	}
 
+	/**
+	 * Returns the XSD for the specified metadataPrefix.
+	 * 
+	 * @param repoGroup
+	 * @param repoName
+	 * @param prefix
+	 * @return
+	 */
 	@GET
 	@Path("/{group}/{repo}/xsd/{prefix}.xsd")
 	@SuppressWarnings("static-method")
@@ -114,16 +115,17 @@ public class OAIPMHResource {
 					try {
 						repo.getXSDForMetadataPrefix(out, prefix);
 					}
+					catch (XSDNotFoundException e) {
+						throw new WebApplicationException(plainTextResponse(404, e.getMessage()));
+					}
 					catch (RepositoryException e) {
-						throw new RuntimeException(e);
+						throw new WebApplicationException(serverError(e));
 					}
 				}
 			});
 		}
 		catch (Throwable t) {
-			if (t.getCause() instanceof XSDNotFoundException)
-				return RESTUtil.plainTextResponse(404, t.getMessage());
-			return RESTUtil.serverError(t);
+			return serverError(t);
 		}
 	}
 
@@ -141,6 +143,14 @@ public class OAIPMHResource {
 		return handle(repo, null);
 	}
 
+	/**
+	 * Handles an OAI-PMH request for the specified OAI repository group and
+	 * repository name.
+	 * 
+	 * @param repoGroup
+	 * @param repoName
+	 * @return
+	 */
 	@GET
 	@POST
 	@Path("/{group}/{repo}")
@@ -156,28 +166,18 @@ public class OAIPMHResource {
 		logger.info("Receiving request for OAI repository \"" + name + "\"");
 		try {
 			RepositoryFactory rf = RepositoryFactory.getInstance();
-			IOAIRepository repo = rf.create(repoGroup, repoName);
-			repo.setRepositoryBaseUrl(getRepoBaseURL(repoGroup, repoName));
-			RequestBuilder requestBuilder = RequestBuilder.newInstance();
-			requestBuilder.setResumptionTokenParser(repo.getResumptionTokenParser());
-			OAIPMHRequest oaiRequest = requestBuilder.build(uriInfo);
-			repo.init(oaiRequest);
-			OAIPMHtype skeleton = createResponseSkeleton(oaiRequest);
-			if (requestBuilder.getErrors().size() != 0) {
-				skeleton.getError().addAll(requestBuilder.getErrors());
+			IOAIRepository repository = rf.create(repoGroup, repoName);
+			repository.setRepositoryBaseUrl(getRepoBaseURL(repoGroup, repoName));
+			RequestBuilder rb = RequestBuilder.newInstance();
+			rb.setResumptionTokenParser(repository.getResumptionTokenParser());
+			OAIPMHRequest request = rb.build(uriInfo);
+			if (rb.getErrors().size() != 0) {
+				OAIPMHtype skeleton = createResponseSkeleton(request);
+				skeleton.getError().addAll(rb.getErrors());
 				return xmlResponse(skeleton);
 			}
-			// try {
-			return xmlResponse(getStream(skeleton, repo, oaiRequest.getVerb()));
-			// }
-			// catch (RuntimeException e) {
-			// if (e.getCause().getClass() == OAIPMHException.class) {
-			// OAIPMHException exc = (OAIPMHException) e.getCause();
-			// skeleton.getError().addAll(exc.getErrors());
-			// return xmlResponse(skeleton);
-			// }
-			// return serverError(e);
-			// }
+			repository.init(request);
+			return new OAIPMHStream(request, repository).stream();
 		}
 		catch (Throwable t) {
 			return serverError(t);
@@ -196,48 +196,6 @@ public class OAIPMHResource {
 			sb.append('/').append(repoName);
 		sb.append('/');
 		return sb.toString();
-	}
-
-	private static StreamingOutput getStream(OAIPMHtype skeleton, IOAIRepository repo, VerbType verb)
-	{
-		return new StreamingOutput() {
-
-			@Override
-			public void write(OutputStream out) throws IOException, WebApplicationException
-			{
-				try {
-					if (verb == GET_RECORD)
-						repo.getRecord(out);
-					else if (verb == IDENTIFY)
-						repo.identify(out);
-					else if (verb == LIST_IDENTIFIERS)
-						repo.listIdentifiers(out);
-					else if (verb == LIST_METADATA_FORMATS)
-						repo.listMetaDataFormats(out);
-					else if (verb == LIST_RECORDS)
-						repo.listRecords(out);
-					else if (verb == LIST_SETS)
-						repo.listSets(out);
-				}
-				catch (OAIPMHException e) {
-					skeleton.getError().addAll(e.getErrors());
-					throw new WebApplicationException(xmlResponse(skeleton));
-				}
-				catch (RepositoryException e) {
-					throw new WebApplicationException(e);
-				}
-			}
-		};
-	}
-
-	@SuppressWarnings("serial")
-	private static class RepoExceptionWrapper extends RuntimeException {
-
-		RepoExceptionWrapper(Throwable e)
-		{
-			super(e);
-		}
-
 	}
 
 }
