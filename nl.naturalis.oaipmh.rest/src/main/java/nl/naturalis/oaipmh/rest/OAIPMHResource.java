@@ -102,11 +102,11 @@ public class OAIPMHResource {
 	@Path("/{group}/{repo}/xsd/{prefix}.xsd")
 	@SuppressWarnings("static-method")
 	public Response getXSD(@PathParam("group") String repoGroup,
-			@PathParam("repo") String repoName, @PathParam("prefix") String prefix)
+			@PathParam("repo") String repoName, @PathParam("prefix") final String prefix)
 	{
 		try {
-			RepositoryFactory rf = RepositoryFactory.getInstance();
-			IOAIRepository repo = rf.create(repoGroup, repoName);
+			final RepositoryFactory rf = RepositoryFactory.getInstance();
+			final IOAIRepository repo = rf.create(repoGroup, repoName);
 			return xmlResponse(new StreamingOutput() {
 
 				@Override
