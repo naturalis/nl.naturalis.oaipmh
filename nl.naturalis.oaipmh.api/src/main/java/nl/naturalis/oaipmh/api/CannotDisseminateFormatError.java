@@ -17,7 +17,7 @@ public class CannotDisseminateFormatError extends OAIPMHerrorType {
 	{
 		super();
 		this.code = CANNOT_DISSEMINATE_FORMAT;
-		this.value = "Cannot disseminate format: \"" + metadataPrefix + "\"";
+		this.value = "Cannot disseminate format: " + metadataPrefix;
 	}
 
 	public CannotDisseminateFormatError(OAIPMHRequest request)
