@@ -1,4 +1,11 @@
+nl.naturalis.lims2.oaipmh
+nl.naturalis.lims2.oaipmh.extracts
+nl.naturalis.lims2.oaipmh.jaxb
+nl.naturalis.lims2.oaipmh.slides
+nl.naturalis.lims2.oaipmh.specimens
 nl.naturalis.oaipmh.api
+nl.naturalis.oaipmh.api.jaxb.abcd
+nl.naturalis.oaipmh.api.jaxb.ggbn
 nl.naturalis.oaipmh.api.util
 nl.naturalis.oaipmh.rest
 org.openarchives.oai._2
