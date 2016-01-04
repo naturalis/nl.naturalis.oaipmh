@@ -5,8 +5,9 @@ import java.util.HashMap;
 /**
  * Decorates the final OAIPMH output with namespace prefix declarations.
  * 
- * A more elegant way would have been to use a NamespacePrefixMapper
- * (com.sun.xml.internal.bind.marshaller.NamespacePrefixMapper), but I got
+ * A more elegant way would have been to use a NamespacePrefixMapper (
+ * {@code com.sun.xml.internal.bind.marshaller.NamespacePrefixMapper}), but this
+ * led to class version and dependency issues. TODO.
  */
 
 class NsPrefixMapper {

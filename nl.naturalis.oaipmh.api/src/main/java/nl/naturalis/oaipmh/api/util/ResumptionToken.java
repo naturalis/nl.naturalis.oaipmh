@@ -32,10 +32,6 @@ import org.domainobject.util.ArrayUtil;
  */
 public class ResumptionToken implements IResumptionTokenParser, IResumptionTokenGenerator {
 
-	/*
-	 * Since all parts of the resumption token have been converted to
-	 * hexadecimal strings, we can use "g" as a delimiter.
-	 */
 	private static final String DELIMITER = "^|^";
 	private static final int FROM_PART = 0;
 	private static final int UNTIL_PART = 1;

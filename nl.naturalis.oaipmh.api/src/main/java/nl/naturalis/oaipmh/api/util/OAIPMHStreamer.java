@@ -19,7 +19,14 @@ import nl.naturalis.oaipmh.api.IOAIRepository;
 import org.domainobject.util.CollectionUtil;
 import org.openarchives.oai._2.OAIPMHtype;
 
-public class OAIPMHMarshaller {
+/**
+ * Class that can aid repository implementations in streaming the OAI-PMH they
+ * have assembled.
+ * 
+ * @author Ayco Holleman
+ *
+ */
+public class OAIPMHStreamer {
 
 	private static final List<String> CORE_PACKAGES = Arrays.asList("org.openarchives.oai._2",
 			"org.openarchives.oai._2_0.oai_dc", "org.purl.dc.elements._1");
@@ -34,7 +41,7 @@ public class OAIPMHMarshaller {
 
 	private OAIPMHtype root;
 
-	public OAIPMHMarshaller()
+	public OAIPMHStreamer()
 	{
 		pkgs = new HashSet<>();
 		pkgs.addAll(CORE_PACKAGES);
@@ -43,7 +50,7 @@ public class OAIPMHMarshaller {
 	}
 
 	/**
-	 * Set the JAXB root object for OAI-PMH marshallling.
+	 * Sets the JAXB root object for OAI-PMH marshallling.
 	 * 
 	 * @param root
 	 */
@@ -53,8 +60,8 @@ public class OAIPMHMarshaller {
 	}
 
 	/**
-	 * Add a package containing JAXB classes. The following packages are
-	 * automatical ly added:
+	 * Adds a package containing JAXB classes. The following packages are
+	 * automatically added:
 	 * <ol>
 	 * <li>org.openarchives.oai._2 (OAI-PMH schema)
 	 * <li>org.openarchives.oai._2_0.oai_dc (oai_dc container)
@@ -72,14 +79,18 @@ public class OAIPMHMarshaller {
 	}
 
 	/**
-	 * Set the location of an XML schema definition. The location of the XSD for
-	 * OAI-PMH is automatically added. The XSD location for oai_dc, however, is
-	 * not automatically added since you might be serving a request for a
-	 * different metadata format. However, you can simply add the XSD location
-	 * for oai_dc by calling {@link #addOaiDcSchemaLocation()}.
+	 * Expands the {@code xsi:schemaLocation} attribute of the &lt;OAI-PMH&gt;
+	 * root element with the specified namespace-location pair. The schema
+	 * location of the XSD for OAI-PMH is automatically added. The XSD location
+	 * for oai_dc, however, is not automatically added since you might be
+	 * serving a request for a different metadata format. However, you can
+	 * simply add the XSD location for oai_dc by calling
+	 * {@link #addOaiDcSchemaLocation()}.
 	 * 
 	 * @param xmlNamespace
+	 *            The XML namespace
 	 * @param schemaLocation
+	 *            The XSD location
 	 */
 	public void addSchemaLocation(String xmlNamespace, String schemaLocation)
 	{
@@ -87,20 +98,22 @@ public class OAIPMHMarshaller {
 	}
 
 	/**
-	 * Add the XSD location of the oai_dc namespace.
+	 * Adds the XSD location of the oai_dc namespace. See
+	 * {@link #addSchemaLocation(String, String)}.
 	 */
 	public void addOaiDcSchemaLocation()
 	{
-		schemas.put(OAI_DC_NAMESPACE, OAI_DC_SCHEMA);
+		addSchemaLocation(OAI_DC_NAMESPACE, OAI_DC_SCHEMA);
 	}
 
 	/**
-	 * Write the OAI-PMH to the specified output stream.
+	 * Writes the OAI-PMH (set via {@link #setRootElement(OAIPMHtype)
+	 * setRootElement}) to the specified output stream.
 	 * 
 	 * @return
 	 * @throws JAXBException
 	 */
-	public void marshal(OutputStream out) throws JAXBException
+	public void stream(OutputStream out) throws JAXBException
 	{
 		JAXBContext ctx = JAXBContext.newInstance(CollectionUtil.implode(pkgs, ":"));
 		Marshaller marshaller = ctx.createMarshaller();

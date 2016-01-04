@@ -19,15 +19,22 @@ import nl.naturalis.oaipmh.api.util.ResumptionToken;
  * For each OAI-PMH request the REST layer cycles through the following calls
  * against the repository:
  * <ol>
- * <li>Call {@link #getResumptionTokenParser()} to parse the value of the
- * resumptionToken query parameter (if present).
+ * <li>Call {@link #setRepositoryBaseUrl(String) setRepositoryBaseUrl} in case
+ * the repository needs to include XML namespace declarations relative to the
+ * base URL under which it operates. See also
+ * {@link #getXSDForMetadataPrefix(OutputStream, String)
+ * getXSDForMetadataPrefix}.
+ * <li>Call {@link #getResumptionTokenParser() getResumptionTokenParser} to
+ * parse the value of the resumptionToken query parameter (if present).
  * <li>Call the {@link #init(OAIPMHRequest) init} method, passing it an
  * {@link OAIPMHRequest} object.
- * <li>Call one of the six protocol request implementations (depending on the
- * value of the {@link Argument verb argument}).
- * <li>Call {@link #getErrors()} to generate the &lt;error&gt; elements.
- * <li>Call {@link #done()} to signify that a response has been sent back to
- * client and that the request cycle is complete.
+ * <li>Call one of the six protocol request implementations (e.g.
+ * {@link #listRecords(OutputStream) listRecords}). The exact method being
+ * called depends on the value of the {@link Argument verb argument}.
+ * <li>Call {@link #getErrors() getErrors} to generate the &lt;error&gt;
+ * elements.
+ * <li>Call {@link #done() done} to signify that a response has been sent back
+ * to client and that the request cycle is complete.
  * </ol>
  * </p>
  * <p>
@@ -64,7 +71,9 @@ public interface IOAIRepository {
 
 	/**
 	 * Write the contents of the XML schema definition corresponding to the
-	 * specified metadataPrefix to the specified output stream.
+	 * specified metadataPrefix to the specified output stream. This is
+	 * especially meant to inform repository clients about custom XML schemas
+	 * used, for example, within the oai_dc element.
 	 * 
 	 * @param output
 	 * @param metadataPrefix
