@@ -3,12 +3,11 @@
        xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
     <info
         organisation="Naturalis"
-        module="nl.naturalis.oaipmh"
+        module="nl.naturalis.oaipmh.rest"
         status="integration">
 	</info>
 	<dependencies>
 		<dependency org="org.slf4j" name="slf4j-api" rev="1.7.10"/>
-		<dependency org="ch.qos.logback" name="logback-classic" rev="1.1.2"/>
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.38"/>
 		<!--
 		<dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.5.1"/>

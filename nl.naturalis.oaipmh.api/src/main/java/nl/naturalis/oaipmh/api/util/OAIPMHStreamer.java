@@ -1,6 +1,6 @@
 package nl.naturalis.oaipmh.api.util;
 
-import static javax.xml.bind.Marshaller.JAXB_SCHEMA_LOCATION;
+import static javax.xml.bind.Marshaller.*;
 
 import java.io.OutputStream;
 import java.util.Arrays;
@@ -127,6 +127,7 @@ public class OAIPMHStreamer {
 			xsds.append(ns).append(' ');
 			xsds.append(schemas.get(ns));
 		}
+		marshaller.setProperty(JAXB_FORMATTED_OUTPUT, true);
 		marshaller.setProperty(JAXB_SCHEMA_LOCATION, xsds.toString());
 		marshaller.marshal(root, out);
 	}

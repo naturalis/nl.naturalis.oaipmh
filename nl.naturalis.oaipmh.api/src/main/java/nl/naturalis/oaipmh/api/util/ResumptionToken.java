@@ -13,6 +13,8 @@ import nl.naturalis.oaipmh.api.IResumptionTokenGenerator;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 
 import org.domainobject.util.ArrayUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An implementation of {@link IResumptionTokenParser} and
@@ -31,6 +33,8 @@ import org.domainobject.util.ArrayUtil;
  *
  */
 public class ResumptionToken implements IResumptionTokenParser, IResumptionTokenGenerator {
+
+	private static final Logger logger = LoggerFactory.getLogger(ResumptionToken.class);
 
 	private static final String DELIMITER = "^|^";
 	private static final int FROM_PART = 0;
@@ -55,9 +59,11 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 	@Override
 	public void decompose(OAIPMHRequest request) throws BadResumptionTokenException
 	{
+		logger.info("XXXXXXXXXXXXXXXXXXXXX: " + request.getResumptionToken());
 		String[] slices = request.getResumptionToken().split(DELIMITER);
-		if (slices.length != 5)
-			throw new BadResumptionTokenException();
+		if (slices.length != 5) {
+			throw new BadResumptionTokenException("Number of parts: " + slices.length);
+		}
 		request.setFrom(parseDate(FROM, slices[FROM_PART]));
 		request.setUntil(parseDate(UNTIL, slices[UNTIL_PART]));
 		if (slices[SET_PART].length() != 0)

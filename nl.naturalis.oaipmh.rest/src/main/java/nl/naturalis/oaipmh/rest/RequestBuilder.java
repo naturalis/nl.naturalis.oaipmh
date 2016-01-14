@@ -33,6 +33,8 @@ import nl.naturalis.oaipmh.api.util.ResumptionToken;
 import org.domainobject.util.CollectionUtil;
 import org.openarchives.oai._2.OAIPMHerrorType;
 import org.openarchives.oai._2.VerbType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Builds {@link OAIPMHRequest} objects from HTTP URLs.
@@ -41,6 +43,8 @@ import org.openarchives.oai._2.VerbType;
  *
  */
 public class RequestBuilder {
+
+	private static final Logger logger = LoggerFactory.getLogger(RequestBuilder.class);
 
 	/*
 	 * This currently just returns a new instance, but in the future we might
@@ -216,16 +220,16 @@ public class RequestBuilder {
 
 	private void checkRequiredArguments(Set<Argument> provided)
 	{
-		VerbType verb = request.getVerb();
-		if (verb == null)
-			return;
-		Set<Argument> required = Argument.getRequiredArguments(verb);
-		required.removeAll(provided);
-		if (required.size() != 0) {
-			String missing = CollectionUtil.implode(required);
-			String msg = "Missing required argument(s): " + missing;
-			errors.add(new BadArgumentError(msg));
-		}
+		// VerbType verb = request.getVerb();
+		// if (verb == null)
+		// return;
+		// Set<Argument> required = Argument.getRequiredArguments(verb);
+		// required.removeAll(provided);
+		// if (required.size() != 0) {
+		// String missing = CollectionUtil.implode(required);
+		// String msg = "Missing required argument(s): " + missing;
+		// errors.add(new BadArgumentError(msg));
+		// }
 	}
 
 	private void processResumptionToken()
@@ -257,9 +261,26 @@ public class RequestBuilder {
 
 	private String getArg(Argument arg)
 	{
-		String s = uriInfo.getQueryParameters().getFirst(arg.param());
-		if (s == null || s.length() == 0)
-			return null;
+		StringBuilder sb = new StringBuilder(50);
+		sb.append("Parameter ").append(arg.param()).append(": ");
+		String s = null;
+		if (uriInfo.getQueryParameters().containsKey(arg.param())) {
+			s = uriInfo.getQueryParameters().getFirst(arg.param());
+			if (s == null) {
+				sb.append("null");
+			}
+			else if (s.length() == 0) {
+				sb.append("\"\" (empty string, evaluates as null)");
+				s = null;
+			}
+			else {
+				sb.append("\"").append(s).append("\"");
+			}
+		}
+		else {
+			sb.append("absent");
+		}
+		logger.debug(sb.toString());
 		return s;
 	}
 
