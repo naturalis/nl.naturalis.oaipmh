@@ -30,7 +30,8 @@ public class OAIPMHException extends Exception {
 
 	public OAIPMHException(OAIPMHerrorType error)
 	{
-		errors = new ArrayList<OAIPMHerrorType>(1);
+		super(error.getCode() + (error.getValue() == null ? "" : ": " + error.getValue()));
+		errors = new ArrayList<>(1);
 		errors.add(error);
 	}
 

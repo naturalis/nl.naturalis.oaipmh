@@ -3,16 +3,19 @@ package nl.naturalis.oaipmh.api.util;
 import static nl.naturalis.oaipmh.api.Argument.FROM;
 import static nl.naturalis.oaipmh.api.Argument.UNTIL;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 import nl.naturalis.oaipmh.api.Argument;
 import nl.naturalis.oaipmh.api.BadResumptionTokenException;
 import nl.naturalis.oaipmh.api.IOAIRepository;
-import nl.naturalis.oaipmh.api.IResumptionTokenParser;
 import nl.naturalis.oaipmh.api.IResumptionTokenGenerator;
+import nl.naturalis.oaipmh.api.IResumptionTokenParser;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 
 import org.domainobject.util.ArrayUtil;
+import org.domainobject.util.StringUtil;
+import org.domainobject.util.debug.BeanPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +39,15 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 
 	private static final Logger logger = LoggerFactory.getLogger(ResumptionToken.class);
 
-	private static final String DELIMITER = "^|^";
+	/*
+	 * Use capital 'O' (uppercase of 'o') as delimiter between in elements in
+	 * the resumption token, so it blends in nicely with the elements but can
+	 * never be part of them. All elements are converted to base-36 numbers,
+	 * containing any digit (0-9) and any lowercase letter (a-z).
+	 */
+	private static final String DELIMITER = "O";
+	private static final int RADIX = 36;
+
 	private static final int FROM_PART = 0;
 	private static final int UNTIL_PART = 1;
 	private static final int SET_PART = 2;
@@ -59,19 +70,33 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 	@Override
 	public void decompose(OAIPMHRequest request) throws BadResumptionTokenException
 	{
-		logger.info("XXXXXXXXXXXXXXXXXXXXX: " + request.getResumptionToken());
-		String[] slices = request.getResumptionToken().split(DELIMITER);
+		if (request.getResumptionToken() == null) {
+			logger.warn("No resumption token in request");
+			return;
+		}
+		logger.info("Processing resumption token: " + request.getResumptionToken());
+		String[] slices = StringUtil.split(request.getResumptionToken(), DELIMITER);
+		if (logger.isDebugEnabled()) {
+			logger.debug("Elements in resumption token:\n" + BeanPrinter.toString(slices));
+		}
 		if (slices.length != 5) {
-			throw new BadResumptionTokenException("Number of parts: " + slices.length);
+			throw new BadResumptionTokenException(
+					"Invalid number of elements in resumption token: " + slices.length);
 		}
 		request.setFrom(parseDate(FROM, slices[FROM_PART]));
 		request.setUntil(parseDate(UNTIL, slices[UNTIL_PART]));
-		if (slices[SET_PART].length() != 0)
-			request.setSet(slices[SET_PART]);
-		if (slices[METADATA_PREFIX_PART].length() != 0)
-			request.setSet(slices[METADATA_PREFIX_PART]);
+		if (slices[SET_PART].length() != 0) {
+			BigInteger bi = new BigInteger(slices[SET_PART], RADIX);
+			String set = new String(bi.toByteArray());
+			request.setSet(set);
+		}
+		if (slices[METADATA_PREFIX_PART].length() != 0) {
+			BigInteger bi = new BigInteger(slices[METADATA_PREFIX_PART], RADIX);
+			String prefix = new String(bi.toByteArray());
+			request.setMetadataPrefix(prefix);
+		}
 		try {
-			int page = Integer.parseInt(slices[PAGE_PART], 16);
+			int page = Integer.parseInt(slices[PAGE_PART], RADIX);
 			request.setPage(page);
 		}
 		catch (NumberFormatException e) {
@@ -79,22 +104,37 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 			String msg = String.format(fmt, slices[3]);
 			throw new BadResumptionTokenException(msg);
 		}
+		logger.info("Updating request:\n" + BeanPrinter.toString(request));
 	}
 
 	@Override
 	public String compose(OAIPMHRequest request)
 	{
+		logger.info("Generating resumption token for next request. Current request:\n"
+				+ BeanPrinter.toString(request));
 		String[] parts = new String[5];
-		parts[PAGE_PART] = Integer.toHexString(request.getPage() + 1);
-		if (request.getFrom() != null)
-			parts[FROM_PART] = Long.toHexString(request.getFrom().getTime());
-		if (request.getUntil() != null)
-			parts[UNTIL_PART] = Long.toHexString(request.getFrom().getTime());
-		if (request.getSet() != null)
-			parts[SET_PART] = request.getSet();
-		if (request.getMetadataPrefix() != null)
-			parts[METADATA_PREFIX_PART] = request.getMetadataPrefix();
-		return ArrayUtil.implode(parts, DELIMITER);
+		parts[PAGE_PART] = Integer.toString((request.getPage() + 1), RADIX);
+		if (request.getFrom() != null) {
+			long from = request.getFrom().getTime();
+			parts[FROM_PART] = Long.toString(from, RADIX);
+		}
+		if (request.getUntil() != null) {
+			long until = request.getUntil().getTime();
+			parts[UNTIL_PART] = Long.toString(until, RADIX);
+		}
+		if (request.getSet() != null) {
+			byte[] bytes = request.getSet().getBytes();
+			BigInteger bi = new BigInteger(bytes);
+			parts[SET_PART] = bi.toString(RADIX);
+		}
+		if (request.getMetadataPrefix() != null) {
+			byte[] bytes = request.getMetadataPrefix().getBytes();
+			BigInteger bi = new BigInteger(bytes);
+			parts[METADATA_PREFIX_PART] = bi.toString(RADIX);
+		}
+		String token = ArrayUtil.implode(parts, DELIMITER);
+		logger.info("Generated resumption token: " + token);
+		return token;
 	}
 
 	private static Date parseDate(Argument arg, String value) throws BadResumptionTokenException
@@ -102,7 +142,7 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 		if (value.length() == 0)
 			return null;
 		try {
-			return new Date(Long.parseLong(value, 16));
+			return new Date(Long.parseLong(value, RADIX));
 		}
 		catch (NumberFormatException e) {
 			String fmt = "Failed to extract %s argument from resumption token (bad number: \"%s\")";
