@@ -99,14 +99,16 @@ public class Registry {
 		}
 		File dir = new File(path);
 		if (!dir.isDirectory()) {
-			String msg = String.format(
-					"Invalid value for system property \"%s\": \"%s\" (no such directory)",
-					SYSPROP_CONFIG_DIR, path);
+			String fmt = "Invalid value for system property \"%s\": \"%s\" (no such directory)";
+			String msg = String.format(fmt, SYSPROP_CONFIG_DIR, path);
 			throw new ApplicationInitializationException(msg);
 		}
 		try {
 			confDir = dir.getCanonicalFile();
-			logger.info("Configuration directory for this application: " + dir.getAbsolutePath());
+			if (logger.isDebugEnabled()) {
+				String p = dir.getAbsolutePath();
+				logger.debug("Configuration directory for this application: " + p);
+			}
 		}
 		catch (IOException e) {
 			throw new ApplicationInitializationException(e);
@@ -120,7 +122,8 @@ public class Registry {
 			String msg = String.format("Configuration file missing: %s", file.getPath());
 			throw new ApplicationInitializationException(msg);
 		}
-		logger.info("Loading application configuration from " + file.getAbsolutePath());
+		if (logger.isDebugEnabled())
+			logger.debug("Loading application configuration from " + file.getAbsolutePath());
 		this.config = new ConfigObject(file);
 	}
 }

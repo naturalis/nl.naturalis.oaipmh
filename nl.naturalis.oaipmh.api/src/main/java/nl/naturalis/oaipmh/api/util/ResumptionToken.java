@@ -45,7 +45,7 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 	 * never be part of them. All elements are converted to base-36 numbers,
 	 * containing any digit (0-9) and any lowercase letter (a-z).
 	 */
-	private static final String DELIMITER = "O";
+	private static final String DELIMITER = "X";
 	private static final int RADIX = 36;
 
 	private static final int FROM_PART = 0;
@@ -104,14 +104,12 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 			String msg = String.format(fmt, slices[3]);
 			throw new BadResumptionTokenException(msg);
 		}
-		logger.info("Updating request:\n" + BeanPrinter.toString(request));
 	}
 
 	@Override
 	public String compose(OAIPMHRequest request)
 	{
-		logger.info("Generating resumption token for next request. Current request:\n"
-				+ BeanPrinter.toString(request));
+		logger.info("Generating resumption token for next request");
 		String[] parts = new String[5];
 		parts[PAGE_PART] = Integer.toString((request.getPage() + 1), RADIX);
 		if (request.getFrom() != null) {

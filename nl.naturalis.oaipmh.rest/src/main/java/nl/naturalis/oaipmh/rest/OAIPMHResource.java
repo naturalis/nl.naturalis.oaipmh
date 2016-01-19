@@ -28,6 +28,7 @@ import nl.naturalis.oaipmh.api.RepositoryException;
 import nl.naturalis.oaipmh.api.XSDNotFoundException;
 
 import org.domainobject.util.IOUtil;
+import org.domainobject.util.debug.BeanPrinter;
 import org.openarchives.oai._2.OAIPMHtype;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,8 +163,7 @@ public class OAIPMHResource {
 
 	private Response handle(String repoGroup, String repoName)
 	{
-		String name = repoName == null ? repoGroup : repoName;
-		logger.info("Receiving request for OAI repository \"" + name + "\"");
+		logRequest(repoGroup, repoName);
 		try {
 			RepositoryFactory rf = RepositoryFactory.getInstance();
 			IOAIRepository repository = rf.create(repoGroup, repoName);
@@ -175,6 +175,9 @@ public class OAIPMHResource {
 				OAIPMHtype skeleton = createResponseSkeleton(request);
 				skeleton.getError().addAll(rb.getErrors());
 				return xmlResponse(skeleton);
+			}
+			if (logger.isDebugEnabled()) {
+				logger.debug("Request object sent to repository:\n" + BeanPrinter.toString(request));
 			}
 			repository.init(request);
 			return new OAIPMHStream(request, repository).stream();
@@ -196,6 +199,22 @@ public class OAIPMHResource {
 			sb.append('/').append(repoName);
 		sb.append('/');
 		return sb.toString();
+	}
+
+	private static void logRequest(String repoGroup, String repoName)
+	{
+		if (logger.isInfoEnabled()) {
+			String msg;
+			if (repoName == null) {
+				String fmt = "Receiving request for OAI repository %s";
+				msg = String.format(fmt, repoGroup);
+			}
+			else {
+				String fmt = "Receiving request for OAI repository %s/%s";
+				msg = String.format(fmt, repoGroup, repoName);
+			}
+			logger.info(msg);
+		}
 	}
 
 }

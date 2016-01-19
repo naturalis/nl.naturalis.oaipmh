@@ -30,7 +30,6 @@ import nl.naturalis.oaipmh.api.IResumptionTokenParser;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.util.ResumptionToken;
 
-import org.domainobject.util.CollectionUtil;
 import org.openarchives.oai._2.OAIPMHerrorType;
 import org.openarchives.oai._2.VerbType;
 import org.slf4j.Logger;
@@ -160,7 +159,7 @@ public class RequestBuilder {
 
 	private void setUntil()
 	{
-		String arg = getArg(FROM);
+		String arg = getArg(UNTIL);
 		if (arg == null)
 			return;
 		try {
@@ -262,7 +261,7 @@ public class RequestBuilder {
 	private String getArg(Argument arg)
 	{
 		StringBuilder sb = new StringBuilder(50);
-		sb.append("Parameter ").append(arg.param()).append(": ");
+		sb.append("Retrieving URL parameter ").append(arg.param()).append(": ");
 		String s = null;
 		if (uriInfo.getQueryParameters().containsKey(arg.param())) {
 			s = uriInfo.getQueryParameters().getFirst(arg.param());
@@ -280,7 +279,8 @@ public class RequestBuilder {
 		else {
 			sb.append("absent");
 		}
-		logger.debug(sb.toString());
+		if (logger.isDebugEnabled())
+			logger.debug(sb.toString());
 		return s;
 	}
 
