@@ -23,7 +23,7 @@ class VerbArgumentMapper {
 
 	private static VerbArgumentMapper instance;
 
-	public static VerbArgumentMapper getInstance()
+	static VerbArgumentMapper getInstance()
 	{
 		if (instance == null)
 			instance = new VerbArgumentMapper();
@@ -33,7 +33,7 @@ class VerbArgumentMapper {
 	private final EnumMap<VerbType, EnumSet<Argument>> required;
 	private final EnumMap<VerbType, EnumSet<Argument>> optional;
 
-	public VerbArgumentMapper()
+	VerbArgumentMapper()
 	{
 		EnumSet<Argument> none = EnumSet.noneOf(Argument.class);
 		required = new EnumMap<>(VerbType.class);
@@ -52,12 +52,12 @@ class VerbArgumentMapper {
 		optional.put(LIST_RECORDS, EnumSet.of(FROM, UNTIL, SET, RESUMPTION_TOKEN));
 	}
 
-	public Set<Argument> getRequiredArguments(VerbType verb)
+	Set<Argument> getRequiredArguments(VerbType verb)
 	{
 		return required.get(verb);
 	}
 
-	public Set<Argument> getOptionalArguments(VerbType verb)
+	Set<Argument> getOptionalArguments(VerbType verb)
 	{
 		return optional.get(verb);
 	}

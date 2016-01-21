@@ -19,6 +19,7 @@ public class ResumptionTokenTest {
 	 * 
 	 * @throws BadResumptionTokenException
 	 */
+	@SuppressWarnings("static-method")
 	@Test
 	public void testComposeAndDecompose() throws BadResumptionTokenException
 	{

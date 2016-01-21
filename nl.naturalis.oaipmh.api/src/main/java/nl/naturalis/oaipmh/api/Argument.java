@@ -32,9 +32,11 @@ public enum Argument {
 	 */
 	public static Argument parse(String param)
 	{
-		for (Argument arg : values()) {
-			if (arg.param.equals(param))
-				return arg;
+		if (param != null) {
+			for (Argument arg : values()) {
+				if (arg.param.equals(param))
+					return arg;
+			}
 		}
 		return null;
 	}
