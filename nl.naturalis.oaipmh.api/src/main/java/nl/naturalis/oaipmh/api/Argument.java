@@ -60,6 +60,19 @@ public enum Argument {
 	}
 
 	/**
+	 * Establishes whether this argument is an allowed argument for the
+	 * specified verb. In other words whether this argument is either a required
+	 * argument or an optional argument for the specified verb.
+	 * 
+	 * @param verb
+	 * @return
+	 */
+	public boolean isArgumentFor(VerbType verb)
+	{
+		return isRequired(verb) || isOptional(verb);
+	}
+
+	/**
 	 * Whether or not this argument is a required argument for the specified
 	 * verb.
 	 * 
@@ -81,19 +94,6 @@ public enum Argument {
 	public boolean isOptional(VerbType verb)
 	{
 		return new VerbArgumentMapper().getOptionalArguments(verb).contains(this);
-	}
-
-	/**
-	 * Establishes whether this argument is an allowed argument for the
-	 * specified verb. In other words whether this argument is either a required
-	 * argument or an optional argument for the specified verb.
-	 * 
-	 * @param verb
-	 * @return
-	 */
-	public boolean isAllowed(VerbType verb)
-	{
-		return isRequired(verb) || isOptional(verb);
 	}
 
 	/**

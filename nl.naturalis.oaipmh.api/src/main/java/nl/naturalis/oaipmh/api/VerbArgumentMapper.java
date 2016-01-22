@@ -21,6 +21,8 @@ import org.openarchives.oai._2.VerbType;
 
 class VerbArgumentMapper {
 
+	private static final EnumSet<Argument> NONE = EnumSet.noneOf(Argument.class);
+
 	private static VerbArgumentMapper instance;
 
 	static VerbArgumentMapper getInstance()
@@ -35,20 +37,25 @@ class VerbArgumentMapper {
 
 	VerbArgumentMapper()
 	{
-		EnumSet<Argument> none = EnumSet.noneOf(Argument.class);
 		required = new EnumMap<>(VerbType.class);
 		optional = new EnumMap<>(VerbType.class);
-		required.put(IDENTIFY, none);
-		required.put(LIST_METADATA_FORMATS, none);
-		required.put(LIST_SETS, none);
-		required.put(GET_RECORD, EnumSet.of(IDENTIFIER, METADATA_PREFIX));
-		required.put(LIST_IDENTIFIERS, EnumSet.of(METADATA_PREFIX));
-		required.put(LIST_RECORDS, EnumSet.of(METADATA_PREFIX));
-		optional.put(IDENTIFY, none);
+
+		required.put(IDENTIFY, NONE);
+		optional.put(IDENTIFY, NONE);
+
+		required.put(LIST_METADATA_FORMATS, NONE);
 		optional.put(LIST_METADATA_FORMATS, EnumSet.of(IDENTIFIER));
+
+		required.put(LIST_SETS, NONE);
 		optional.put(LIST_SETS, EnumSet.of(RESUMPTION_TOKEN));
-		optional.put(GET_RECORD, none);
+
+		required.put(GET_RECORD, EnumSet.of(IDENTIFIER, METADATA_PREFIX));
+		optional.put(GET_RECORD, NONE);
+
+		required.put(LIST_IDENTIFIERS, EnumSet.of(METADATA_PREFIX));
 		optional.put(LIST_IDENTIFIERS, EnumSet.of(FROM, UNTIL, SET));
+
+		required.put(LIST_RECORDS, EnumSet.of(METADATA_PREFIX));
 		optional.put(LIST_RECORDS, EnumSet.of(FROM, UNTIL, SET, RESUMPTION_TOKEN));
 	}
 

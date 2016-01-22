@@ -206,7 +206,7 @@ public class RequestBuilder {
 				if (arg != VERB) {
 					args.add(arg);
 					VerbType verb = request.getVerb();
-					if (verb != null && !arg.isAllowed(verb)) {
+					if (verb != null && !arg.isArgumentFor(verb)) {
 						String fmt = "Argument %s not allowed for verb %s";
 						String msg = String.format(fmt, arg, verb.value());
 						errors.add(new BadArgumentError(msg));

@@ -1,62 +1,73 @@
 package nl.naturalis.oaipmh.api;
 
+import static nl.naturalis.oaipmh.api.Argument.FROM;
+import static nl.naturalis.oaipmh.api.Argument.IDENTIFIER;
+import static nl.naturalis.oaipmh.api.Argument.METADATA_PREFIX;
+import static nl.naturalis.oaipmh.api.Argument.UNTIL;
+import static nl.naturalis.oaipmh.api.Argument.getRequiredArguments;
+import static nl.naturalis.oaipmh.api.Argument.parse;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
+import static org.openarchives.oai._2.VerbType.LIST_RECORDS;
+
+import java.util.Set;
 
 import org.junit.Test;
 
 public class ArgumentTest {
 
 	@Test
+	@SuppressWarnings("static-method")
 	public void testParse()
 	{
-		Argument arg = Argument.parse(null);
+		Argument arg = parse(null);
 		assertNull("01", arg);
-		arg = Argument.parse("");
+		arg = parse("");
 		assertNull("02", arg);
-		arg = Argument.parse("bla");
+		arg = parse("bla");
 		assertNull("03", arg);
-		arg = Argument.parse("UNTIL");
+		arg = parse("UNTIL");
 		assertNull("04", arg);
-		arg = Argument.parse("until");
-		assertEquals("05", Argument.UNTIL, arg);
+		arg = parse("until");
+		assertEquals("05", UNTIL, arg);
 	}
 
 	@Test
+	@SuppressWarnings("static-method")
 	public void testGetRequiredArguments()
 	{
-		fail("Not yet implemented");
+		Set<Argument> args = getRequiredArguments(LIST_RECORDS);
+		assertEquals("01", 1, args.size());
+		assertEquals("02", METADATA_PREFIX, args.iterator().next());
 	}
 
 	@Test
+	@SuppressWarnings("static-method")
 	public void testIsRequired()
 	{
-		fail("Not yet implemented");
+		assertTrue("01", METADATA_PREFIX.isRequired(LIST_RECORDS));
+		assertFalse("02", IDENTIFIER.isRequired(LIST_RECORDS));
+		assertFalse("03", FROM.isRequired(LIST_RECORDS));
 	}
 
 	@Test
+	@SuppressWarnings("static-method")
 	public void testIsOptional()
 	{
-		fail("Not yet implemented");
+		assertFalse("01", METADATA_PREFIX.isOptional(LIST_RECORDS));
+		assertFalse("02", IDENTIFIER.isOptional(LIST_RECORDS));
+		assertTrue("03", FROM.isOptional(LIST_RECORDS));
 	}
 
 	@Test
+	@SuppressWarnings("static-method")
 	public void testIsAllowed()
 	{
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testParam()
-	{
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testToString()
-	{
-		fail("Not yet implemented");
+		assertTrue("01", METADATA_PREFIX.isArgumentFor(LIST_RECORDS));
+		assertFalse("02", IDENTIFIER.isArgumentFor(LIST_RECORDS));
+		assertTrue("03", FROM.isArgumentFor(LIST_RECORDS));
 	}
 
 }
