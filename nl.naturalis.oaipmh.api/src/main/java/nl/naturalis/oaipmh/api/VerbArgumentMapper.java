@@ -55,8 +55,8 @@ class VerbArgumentMapper {
 		required.put(LIST_IDENTIFIERS, EnumSet.of(METADATA_PREFIX));
 		optional.put(LIST_IDENTIFIERS, EnumSet.of(FROM, UNTIL, SET));
 
-		required.put(LIST_RECORDS, EnumSet.of(METADATA_PREFIX));
-		optional.put(LIST_RECORDS, EnumSet.of(FROM, UNTIL, SET, RESUMPTION_TOKEN));
+		required.put(LIST_RECORDS, NONE);
+		optional.put(LIST_RECORDS, EnumSet.of(METADATA_PREFIX, FROM, UNTIL, SET, RESUMPTION_TOKEN));
 	}
 
 	Set<Argument> getRequiredArguments(VerbType verb)

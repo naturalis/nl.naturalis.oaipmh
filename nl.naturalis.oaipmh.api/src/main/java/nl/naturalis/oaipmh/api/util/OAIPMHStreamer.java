@@ -1,6 +1,7 @@
 package nl.naturalis.oaipmh.api.util;
 
-import static javax.xml.bind.Marshaller.*;
+import static javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT;
+import static javax.xml.bind.Marshaller.JAXB_SCHEMA_LOCATION;
 
 import java.io.OutputStream;
 import java.util.Arrays;
@@ -21,7 +22,8 @@ import org.openarchives.oai._2.OAIPMHtype;
 
 /**
  * Class that can aid repository implementations in streaming the OAI-PMH they
- * have assembled.
+ * have generated to the {@link java.io.OutputStream} provided by the REST
+ * layer.
  * 
  * @author Ayco Holleman
  *

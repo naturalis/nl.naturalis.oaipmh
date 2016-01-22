@@ -15,6 +15,7 @@ import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormatter;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,7 @@ import nl.naturalis.oaipmh.api.IResumptionTokenParser;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.util.ResumptionToken;
 
+import org.domainobject.util.CollectionUtil;
 import org.openarchives.oai._2.OAIPMHerrorType;
 import org.openarchives.oai._2.VerbType;
 import org.slf4j.Logger;
@@ -101,9 +103,8 @@ public class RequestBuilder {
 		setVerb();
 		setFrom();
 		setUntil();
-		Set<Argument> args = checkArguments();
-		checkRequiredArguments(args);
-		processResumptionToken();
+		checkArguments();
+		parseResumptionToken();
 		return request;
 	}
 
@@ -184,7 +185,7 @@ public class RequestBuilder {
 	 * arguments in the request except the verb, which is more like the name of
 	 * the function to be executed.
 	 */
-	private Set<Argument> checkArguments()
+	private void checkArguments()
 	{
 		Set<Argument> args = new HashSet<>(5);
 		for (String param : uriInfo.getQueryParameters().keySet()) {
@@ -214,51 +215,60 @@ public class RequestBuilder {
 				}
 			}
 		}
-		return args;
+		checkRequiredArguments(args);
+		checkExclusiveArguments(args);
 	}
 
 	private void checkRequiredArguments(Set<Argument> provided)
 	{
-		// VerbType verb = request.getVerb();
-		// if (verb == null)
-		// return;
-		// Set<Argument> required = Argument.getRequiredArguments(verb);
-		// required.removeAll(provided);
-		// if (required.size() != 0) {
-		// String missing = CollectionUtil.implode(required);
-		// String msg = "Missing required argument(s): " + missing;
-		// errors.add(new BadArgumentError(msg));
-		// }
+		VerbType verb = request.getVerb();
+		if (verb == null)
+			return;
+		Set<Argument> required = Argument.getRequiredArguments(verb);
+		required.removeAll(provided);
+		if (required.size() != 0) {
+			String missing = CollectionUtil.implode(required);
+			String msg = "Missing required argument(s): " + missing;
+			errors.add(new BadArgumentError(msg));
+		}
 	}
 
-	private void processResumptionToken()
+	/*
+	 * Checks for mutually exclusive arguments. Currently just for the
+	 * ListRecords request.
+	 */
+	private void checkExclusiveArguments(Set<Argument> provided)
 	{
 		if (request.getResumptionToken() != null) {
+			EnumSet<Argument> forbidden = EnumSet.of(FROM, UNTIL, METADATA_PREFIX, SET, IDENTIFIER);
 			String fmt = "resumptionToken argument cannot be combined with %s argument";
-			if (request.getFrom() != null)
-				errors.add(new BadArgumentError(String.format(fmt, FROM)));
-			if (request.getUntil() != null)
-				errors.add(new BadArgumentError(String.format(fmt, UNTIL)));
-			if (request.getMetadataPrefix() != null)
-				errors.add(new BadArgumentError(String.format(fmt, METADATA_PREFIX)));
-			if (request.getSet() != null)
-				errors.add(new BadArgumentError(String.format(fmt, SET)));
-			if (request.getIdentifier() != null)
-				errors.add(new BadArgumentError(String.format(fmt, IDENTIFIER)));
-			if (errors.size() == 0) {
-				try {
-					if (rtParser == null)
-						rtParser = new ResumptionToken();
-					rtParser.decompose(request);
-				}
-				catch (BadResumptionTokenException e) {
-					errors.add(e.getErrors().get(0));
-				}
+			for (Argument arg : provided) {
+				if (forbidden.contains(arg))
+					errors.add(new BadArgumentError(String.format(fmt, arg)));
+			}
+		}
+	}
+
+	private void parseResumptionToken()
+	{
+		if (request.getResumptionToken() != null) {
+			try {
+				if (rtParser == null)
+					rtParser = new ResumptionToken();
+				rtParser.decompose(request);
+			}
+			catch (BadResumptionTokenException e) {
+				errors.add(e.getErrors().get(0));
 			}
 		}
 	}
 
 	private String getArg(Argument arg)
+	{
+		return logger.isDebugEnabled() ? getArgDebug(arg) : getArgNoDebug(arg);
+	}
+
+	private String getArgDebug(Argument arg)
 	{
 		StringBuilder sb = new StringBuilder(50);
 		sb.append("Retrieving URL parameter ").append(arg.param()).append(": ");
@@ -279,8 +289,19 @@ public class RequestBuilder {
 		else {
 			sb.append("absent");
 		}
-		if (logger.isDebugEnabled())
-			logger.debug(sb.toString());
+		logger.debug(sb.toString());
+		return s;
+	}
+
+	private String getArgNoDebug(Argument arg)
+	{
+		String s = null;
+		if (uriInfo.getQueryParameters().containsKey(arg.param())) {
+			s = uriInfo.getQueryParameters().getFirst(arg.param());
+			if (s.length() == 0) {
+				s = null;
+			}
+		}
 		return s;
 	}
 

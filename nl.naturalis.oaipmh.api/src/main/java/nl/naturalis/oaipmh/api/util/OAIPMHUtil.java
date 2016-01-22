@@ -14,6 +14,12 @@ import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import org.openarchives.oai._2.OAIPMHtype;
 import org.openarchives.oai._2.RequestType;
 
+/**
+ * Utility class providing common functionality for OAI reposities.
+ * 
+ * @author Ayco Holleman
+ *
+ */
 public class OAIPMHUtil {
 
 	/**
