@@ -13,11 +13,11 @@ import nl.naturalis.oaipmh.api.IResumptionTokenGenerator;
 import nl.naturalis.oaipmh.api.IResumptionTokenParser;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.domainobject.util.ArrayUtil;
 import org.domainobject.util.StringUtil;
 import org.domainobject.util.debug.BeanPrinter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * An implementation of {@link IResumptionTokenParser} and
@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ResumptionToken implements IResumptionTokenParser, IResumptionTokenGenerator {
 
-	private static final Logger logger = LoggerFactory.getLogger(ResumptionToken.class);
+	private static final Logger logger = LogManager.getLogger(ResumptionToken.class);
 
 	/*
 	 * Use capital 'O' (uppercase of 'o') as delimiter between in elements in

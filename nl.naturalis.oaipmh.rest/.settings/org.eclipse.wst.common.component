@@ -1,23 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="nl.naturalis.oaipmh.rest">
-        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
-        <dependent-module archiveName="org.domainobject.util.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/org.domainobject.util/org.domainobject.util">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="nl.naturalis.oaipmh.api.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/nl.naturalis.oaipmh.api/nl.naturalis.oaipmh.api">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="nl.naturalis.lims2.oaipmh.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/nl.naturalis.lims2.oaipmh/nl.naturalis.lims2.oaipmh">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="mysql-connector-java-5.1.38.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//home/ayco/.ivy2/cache/mysql/mysql-connector-java/jars/mysql-connector-java-5.1.38.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <property name="java-output-path" value="/nl.naturalis.oaipmh.rest/build/classes"/>
-        <property name="context-root" value="nl.naturalis.oaipmh.rest"/>
-    </wb-module>
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+	<wb-module deploy-name="nl.naturalis.oaipmh.rest">
+		<wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource" />
+		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java" />
+		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources" />
+		<dependent-module archiveName="nl.naturalis.oaipmh.api.jar"
+			deploy-path="/WEB-INF/lib"
+			handle="module:/resource/nl.naturalis.oaipmh.api/nl.naturalis.oaipmh.api">
+			<dependency-type>uses</dependency-type>
+		</dependent-module>
+		<dependent-module archiveName="nl.naturalis.lims2.oaipmh.jar"
+			deploy-path="/WEB-INF/lib"
+			handle="module:/resource/nl.naturalis.lims2.oaipmh/nl.naturalis.lims2.oaipmh">
+			<dependency-type>uses</dependency-type>
+		</dependent-module>
+		<dependent-module archiveName="org.domainobject.util.jar"
+			deploy-path="/WEB-INF/lib" handle="module:/resource/org.domainobject.util/org.domainobject.util">
+			<dependency-type>uses</dependency-type>
+		</dependent-module>
+		<property name="java-output-path" value="/nl.naturalis.oaipmh.rest/build/classes" />
+		<property name="context-root" value="nl.naturalis.oaipmh.rest" />
+	</wb-module>
 </project-modules>

@@ -16,16 +16,18 @@ import org.slf4j.LoggerFactory;
  */
 public class Registry {
 
+	/**
+	 * Name of the central configuration file for the OAIPMH REST service
+	 * (oaipmh.properties).
+	 */
+	static final String CONFIG_FILE_NAME = "oaipmh.properties";
+
 	/*
 	 * System property that tells us where the configuration directory
 	 * (containing purl.properties) is. When using Wildfly, this system property
 	 * is probably set in standalone.xml
 	 */
 	private static final String SYSPROP_CONFIG_DIR = "nl.naturalis.oaipmh.conf.dir";
-	/*
-	 * Name of the central configuration file for the OAIPMH REST service.
-	 */
-	private static final String CONFIG_FILE_NAME = "oaipmh.properties";
 
 	private static final Logger logger = LoggerFactory.getLogger(Registry.class);
 

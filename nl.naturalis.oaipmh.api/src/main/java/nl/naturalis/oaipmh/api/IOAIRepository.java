@@ -2,6 +2,8 @@ package nl.naturalis.oaipmh.api;
 
 import java.io.OutputStream;
 
+import org.domainobject.util.ConfigObject;
+
 import nl.naturalis.oaipmh.api.util.ResumptionToken;
 
 /**
@@ -61,6 +63,8 @@ import nl.naturalis.oaipmh.api.util.ResumptionToken;
  *
  */
 public interface IOAIRepository {
+
+	void setConfiguration(ConfigObject config);
 
 	/**
 	 * Informs the OAI repository under which URL it operates. OAI repositories

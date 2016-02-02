@@ -6,7 +6,10 @@ import java.util.HashMap;
 
 import nl.naturalis.oaipmh.api.IOAIRepository;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.domainobject.util.ConfigObject;
+import org.domainobject.util.FileUtil;
 
 /**
  * Factory class producing {@link IOAIRepository} instances.
@@ -15,6 +18,9 @@ import org.domainobject.util.ConfigObject;
  *
  */
 public class RepositoryFactory {
+
+	private static final String REPO_CONFIG_FILENAME_PATTERN = "oai-repo.%s.properties";
+	private static final Logger logger = LogManager.getLogger(RepositoryFactory.class);
 
 	private static RepositoryFactory instance;
 
@@ -81,62 +87,97 @@ public class RepositoryFactory {
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
-	public IOAIRepository create(String repoGroup, String repoName)
+	public IOAIRepository build(String repoGroup, String repoName)
 			throws RepositoryInitializationException
 	{
 		String cacheKey = "%" + repoGroup + "/" + repoName + "%";
-		IOAIRepository repo = cache.get(cacheKey);
-		if (repo == null) {
-			ConfigObject restConfig = Registry.getInstance().getConfig();
-			String property = "repository." + repoGroup + ".config";
-			String repoConfigFile = restConfig.get(property);
-			ConfigObject repoConfig = null;
-			if (repoConfigFile == null) {
-				repoConfigFile = "oai-repo." + repoGroup + ".properties";
-				InputStream is = getClass().getResourceAsStream(repoConfigFile);
-				if (is == null) {
-					repoConfigFile = "/oai-repo." + repoGroup + ".properties";
-					is = getClass().getResourceAsStream(repoConfigFile);
-				}
-				if (is != null) {
-					repoConfig = new ConfigObject(is);
-				}
+		IOAIRepository repository = cache.get(cacheKey);
+		if (repository == null) {
+			ConfigObject config = getRepoConfigFromRestConfig(repoGroup);
+			if (config == null) {
+				config = getRepoConfigFromClasspath(repoGroup);
 			}
-			else {
-				File f = new File(repoConfigFile);
-				if (f.isFile()) {
-					repoConfig = new ConfigObject(f);
-				}
-			}
-			if (repoConfig == null) {
+			if (config == null) {
 				String fmt = "Missing configuration file for OAI repository \"%s\"";
 				String msg = String.format(fmt, repoGroup);
 				throw new RepositoryInitializationException(msg);
 			}
 			String repoClassName;
 			if (repoName == null)
-				repoClassName = repoConfig.required("repo.impl.class");
+				repoClassName = config.required("repo.impl.class");
 			else
-				repoClassName = repoConfig.required(repoName + ".repo.impl.class");
+				repoClassName = config.required(repoName + ".repo.impl.class");
 			Class<IOAIRepository> repoClass;
 			try {
 				repoClass = (Class<IOAIRepository>) Class.forName(repoClassName);
 			}
 			catch (ClassNotFoundException e) {
-				String fmt = "The repository implementation class specified "
-						+ "in %s (%s) was not found on the classpath";
-				String msg = String.format(fmt, repoConfigFile, repoClassName);
+				String fmt = "Repository implementation class (%s) not found";
+				String msg = String.format(fmt, repoClassName);
 				throw new RepositoryInitializationException(msg);
 			}
 			try {
-				repo = repoClass.newInstance();
-				cache.put(repoGroup, repo);
+				repository = repoClass.newInstance();
+				repository.setConfiguration(config);
+				cache.put(cacheKey, repository);
 			}
 			catch (InstantiationException | IllegalAccessException e) {
 				throw new RepositoryInitializationException(e);
 			}
 		}
-		return repo;
+		return repository;
+	}
+
+	private static ConfigObject getRepoConfigFromRestConfig(String repoGroup)
+			throws RepositoryInitializationException
+	{
+		ConfigObject restConfig = Registry.getInstance().getConfig();
+		String pattern = REPO_CONFIG_FILENAME_PATTERN;
+		String key = String.format(pattern, repoGroup) + ".file";
+		String val = restConfig.get(key);
+		if (val == null) {
+			return null;
+		}
+		logger.debug("Searching for {}", val);
+		File f = new File(val);
+		if (!f.isFile()) {
+			String fmt = "Invalid value for property \"%s\" in %s. No such file: \"%s\"";
+			String msg = String.format(fmt, key, val);
+			throw new RepositoryInitializationException(msg);
+		}
+		logConfigLocation(repoGroup, key);
+		return new ConfigObject(f);
+	}
+
+	private ConfigObject getRepoConfigFromClasspath(String repoGroup)
+	{
+		File confDir = Registry.getInstance().getConfDir();
+		String cfgFileName = String.format(REPO_CONFIG_FILENAME_PATTERN, repoGroup);
+		if (logger.isDebugEnabled()) {
+			String fmt = "Searching for {} in {}";
+			logger.debug(fmt, cfgFileName, confDir.getAbsolutePath());
+		}
+		File file = FileUtil.newFile(confDir, cfgFileName);
+		if (file.isFile()) {
+			logConfigLocation(repoGroup, file.getAbsolutePath());
+			return new ConfigObject(file);
+		}
+		logger.debug("Searching classpath for file {}");
+		InputStream is = getClass().getResourceAsStream(cfgFileName);
+		if (is == null) {
+			cfgFileName = "/" + cfgFileName;
+			is = getClass().getResourceAsStream(cfgFileName);
+		}
+		if (is != null) {
+			logConfigLocation(repoGroup, getClass().getResource(cfgFileName).toExternalForm());
+			return new ConfigObject(is);
+		}
+		return null;
+	}
+
+	private static void logConfigLocation(String repoGroup, String location)
+	{
+		logger.info("Configuration file for {} OAI repository: {}", repoGroup, location);
 	}
 
 }

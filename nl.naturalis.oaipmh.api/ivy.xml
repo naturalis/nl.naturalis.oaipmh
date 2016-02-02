@@ -7,7 +7,8 @@
         status="integration">
 	</info>
 	<dependencies>
-		<dependency org="org.slf4j" name="slf4j-api" rev="1.7.10"/>
+	  <dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.5" />
+	  <dependency org="org.apache.logging.log4j" name="log4j-core" rev="2.5" />
 		<dependency org="commons-codec" name="commons-codec" rev="1.9"/>
 	</dependencies>
 </ivy-module>

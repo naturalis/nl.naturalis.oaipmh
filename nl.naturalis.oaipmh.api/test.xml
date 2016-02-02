@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OAI-PMH xmlns:lims2="http://data.naturalis.nl/lims2" xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd http://data.naturalis.nl/lims2 http://10.42.1.146:8080/oaipmh/geneious/dna-extracts/xsd/lims2.xsd">
+	<responseDate>2016-01-27T07:41:35Z</responseDate>
+	<request verb="ListRecords" metadataPrefix="lims2">http://10.42.1.146:8080/oaipmh/geneious/dna-extracts</request>
+	<ListRecords>
+		<record>
+			<header>
+				<identifier>123423046</identifier>
+				<datestamp>2016-01-27T07:41:35Z</datestamp>
+			</header>
+			<metadata>
+				<lims2:geneious>
+					<lims2:dnaExtract>
+						<lims2:unit>
+							<lims2:unitID>e123214324</lims2:unitID>
+							<lims2:associatedUnitID>RMNH.INS.23917</lims2:associatedUnitID>
+							<lims2:institutePlateID>NBCN123456</lims2:institutePlateID>
+							<lims2:platePosition>A10</lims2:platePosition>
+						</lims2:unit>
+						<lims2:dnaLabProject>
+							<lims2:projectID>BCP1234</lims2:projectID>
+							<lims2:versionNumber>12345</lims2:versionNumber>
+							<lims2:amplification>
+								<lims2:marker>CO1</lims2:marker>
+								<lims2:amplificationStaff></lims2:amplificationStaff>
+							</lims2:amplification>
+							<lims2:sequencing>
+								<lims2:cloningStaff></lims2:cloningStaff>
+								<lims2:consensusSequenceID>e4010125106_Rhy_ger_MJ243_COI-H08_M13R_P15_025</lims2:consensusSequenceID>
+								<lims2:consensusSequenceLength>650</lims2:consensusSequenceLength>
+								<lims2:consensusSequenceQuality>fault</lims2:consensusSequenceQuality>
+								<lims2:amplificationStaff></lims2:amplificationStaff>
+								<lims2:geneticAccession>
+									<lims2:geneticAccessionNumber>JQ412562</lims2:geneticAccessionNumber>
+									<lims2:geneticAccessionNumberURI>http://www.ncbi.nlm.nih.gov/nuccore/JQ412562</lims2:geneticAccessionNumberURI>
+									<lims2:BOLDProcessID>ANTVI001-11</lims2:BOLDProcessID>
+								</lims2:geneticAccession>
+							</lims2:sequencing>
+						</lims2:dnaLabProject>
+					</lims2:dnaExtract>
+				</lims2:geneious>
+			</metadata>
+		</record>
+	</ListRecords>
+</OAI-PMH>

@@ -3,9 +3,9 @@
 	<name>nl.naturalis.oaipmh.rest</name>
 	<comment></comment>
 	<projects>
-		<project>org.domainobject.util</project>
 		<project>nl.naturalis.oaipmh.api</project>
 		<project>nl.naturalis.lims2.oaipmh</project>
+		<project>org.domainobject.util</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

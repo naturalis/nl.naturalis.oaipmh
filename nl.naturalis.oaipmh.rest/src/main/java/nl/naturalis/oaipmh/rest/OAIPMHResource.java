@@ -106,15 +106,15 @@ public class OAIPMHResource {
 			@PathParam("repo") String repoName, @PathParam("prefix") final String prefix)
 	{
 		try {
-			final RepositoryFactory rf = RepositoryFactory.getInstance();
-			final IOAIRepository repo = rf.create(repoGroup, repoName);
+			final RepositoryFactory factory = RepositoryFactory.getInstance();
+			final IOAIRepository repository = factory.build(repoGroup, repoName);
 			return xmlResponse(new StreamingOutput() {
 
 				@Override
 				public void write(OutputStream out) throws IOException, WebApplicationException
 				{
 					try {
-						repo.getXSDForMetadataPrefix(out, prefix);
+						repository.getXSDForMetadataPrefix(out, prefix);
 					}
 					catch (XSDNotFoundException e) {
 						throw new WebApplicationException(plainTextResponse(404, e.getMessage()));
@@ -166,7 +166,7 @@ public class OAIPMHResource {
 		logRequest(repoGroup, repoName);
 		try {
 			RepositoryFactory rf = RepositoryFactory.getInstance();
-			IOAIRepository repository = rf.create(repoGroup, repoName);
+			IOAIRepository repository = rf.build(repoGroup, repoName);
 			repository.setRepositoryBaseUrl(getRepoBaseURL(repoGroup, repoName));
 			RequestBuilder rb = RequestBuilder.newInstance();
 			rb.setResumptionTokenParser(repository.getResumptionTokenParser());
