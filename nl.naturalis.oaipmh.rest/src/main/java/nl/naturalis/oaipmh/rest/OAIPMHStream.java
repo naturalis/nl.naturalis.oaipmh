@@ -74,6 +74,9 @@ class OAIPMHStream implements StreamingOutput {
 		catch (RepositoryException e) {
 			throw new WebApplicationException(serverError(e));
 		}
+		catch (Throwable t) {
+			throw new WebApplicationException(serverError(t));
+		}
 	}
 
 }
