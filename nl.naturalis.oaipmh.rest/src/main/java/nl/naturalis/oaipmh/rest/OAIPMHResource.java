@@ -27,11 +27,11 @@ import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.RepositoryException;
 import nl.naturalis.oaipmh.api.XSDNotFoundException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.domainobject.util.IOUtil;
 import org.domainobject.util.debug.BeanPrinter;
 import org.openarchives.oai._2.OAIPMHtype;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -63,7 +63,7 @@ import org.slf4j.LoggerFactory;
 @Path("/")
 public class OAIPMHResource {
 
-	private static final Logger logger = LoggerFactory.getLogger(OAIPMHResource.class);
+	private static final Logger logger = LogManager.getLogger(OAIPMHResource.class);
 
 	@Context
 	private HttpServletRequest httpServletRequest;
@@ -176,9 +176,7 @@ public class OAIPMHResource {
 				skeleton.getError().addAll(rb.getErrors());
 				return xmlResponse(skeleton);
 			}
-			if (logger.isDebugEnabled()) {
-				logger.debug("Request object sent to repository:\n" + BeanPrinter.toString(request));
-			}
+			logger.debug("Request object sent to repository:\n{}", BeanPrinter.toString(request));
 			repository.init(request);
 			return new OAIPMHStream(request, repository).stream();
 		}

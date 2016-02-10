@@ -1,16 +1,15 @@
 package nl.naturalis.oaipmh.rest;
 
+import static org.domainobject.util.ExceptionUtil.rootStackTrace;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.domainobject.util.debug.BeanPrinter;
-
-import static org.domainobject.util.ExceptionUtil.*;
 
 /**
  * Provides common functionality for the REST service.

@@ -31,11 +31,11 @@ import nl.naturalis.oaipmh.api.IResumptionTokenParser;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.util.ResumptionToken;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.domainobject.util.CollectionUtil;
 import org.openarchives.oai._2.OAIPMHerrorType;
 import org.openarchives.oai._2.VerbType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Builds {@link OAIPMHRequest} objects from HTTP URLs.
@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RequestBuilder {
 
-	private static final Logger logger = LoggerFactory.getLogger(RequestBuilder.class);
+	private static final Logger logger = LogManager.getLogger(RequestBuilder.class);
 
 	/*
 	 * This currently just returns a new instance, but in the future we might
