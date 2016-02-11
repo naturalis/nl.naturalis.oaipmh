@@ -109,7 +109,7 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 	@Override
 	public String compose(OAIPMHRequest request)
 	{
-		logger.info("Generating resumption token for next request");
+		logger.debug("Generating resumption token for next request");
 		String[] parts = new String[5];
 		parts[PAGE_PART] = Integer.toString((request.getPage() + 1), RADIX);
 		if (request.getFrom() != null) {
@@ -131,7 +131,7 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 			parts[METADATA_PREFIX_PART] = bi.toString(RADIX);
 		}
 		String token = ArrayUtil.implode(parts, DELIMITER);
-		logger.info("Generated resumption token: " + token);
+		logger.info("Resumption token for next request: " + token);
 		return token;
 	}
 

@@ -177,7 +177,7 @@ public class RepositoryFactory {
 
 	private static void logConfigLocation(String repoGroup, String location)
 	{
-		logger.info("Configuration file for {} OAI repository: {}", repoGroup, location);
+		logger.info("Loading configuration for {}: {}", repoGroup, location);
 	}
 
 }
