@@ -131,7 +131,7 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
 			parts[METADATA_PREFIX_PART] = bi.toString(RADIX);
 		}
 		String token = ArrayUtil.implode(parts, DELIMITER);
-		logger.info("Resumption token for next request: " + token);
+		logger.debug("Resumption token for next request: " + token);
 		return token;
 	}
 
