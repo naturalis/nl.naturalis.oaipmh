@@ -4,8 +4,17 @@
 		<Console name="Console">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n" />
 		</Console>
+		<File name="oaipmh" fileName="/home/ayco/projects/oaipmh/oaipmh.log">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n" />
+		</File>
 	</Appenders>
 	<Loggers>
+		<Logger name="nl.naturalis.lims2" level="DEBUG" additivity="false">
+			<AppenderRef ref="oaipmh" />
+		</Logger>
+		<Logger name="nl.naturalis.oaipmh" level="DEBUG" additivity="false">
+			<AppenderRef ref="oaipmh" />
+		</Logger>
 		<Root level="INFO">
 			<AppenderRef ref="Console" />
 		</Root>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." name="properties">
+
+	<property name="javac.source" value="1.7" />
+	<property name="javac.target" value="1.7" />
+	<property name="javac.debug" value="source,lines,vars" />
+
+	<property name="home" location="${basedir}/../" />
+
+	<property name="build.module.name" value="nl.naturalis.oaipmh.build" />
+	<property name="build.module.location" location="${home}/${build.module.name}" />
+
+	<property name="api.module.name" value="nl.naturalis.oaipmh.api" />
+	<property name="api.module.location" location="${home}/${api.module.name}" />
+
+	<property name="rest.module.name" value="nl.naturalis.oaipmh.rest" />
+	<property name="rest.module.location" location="${home}/${rest.module.name}" />
+
+	<property name="lims2.module.name" value="nl.naturalis.lims2.oaipmh" />
+	<property name="lims2.module.location" location="${home}/${lims2.module.name}" />
+
+
+</project>
