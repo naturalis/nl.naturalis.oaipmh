@@ -131,6 +131,7 @@ public class RequestBuilder {
 				request.setVerb(verb);
 			}
 			catch (IllegalArgumentException e) {
+				logger.error("Bad verb: {}", arg);
 				errors.add(new BadVerbError(arg));
 			}
 		}
@@ -153,6 +154,7 @@ public class RequestBuilder {
 				request.setDateFormatFrom(dateFormat);
 			}
 			catch (ParseException e2) {
+				logger.error("Bad \"from\" date: {}", arg);
 				errors.add(badDate(arg));
 			}
 		}
@@ -175,6 +177,7 @@ public class RequestBuilder {
 				request.setDateFormatUntil(dateFormat);
 			}
 			catch (ParseException e2) {
+				logger.error("Bad \"until\" date: {}", arg);
 				errors.add(badDate(arg));
 			}
 		}

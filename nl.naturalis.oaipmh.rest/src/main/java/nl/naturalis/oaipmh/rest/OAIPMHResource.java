@@ -8,6 +8,13 @@ import static nl.naturalis.oaipmh.rest.RESTUtil.xmlResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -38,7 +45,7 @@ import org.openarchives.oai._2.OAIPMHtype;
  * <p>
  * REST resource handling all OAI-PMH requests for all OAI repositories. Each
  * OAI repository is accessed through a sub-resource of this REST resource. In
- * other words, if the base URL of the OAI-PMH REST service is
+ * other words, if the base URL of the OAI-PMH REST service would be
  * http://example.com/oaipmh, then http://example.com/oaipmh<b>/geneious</b>
  * will access the geneious repository and
  * http://example.com/oaipmh<b>/medialib</b> will access the medialib
@@ -51,11 +58,11 @@ import org.openarchives.oai._2.OAIPMHtype;
  * http://example.com/oaipmh/geneious/specimens<br>
  * http://example.com/oaipmh/geneious/dna-extracts<br>
  * http://example.com/oaipmh/geneious/dna-slides<br>
- * The first path segment after the base URL then becomes the name of the group
- * while the next path segment specifies the name of the repository. Apart from
- * providing a nice URL structure, repository groups share a single
- * configuration file. This is explained in the comments for
- * {@link RepositoryFactory}.
+ * The first path segment after the base URL then becomes the name of the
+ * repository group while the next path segment specifies the name of the
+ * repository within that group. Apart from providing a nice URL structure,
+ * repository groups share a single configuration file. This is explained in the
+ * comments for {@link RepositoryFactory}.
  * </p>
  * 
  * @author Ayco Holleman
@@ -70,6 +77,8 @@ public class OAIPMHResource {
 	private HttpServletRequest httpServletRequest;
 	@Context
 	private UriInfo uriInfo;
+
+	private BeanPrinter beanPrinter;
 
 	/**
 	 * Show some welcome content.
@@ -174,7 +183,10 @@ public class OAIPMHResource {
 				skeleton.getError().addAll(rb.getErrors());
 				return xmlResponse(skeleton);
 			}
-			logger.debug("Request object sent to repository:\n{}", BeanPrinter.toString(request));
+			if (logger.isDebugEnabled()) {
+				logger.debug("Request object sent to repository:\n{}",
+						BeanPrinter.toString(request));
+			}
 			repository.init(request);
 			return new OAIPMHStream(request, repository).stream();
 		}
