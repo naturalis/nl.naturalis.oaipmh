@@ -29,6 +29,7 @@ import nl.naturalis.oaipmh.api.XSDNotFoundException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.domainobject.util.ConfigObject;
 import org.domainobject.util.IOUtil;
 import org.domainobject.util.debug.BeanPrinter;
 import org.openarchives.oai._2.OAIPMHtype;
@@ -77,18 +78,15 @@ public class OAIPMHResource {
 	 */
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	@SuppressWarnings("static-method")
-	public StreamingOutput welcome()
+	public String welcome()
 	{
-		return new StreamingOutput() {
-
-			@Override
-			public void write(OutputStream out) throws IOException, WebApplicationException
-			{
-				InputStream in = getClass().getResourceAsStream("welcome.html");
-				IOUtil.pipe(in, out, 2048);
-			}
-		};
+		InputStream in = getClass().getResourceAsStream("welcome.html");
+		String s = new String(IOUtil.readAllBytes(in));
+		ConfigObject cfg = Registry.getInstance().getConfig();
+		s = s.replace("%version%", cfg.get("version", "not set"));
+		s = s.replace("%branch%", cfg.get("git.branch", "not set"));
+		s = s.replace("%commit%", cfg.get("git.commit", "not set"));
+		return s;
 	}
 
 	/**
