@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns:ivy="antlib:org.apache.ivy.ant"
-         xmlns:if="ant:if"
-         xmlns:unless="ant:unless"
-         basedir="."
-         name="common">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:if="ant:if" xmlns:unless="ant:unless" basedir="." name="common">
 
+	<!-- Dynamic configuration -->
 	<property file="build.properties" />
+
+	<!-- Static configuration -->
+	<import file="../nl.naturalis.oaipmh.build/properties.xml" />
 
 	<!-- Prefix for environment variables -->
 	<property environment="env" />
 
 	<!-- Configure Ivy. Only required for ant builds within Eclipse. -->
 	<path id="ivy.lib.path">
-		<fileset dir="${env.IVY_HOME}" includes="**/*.jar" />
+		<fileset dir="${build.module.location}/apache-ivy-2.4.0" includes="**/*.jar" />
 	</path>
-	<taskdef resource="org/apache/ivy/ant/antlib.xml"
-	         uri="antlib:org.apache.ivy.ant"
-	         classpathref="ivy.lib.path" />
+
+	<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path" />
 
 	<property name="javac.source" value="1.7" />
 	<property name="javac.target" value="1.7" />
 	<property name="javac.debug" value="source,lines,vars" />
 
 	<property name="home" location="${basedir}/../" />
-	
+
 	<!-- ===============[ TASKS ]=============== -->
 
 	<target name="git-info" description="Retrieve current git branch, tag and commit">
@@ -91,26 +90,22 @@
 		<echo message="Collecting jar files" />
 		<mkdir dir="build/classpath" />
 		<echo message="Adding Ivy-managed dependencies to ${basedir}/build/classpath" />
-		<ivy:retrieve pattern="build/classpath/[artifact]-[revision](-[classifier]).[ext]"
-		              log="download-only" />
+		<ivy:retrieve pattern="build/classpath/[artifact]-[revision](-[classifier]).[ext]" log="download-only" />
 		<echo message="Adding external libraries to ${basedir}/build/classpath" />
 		<copy todir="build/classpath">
 			<path refid="non-ivy-dependencies" />
 		</copy>
-		<echo message="Adding libraries in ${basedir}/lib to ${basedir}/build/classpath" />
-		<copy todir="build/classpath">
+
+		<available file="lib" type="dir" property="lib.dir.exists" />
+		<echo if:set="lib.dir.exists" message="Adding libraries in ${basedir}/lib to ${basedir}/build/classpath" />
+		<copy if:set="lib.dir.exists" todir="build/classpath">
 			<fileset dir="lib">
 				<include name="**/*.jar" />
 			</fileset>
 		</copy>
+		
 		<echo message="Compiling classes for ${ant.project.name}" />
-		<javac encoding="UTF8"
-		       destdir="build/main"
-		       debug="true"
-		       debuglevel="${javac.debug}"
-		       includeantruntime="false"
-		       source="${javac.source}"
-		       target="${javac.target}">
+		<javac encoding="UTF8" destdir="build/main" debug="true" debuglevel="${javac.debug}" includeantruntime="false" source="${javac.source}" target="${javac.target}">
 			<src path="src/main/java" />
 			<classpath>
 				<fileset dir="build/classpath">
@@ -130,13 +125,7 @@
 			</fileset>
 		</copy>
 		<echo message="Compiling unit tests for ${ant.project.name}" />
-		<javac encoding="UTF8"
-		       destdir="build/test"
-		       debug="true"
-		       debuglevel="${javac.debug}"
-		       includeantruntime="false"
-		       source="${javac.source}"
-		       target="${javac.target}">
+		<javac encoding="UTF8" destdir="build/test" debug="true" debuglevel="${javac.debug}" includeantruntime="false" source="${javac.source}" target="${javac.target}">
 			<src path="src/test/java" />
 			<classpath>
 				<fileset dir="build/classpath">
@@ -150,9 +139,9 @@
 
 	<target name="test" depends="compile-test-sources">
 		<echo message="Testing ${ant.project.name}" />
-		<mkdir dir="${home}/nl.naturalis.nda.build/test-reports"/>
+		<mkdir dir="${home}/nl.naturalis.nda.build/test-reports" />
 		<junit printsummary="yes" haltonfailure="yes">
-			<sysproperty key="ndaConfDir" value="${nda.import.install.dir}/conf"/>
+			<sysproperty key="ndaConfDir" value="${nda.import.install.dir}/conf" />
 			<assertions>
 				<enable />
 			</assertions>
@@ -164,7 +153,7 @@
 				<dirset dir="build/test" />
 			</classpath>
 			<formatter type="plain" />
-			<batchtest todir="${home}/nl.naturalis.nda.build/test-reports">
+			<batchtest todir="${build.module.location}/test-reports">
 				<fileset dir="src/test/java">
 					<include name="**/*Test.java" />
 				</fileset>
