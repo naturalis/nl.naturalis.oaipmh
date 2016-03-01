@@ -39,31 +39,29 @@ public class ArgumentTest {
 	public void testGetRequiredArguments()
 	{
 		Set<Argument> args = getRequiredArguments(LIST_RECORDS);
-		assertEquals("01", 1, args.size());
-		assertEquals("02", METADATA_PREFIX, args.iterator().next());
+		assertEquals("01", 0, args.size());
 	}
 
 	@Test
 	@SuppressWarnings("static-method")
 	public void testIsRequired()
 	{
-		assertTrue("01", METADATA_PREFIX.isRequired(LIST_RECORDS));
-		assertFalse("02", IDENTIFIER.isRequired(LIST_RECORDS));
-		assertFalse("03", FROM.isRequired(LIST_RECORDS));
+		assertFalse("01", IDENTIFIER.isRequired(LIST_RECORDS));
+		assertFalse("02", FROM.isRequired(LIST_RECORDS));
 	}
 
 	@Test
 	@SuppressWarnings("static-method")
 	public void testIsOptional()
 	{
-		assertFalse("01", METADATA_PREFIX.isOptional(LIST_RECORDS));
+		assertTrue("01", METADATA_PREFIX.isOptional(LIST_RECORDS));
 		assertFalse("02", IDENTIFIER.isOptional(LIST_RECORDS));
 		assertTrue("03", FROM.isOptional(LIST_RECORDS));
 	}
 
 	@Test
 	@SuppressWarnings("static-method")
-	public void testIsAllowed()
+	public void testIsArgumentFor()
 	{
 		assertTrue("01", METADATA_PREFIX.isArgumentFor(LIST_RECORDS));
 		assertFalse("02", IDENTIFIER.isArgumentFor(LIST_RECORDS));

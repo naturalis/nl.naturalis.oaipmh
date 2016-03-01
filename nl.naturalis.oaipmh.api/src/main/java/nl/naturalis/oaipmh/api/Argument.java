@@ -82,8 +82,6 @@ public enum Argument {
 	public boolean isRequired(VerbType verb)
 	{
 		return VerbArgumentMapper.getInstance().getRequiredArguments(verb).contains(this);
-		// return new
-		// VerbArgumentMapper().getRequiredArguments(verb).contains(this);
 	}
 
 	/**
@@ -96,8 +94,6 @@ public enum Argument {
 	public boolean isOptional(VerbType verb)
 	{
 		return VerbArgumentMapper.getInstance().getOptionalArguments(verb).contains(this);
-		// return new
-		// VerbArgumentMapper().getOptionalArguments(verb).contains(this);
 	}
 
 	/**

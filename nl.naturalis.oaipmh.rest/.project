@@ -4,8 +4,8 @@
 	<comment></comment>
 	<projects>
 		<project>nl.naturalis.oaipmh.api</project>
-		<project>nl.naturalis.lims2.oaipmh</project>
 		<project>org.domainobject.util</project>
+		<project>nl.naturalis.oaipmh.geneious</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

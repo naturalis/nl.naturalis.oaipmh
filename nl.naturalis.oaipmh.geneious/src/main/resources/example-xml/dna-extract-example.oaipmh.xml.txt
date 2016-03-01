@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OAI-PMH
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd"
+	xmlns="http://www.openarchives.org/OAI/2.0/ http://data.ggbn.org/schemas/GGBN/terms/ABCDGGBN.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atlantis="urn:atlantis"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<responseDate>2016-01-14T12:22:39Z</responseDate>
+	<request verb="ListRecords" resumptionToken="______oai_geneious_dnasamples__3415000">http://geneious.naturalis.nl/geneiouspubliek/oai.axd
+	</request>
+	<ListRecords>
+		<record>
+			<header>
+				<identifier>123423046</identifier>
+				<datestamp>2015-030-11T16:48:53Z</datestamp>
+				<setSpec>dnaSamples</setSpec>
+			</header>
+			<!-- Let op! Dit zijn concept veldnamen. Ze zijn nog niet definitief -->
+			<metadata>
+				<oai_dc:dc
+					xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd"
+					xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:abcd="http://rs.tdwg.org/abcd/2.06/b/"
+					xlmns:ggbn="http://data.ggbn.org/schemas/GGBN/terms/ABCDGGBN.xsd">
+					<abcd:unit>
+						<abcd:UnitID>e123214324</abcd:UnitID>
+						<abcd:AssociatedUnitID>RMNH.INS.23917</abcd:AssociatedUnitID>
+						<institutePlateID>NBCN123456</institutePlateID>
+						<platePosition>A10</platePosition>
+					</abcd:unit>
+					<dnalabproject>
+						<projectID>
+							BCP1234
+						</projectID>
+						<versionNumber>0</versionNumber>
+						<abcdggbn:amplification>
+							<abcdggbn:marker>CO1</abcdggbn:marker>
+							<abcdggbn:amplificationStaff></abcdggbn:amplificationStaff>
+						</abcdggbn:amplification>
+						<abcdggbn:sequencing>
+							<abcdggbn:cloningStaff></abcdggbn:cloningStaff>
+							<consensusSequenceID>e4010125106_Rhy_ger_MJ243_COI-H08_M13R_P15_025
+							</consensusSequenceID>
+							<abcdggbn:consensusSequenceLength>650</abcdggbn:consensusSequenceLength>
+							<consensusSequenceQuality>fault</consensusSequenceQuality>
+							<abcdggbn:amplificationStaff></abcdggbn:amplificationStaff>
+							<abcdggbn:geneticAccession>
+								<abcdggbn:geneticAccessionNumber>JQ412562</abcdggbn:geneticAccessionNumber>
+								<abcdggbn:geneticAccessionNumberURI>http://www.ncbi.nlm.nih.gov/nuccore/JQ412562</abcdggbn:geneticAccessionNumberURI>
+								<abcdggbn:BOLDProcessID>
+									ANTVI001-11
+								</abcdggbn:BOLDProcessID>
+							</abcdggbn:geneticAccession>
+							<abcdggbn:sequencing>
+					</dnalabproject>
+				</oai_dc:dc>
+			</metadata>
+		</record>
+		<resumptionToken completeListSize="3421147" cursor="3415000">______oai_geneious_dnasamples__3416000
+		</resumptionToken>
+	</ListRecords>
+</OAI-PMH>

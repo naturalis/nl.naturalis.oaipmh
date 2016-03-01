@@ -1,0 +1,113 @@
+<document
+	class="com.biomatters.geneious.publicapi.implementations.sequence.DefaultNucleotideGraphSequence"
+	version="1.3-11" revisionNumber="1" geneiousVersion="8.1.8"
+	geneiousVersionMinimum="7.1" PluginDocument_FormatLastChanged="7.1"
+	PluginDocument_FormatLastExtended="7.1"
+	PluginDocument_OldestVersionSerializableTo="6.0">
+	<hiddenFields>
+		<unread type="boolean">true</unread>
+		<parent_operation_record_document type="int">0</parent_operation_record_document>
+		<cache_urn type="urn">urn:local:Reinier.Kartowikromo:my-5sr8a1x
+		</cache_urn>
+		<nucleotideSequenceWithQualityCount type="int">1
+		</nucleotideSequenceWithQualityCount>
+		<description>Assembly of 2 reads:
+			e4010125023_Cyp_lon_MJ243_COI-A09_M13R_B17_040.ab1 (reversed),
+			e4010125023_Cyp_lon_MJ243_COI-A09_M13F_A17_040.ab1</description>
+		<overrideDocumentType>com.biomatters.geneious.publicapi.documents.sequence.NucleotideSequenceDocument</overrideDocumentType>
+		<cache_plugin_document_urn></cache_plugin_document_urn>
+		<strong_referenced_documents type="list">
+			<strong_referenced_documents type="int">0
+			</strong_referenced_documents>
+		</strong_referenced_documents>
+		<cache_name>Reads Assembly Contig 10 consensus sequence</cache_name>
+		<override_modified_date type="date">1456227004797
+		</override_modified_date>
+		<cache_created type="date">1456227001161</cache_created>
+		<referenced_documents type="list">
+			<referenced_documents>urn:local:Reinier.Kartowikromo:me-5sr89qb@0
+			</referenced_documents>
+		</referenced_documents>
+		<trimmedSequencesCount type="int">0</trimmedSequencesCount>
+	</hiddenFields>
+	<fields>
+		<document_size type="bytes">2562</document_size>
+		<molType>DNA</molType>
+		<mediumQualityPercent decimalPlacesDisplayed="1" type="percent">60.91954022988506
+		</mediumQualityPercent>
+		<BinFailReason>HQ%, LQ%, Post-Trim</BinFailReason>
+		<highQualityPercent decimalPlacesDisplayed="1" type="percent">7.471264367816092
+		</highQualityPercent>
+		<lowQualityPercent decimalPlacesDisplayed="1" type="percent">31.60919540229885
+		</lowQualityPercent>
+		<percentage_similarity decimalPlacesDisplayed="1" type="percent">97.14285714285714</percentage_similarity>
+		<meanCoverage type="double">1.2011494252873562</meanCoverage>
+		<disagreements type="int">2</disagreements>
+		<sequence_residues>TTGGCAAGGCTTTGCCTTTCGCAGTATTTTCAGTGCATTTGTTAGGCATTTCCTCCATTATGGGCGCGATTAATATTATCGCAACGATATTTAACATGCGTGCGCMTGCCATGAAAATGATGGATATGCCATTGTTTGTATGGACGTGGTTGATAACTGCATTTTTGTTGATTG
+		</sequence_residues>
+		<consensusSequenceLength type="int">174</consensusSequenceLength>
+		<freeEndGaps type="boolean">true</freeEndGaps>
+		<topology>linear</topology>
+		<abiguities type="int">1</abiguities>
+		<sequence_length type="int">174</sequence_length>
+		<percentage_identical decimalPlacesDisplayed="1" type="percent">94.28571428571428</percentage_identical>
+		<bin>&lt;html&gt;&lt;head&gt;&lt;1&gt;&lt;/head&gt;&lt;b&gt;&lt;font
+			color='#C13D26'&gt;Low&lt;/font&gt;&lt;/b&gt;&lt;/html&gt;</bin>
+		<gcPercent decimalPlacesDisplayed="1" type="percent">40.46242774566474
+		</gcPercent>
+		<postTrimLength type="int">174</postTrimLength>
+		<number_of_source_sequences type="int">2</number_of_source_sequences>
+		<modified_date type="date">1456226974369</modified_date>
+		<indelDisagreements type="int">0</indelDisagreements>
+	</fields>
+	<notes>
+		<note code="DocumentNoteUtilities-Extract ID (Seq)" type="note">
+			<ExtractIDCode_Seq>e4010125023</ExtractIDCode_Seq>
+		</note>
+		<note code="DocumentNoteUtilities-PCR plate ID (Seq)" type="note">
+			<PCRplateIDCode_Seq>MJ243</PCRplateIDCode_Seq>
+		</note>
+		<note code="DocumentNoteUtilities-Marker (Seq)" type="note">
+			<MarkerCode_Seq>COI</MarkerCode_Seq>
+		</note>
+		<note code="DocumentNoteUtilities-Ampl-staff (Seq)" type="note">
+			<AmplicificationStaffCode_FixedValue_Seq>Naturalis Biodiversity Center
+				Laboratories</AmplicificationStaffCode_FixedValue_Seq>
+		</note>
+		<note code="DocumentNoteUtilities-Pass (Seq)" type="note" />
+		<note code="DocumentNoteUtilities-CRS (CRS)" type="note">
+			<CRSCode_CRS type="boolean">true</CRSCode_CRS>
+		</note>
+		<note code="DocumentNoteUtilities-Registr-nmbr (Samples)" type="note">
+			<RegistrationNumberCode_Samples>RMNH.INS.556182</RegistrationNumberCode_Samples>
+		</note>
+		<note code="DocumentNoteUtilities-[Scientific name] (Samples)" type="note">
+			<TaxonName2Code_Samples>Cypha longicornis</TaxonName2Code_Samples>
+		</note>
+		<note code="DocumentNoteUtilities-Sample plate ID (Samples)" type="note">
+			<ProjectPlateNumberCode_Samples>BCP0047-40</ProjectPlateNumberCode_Samples>
+		</note>
+		<note code="DocumentNoteUtilities-Extract plate ID (Samples)" type="note">
+			<ExtractPlateNumberCode_Samples>NCBN000678</ExtractPlateNumberCode_Samples>
+		</note>
+		<note code="DocumentNoteUtilities-Position (Samples)" type="note">
+			<PlatePositionCode_Samples>A-09</PlatePositionCode_Samples>
+		</note>
+		<note code="DocumentNoteUtilities-Extract ID (Samples)" type="note">
+			<ExtractIDCode_Samples>e4010125023</ExtractIDCode_Samples>
+		</note>
+		<note code="DocumentNoteUtilities-Extraction method (Samples)" type="note">
+			<SampleMethodCode_Samples>Sample method</SampleMethodCode_Samples>
+		</note>
+		<note code="DocumentNoteUtilities-Document version" type="note">
+			<DocumentVersionCode>1</DocumentVersionCode>
+		</note>
+		<note code="DocumentNoteUtilities-Seq-staff (Samples)" type="note">
+			<SequencingStaffCode_FixedValue_Samples>Naturalis Biodiversity Center
+				Laboratories</SequencingStaffCode_FixedValue_Samples>
+		</note>
+		<note code="trimParams" type="note">
+			<trimParams>Error probability: 0.05</trimParams>
+		</note>
+	</notes>
+</document>

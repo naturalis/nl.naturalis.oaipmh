@@ -1,0 +1,103 @@
+<xs:schema targetNamespace="http://data.naturalis.nl/geneious"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:self="http://data.naturalis.nl/geneious"
+	xmlns:abcd="http://www.tdwg.org/schemas/abcd/2.1" xmlns="http://www.tdwg.org/schemas/abcd/2.1"
+	version="0.1">
+
+	<!-- In case we still want to nest ABCD elements within elements defined here: -->
+	<!-- xs:import namespace="http://www.tdwg.org/schemas/abcd/2.1" schemaLocation="ABCDGGBN.xsd"></xs:import -->
+
+	<xs:element name="geneious">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element name="specimen" type="self:Specimen"></xs:element>
+				<xs:element name="dnaExtractPlate" type="self:DnaExtractPlate"></xs:element>
+				<xs:element name="dnaExtract" type="self:DnaExtract"></xs:element>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="Specimen">
+		<xs:sequence>
+			<xs:element type="self:SpecimenUnit" name="unit" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="DnaExtractPlate">
+		<xs:sequence>
+			<xs:element type="self:ExtractPlateUnit" name="unit" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="DnaExtract">
+		<xs:sequence>
+			<xs:element type="self:ExtractUnit" name="unit" />
+			<xs:element type="self:DnaLabProject" name="dnaLabProject" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="SpecimenUnit">
+		<xs:sequence>
+			<!-- Nest ABCD Unit element within Specimen element -->
+			<!-- xs:element name="Unit" type="abcd:Unit"></xs:element -->
+			<xs:element type="xs:string" name="unitID" />
+			<xs:element type="xs:string" name="associatedUnitID" />
+			<xs:element type="xs:anyURI" name="uri" />
+			<xs:element type="xs:int" name="multiMediaObjectComment" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ExtractUnit">
+		<xs:sequence>
+			<xs:element type="xs:string" name="unitID" />
+			<xs:element type="xs:string" name="associatedUnitID" />
+			<xs:element type="xs:string" name="institutePlateID" />
+			<xs:element type="xs:string" name="platePosition" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ExtractPlateUnit">
+		<xs:sequence>
+			<xs:element type="xs:string" name="institutePlateID" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="DnaLabProject">
+		<xs:sequence>
+			<xs:element type="xs:string" name="batchID" />
+			<xs:element type="xs:string" name="versionNumber" />
+			<xs:element type="self:Amplification" name="amplification" />
+			<xs:element type="self:Sequencing" name="sequencing" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="Sequencing">
+		<xs:sequence>
+			<xs:element type="xs:string" name="sequencingStaff" />
+			<xs:element type="xs:string" name="consensusSequenceID" />
+			<xs:element type="xs:string" name="consensusSequenceLength" />
+			<xs:element type="xs:string" name="consensusSequenceQuality" />
+			<xs:element type="xs:string" name="amplificationStaff" />
+			<xs:element name="geneticAccession" type="self:GeneticAccession"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="Amplification">
+		<xs:sequence>
+			<xs:element type="xs:string" name="marker" />
+			<xs:element type="xs:string" name="amplificationStaff" />
+			<xs:element type="xs:string" name="pcrPlateID" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="GeneticAccession">
+		<xs:sequence>
+			<xs:element type="xs:string" name="geneticAccessionNumber" />
+			<xs:element type="xs:anyURI" name="geneticAccessionNumberURI" />
+			<xs:element type="xs:string" name="BOLDProcessID" />
+		</xs:sequence>
+	</xs:complexType>
+
+
+
+</xs:schema>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OAI-PMH
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd"
+	xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:atlantis="urn:atlantis" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<responseDate>2016-01-14T08:22:39Z</responseDate>
+	<request verb="ListRecords" resumptionToken="______oai_geneious_specimen__3415000">http://geneious.naturalis.nl/geneiouspubliek/oai.axd</request>
+	<ListRecords>
+		<record>
+			<header>
+				<identifier>154383046</identifier>
+				<datestamp>2015-06-11T16:48:53Z</datestamp>
+				<setSpec>Specimens</setSpec>
+			</header>
+			<!-- Let op! Dit zijn concept veldnamen. Ze zijn nog niet definitief -->
+			<metadata>
+				<oai_dc:dc
+					xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd"
+					xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+					xmlns:abcd="http://rs.tdwg.org/abcd/2.06/b/">
+					<abcd:unit>
+						<abcd:UnitID>RMNH.INS.23917</abcd:UnitID>
+						<abcd:AssociatedUnitID>ANTVI001-11</abcd:AssociatedUnitID>
+						<abcd:URI>http://www.boldsystems.org/index.php/Public_RecordView?processid=ANTVI001-11
+						</abcd:URI>
+						<abcd:MultiMediaObjectComment>1</abcd:MultiMediaObjectComment>
+					</abcd:unit>
+				</oai_dc:dc>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>154383050</identifier>
+				<datestamp>2015-06-12T16:48:53Z</datestamp>
+				<setSpec>Specimen</setSpec>
+			</header>
+			<metadata>
+				<oai_dc:dc
+					xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd"
+					xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+					xmlns:abcd="http://rs.tdwg.org/abcd/2.06/b/">
+					<specimen>
+						<abcd:UnitID>RMNH.INS.18127</abcd:UnitID>
+						<abcd:AssociatedUnitID>ANTVI006-11</abcd:AssociatedUnitID>
+						<abcd:URI>http://www.boldsystems.org/index.php/Public_RecordView?processid=ANTVI006-11
+						</abcd:URI>
+						<abcd:MultiMediaObjectComment>2</abcd:MultiMediaObjectComment>
+					</specimen>
+				</oai_dc:dc>
+			</metadata>
+		</record>
+		<resumptionToken completeListSize="3421147" cursor="3415000">______oai_geneious_specimen__3416000</resumptionToken>
+	</ListRecords>
+</OAI-PMH>

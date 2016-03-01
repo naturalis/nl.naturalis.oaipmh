@@ -19,6 +19,13 @@ import java.util.Set;
 
 import org.openarchives.oai._2.VerbType;
 
+/**
+ * Maps each of the five OAI-PMH verbs to a set of required arguments and a set
+ * of optional arguments.
+ * 
+ * @author Ayco Holleman
+ *
+ */
 class VerbArgumentMapper {
 
 	private static final EnumSet<Argument> NONE = EnumSet.noneOf(Argument.class);
@@ -55,15 +62,27 @@ class VerbArgumentMapper {
 		required.put(LIST_IDENTIFIERS, EnumSet.of(METADATA_PREFIX));
 		optional.put(LIST_IDENTIFIERS, EnumSet.of(FROM, UNTIL, SET));
 
-		required.put(LIST_RECORDS, EnumSet.of(METADATA_PREFIX));
-		optional.put(LIST_RECORDS, EnumSet.of(FROM, UNTIL, SET, RESUMPTION_TOKEN));
+		required.put(LIST_RECORDS, NONE);
+		optional.put(LIST_RECORDS, EnumSet.of(FROM, UNTIL, SET, RESUMPTION_TOKEN, METADATA_PREFIX));
 	}
 
+	/**
+	 * Returns the required arguments for the specified verb,
+	 * 
+	 * @param verb
+	 * @return
+	 */
 	Set<Argument> getRequiredArguments(VerbType verb)
 	{
 		return required.get(verb);
 	}
 
+	/**
+	 * Returns the optional (non-required) arguments for the specified verb.
+	 * 
+	 * @param verb
+	 * @return
+	 */
 	Set<Argument> getOptionalArguments(VerbType verb)
 	{
 		return optional.get(verb);

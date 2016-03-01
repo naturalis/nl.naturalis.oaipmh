@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OAI-PMH
+	xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd"
+	xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:atlantis="urn:atlantis" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<responseDate>2016-01-14T12:22:39Z</responseDate>
+	<request verb="ListRecords" resumptionToken="______oai_geneious_dnasampleplates__1000">http://geneious.naturalis.nl/geneiouspubliek/oai.axd</request>
+	<ListRecords>
+		<record>
+			<header>
+				<identifier>123423046</identifier>
+				<datestamp>2015-030-11T16:48:53Z</datestamp>
+				<setSpec>dnaPlates</setSpec>
+			</header>
+			<! --- Let op! Dit zijn concept veldnamen. Ze zijn nog niet definitief --->
+			<metadata>
+				<oai_dc:dc
+					xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd"
+					xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+					xmlns:abcd="http://rs.tdwg.org/abcd/2.06/b/">
+					<abcd:unit>
+						<institutePlateID>NBCN123456</institutePlateID>
+						<batchID>BCP1234-99</batchID>
+					</abcd:unit>
+				</oai_dc:dc>
+			</metadata>
+		</record>
+		<resumptionToken completeListSize="2400" cursor="1000">______oai_geneious_dnasampleplates__2000</resumptionToken>
+	</ListRecords>
+</OAI-PMH>

@@ -1,0 +1,19 @@
+(nl.naturalis.lims2.oaipmh.Document) {
+	documentClass: (nl.naturalis.lims2.oaipmh.DocumentClass) DefaultNucleotideGraphSequence
+	referencedDocuments: (java.util.ArrayList$Itr) {
+		0: (String) "urn:local:Reinier.Kartowikromo:me-5sr89qb"
+	}
+	notes: (nl.naturalis.lims2.oaipmh.DocumentNotes) {
+		data: (java.util.EnumMap[9]) {
+			CRSCode_CRS => (String) "true"
+			RegistrationNumberCode_Samples => (String) "RMNH.INS.556182"
+			ExtractPlateNumberCode_Samples => (String) "NCBN000678"
+			ExtractIDCode_Samples => (String) "e4010125023"
+			PlatePositionCode_Samples => (String) "A-09"
+			ProjectPlateNumberCode_Samples => (String) "BCP0047-40"
+			DocumentVersionCode => (String) "1"
+			MarkerCode_Seq => (String) "COI"
+			PCRplateIDCode_Seq => (String) "MJ243"
+		}
+	}
+}

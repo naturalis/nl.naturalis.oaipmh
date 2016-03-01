@@ -1,0 +1,56 @@
+<XMLSerialisableRootElement annotationsRevision="1">
+	<fields>
+		<number_of_source_sequences type="int">2
+		</number_of_source_sequences>
+		<indelDisagreements type="int">0</indelDisagreements>
+		<bin>&lt;html&gt;&lt;head&gt;&lt;1&gt;&lt;/head&gt;&lt;b&gt;&lt;font
+			color='#C13D26'&gt;Low&lt;/font&gt;&lt;/b&gt;&lt;/html&gt;</bin>
+		<topology>linear</topology>
+		<highQualityPercent decimalPlacesDisplayed="1" type="percent">7.471264367816092
+		</highQualityPercent>
+		<lowQualityPercent decimalPlacesDisplayed="1" type="percent">31.60919540229885
+		</lowQualityPercent>
+		<modified_date type="date">1456226974369</modified_date>
+		<consensusSequenceLength type="int">174
+		</consensusSequenceLength>
+		<molType>DNA</molType>
+		<percentage_similarity decimalPlacesDisplayed="1" type="percent">97.14285714285714
+		</percentage_similarity>
+		<percentage_identical decimalPlacesDisplayed="1" type="percent">94.28571428571428
+		</percentage_identical>
+		<meanCoverage type="double">1.2011494252873562</meanCoverage>
+		<BinFailReason>Approx. Consensus Length, LQ%, HQ%</BinFailReason>
+		<freeEndGaps type="boolean">true</freeEndGaps>
+		<abiguities type="int">1</abiguities>
+		<disagreements type="int">2</disagreements>
+	</fields>
+	<created type="date">1456227001161</created>
+	<storedFields>
+		<standardField code="modified_date" />
+		<standardField code="number_of_source_sequences" />
+		<standardField code="percentage_similarity" />
+		<standardField code="percentage_identical" />
+		<standardField code="meanCoverage" />
+		<standardField code="disagreements" />
+		<standardField code="indelDisagreements" />
+		<standardField code="bin" />
+		<standardField code="BinFailReason" />
+		<standardField code="freeEndGaps" />
+		<standardField code="topology" />
+		<standardField code="consensusSequenceLength" />
+		<standardField code="abiguities" />
+		<standardField code="highQualityPercent" />
+		<standardField code="lowQualityPercent" />
+		<standardField code="molType" />
+	</storedFields>
+	<name>Reads Assembly Contig 10 consensus sequence</name>
+	<description>Assembly of 2 reads:
+		e4010125023_Cyp_lon_MJ243_COI-A09_M13R_B17_040.ab1 (reversed),
+		e4010125023_Cyp_lon_MJ243_COI-A09_M13F_A17_040.ab1</description>
+	<charSequence>TTGGCAAGGCTTTGCCTTTCGCAGTATTTTCAGTGCATTTGTTAGGCATTTCCTCCATTATGGGCGCGATTAATATTATCGCAACGATATTTAACATGCGTGCGCMTGCCATGAAAATGATGGATATGCCATTGTTTGTATGGACGTGGTTGATAACTGCATTTTTGTTGATTG
+	</charSequence>
+	<graphProperties graphXmlVersion="1">
+		<qualities>;FFHHQNNGGCGPGGPPMPMBGPNLQYKKKKPOGAGRNKKKPLLQOfccdcdmOkaaaVVfWdgddghbmaaYYbcddlpKLRPPPbLPSHNHLLLOGLBGAGFBS1LJKKGAGGGGGLMQFGGNPOLLOOKGGLLKLwptGGGGFFGFFFFGPKLLFFLTPPLGLPLPPPQGGM
+		</qualities>
+	</graphProperties>
+</XMLSerialisableRootElement>

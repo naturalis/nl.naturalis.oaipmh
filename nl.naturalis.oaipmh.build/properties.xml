@@ -5,6 +5,10 @@
 	<property name="javac.target" value="1.7" />
 	<property name="javac.debug" value="source,lines,vars" />
 
+	<!-- Prefix for environment variables -->
+	<property environment="env" />
+
+	<!-- Parent directory of the build module -->
 	<property name="home" location="${basedir}/../" />
 
 	<property name="build.module.name" value="nl.naturalis.oaipmh.build" />
@@ -12,12 +16,14 @@
 
 	<property name="api.module.name" value="nl.naturalis.oaipmh.api" />
 	<property name="api.module.location" location="${home}/${api.module.name}" />
+	<property name="api.module.artifact" value="${api.module.name}.jar" />
 
 	<property name="rest.module.name" value="nl.naturalis.oaipmh.rest" />
 	<property name="rest.module.location" location="${home}/${rest.module.name}" />
+	<property name="rest.module.artifact" value="${rest.module.name}.war" />
 
-	<property name="lims2.module.name" value="nl.naturalis.lims2.oaipmh" />
-	<property name="lims2.module.location" location="${home}/${lims2.module.name}" />
-
+	<property name="geneious.module.name" value="nl.naturalis.oaipmh.geneious" />
+	<property name="geneious.module.location" location="${home}/${geneious.module.name}" />
+	<property name="geneious.module.artifact" value="${geneious.module.name}.jar" />
 
 </project>

@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:if="ant:if" xmlns:unless="ant:unless" basedir="." name="nl.naturalis.oaipmh.api" default="build">
+<!-- nl.naturalis.oaipmh.api -->
+<project xmlns:ivy="antlib:org.apache.ivy.ant"
+         xmlns:if="ant:if"
+         xmlns:unless="ant:unless"
+         basedir="."
+         name="nl.naturalis.oaipmh.api"
+         default="build">
 
 	<import file="../nl.naturalis.oaipmh.build/properties.xml" />
 	<import file="../nl.naturalis.oaipmh.build/common.xml" />
 	<property file="../nl.naturalis.oaipmh.build/build.properties" />
-	
+
 	<!-- Eclipse projects and non-ivy managed dependencies (none) -->
-	<path id="non-ivy-dependencies" />
+	<path id="non-ivy-dependencies">
+		<filelist dir="${build.module.location}/lib">
+			<file name="org.domainobject.util.jar" />
+		</filelist>
+	</path>
 
 	<!-- Build referenced projects -->
 	<target name="-projects" />
@@ -15,7 +25,8 @@
 	<target name="-package" depends="-projects,package" />
 
 	<target name="build">
-		<available file="build/${domain.module.artifact}" property="${ant.project.name}.packaged" />
+		<available file="build/${api.module.artifact}"
+		           property="${ant.project.name}.packaged" />
 		<echo if:set="${ant.project.name}.packaged"
 		      message="${ant.project.name} already built. Clean project to force rebuild." />
 		<echo unless:set="${ant.project.name}.packaged"
