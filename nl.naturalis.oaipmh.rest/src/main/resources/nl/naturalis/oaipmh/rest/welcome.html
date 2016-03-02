@@ -3,13 +3,23 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Naturalis OAI-PMH Server</title>
+		<style type="text/css">
+			td {
+				font-family: "Mono";
+			}
+			td:first-child {
+				padding: 0 30px 0 0;
+				text-align: right;
+			}
+		</style>
 	</head>
 	<body>
 		<h1>Naturalis OAI-PMH Server up and running!</h1>
 		<table>
-		<tr><td>Version:</td><td>%version%</td></tr>
-		<tr><td>Branch:</td><td>%branch%</td></tr>
-		<tr><td>Commit:</td><td>%commit%</td></tr>
+		<tr><td>Branch</td><td>%branch%</td></tr>
+		<tr><td>Tag</td><td>%tag%</td></tr>
+		<tr><td>Commit</td><td>%commit%</td></tr>
+		<tr><td>Built</td><td>%built%</td></tr>
 		</table>
 	</body>
 </html>

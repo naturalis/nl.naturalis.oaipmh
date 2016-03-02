@@ -11,7 +11,7 @@
 	<import file="../nl.naturalis.oaipmh.build/common.xml" />
 	<property file="../nl.naturalis.oaipmh.build/build.properties" />
 
-	<!-- Eclipse projects and non-ivy managed dependencies (none) -->
+	<!-- Eclipse projects and non-ivy managed dependencies -->
 	<path id="non-ivy-dependencies">
 		<filelist dir="${build.module.location}/lib">
 			<file name="org.domainobject.util.jar" />

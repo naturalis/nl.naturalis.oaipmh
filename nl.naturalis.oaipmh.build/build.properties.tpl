@@ -7,5 +7,5 @@
 ##########################################################
 
 # Hot deployment directory for war/ear files.
-war.install.dir=/opt/wildfly-8.2.1.Final/standalone/deployments
+war.install.dir=/home/ayco/programs/wildfly-8.1.0/standalone/deployments
 

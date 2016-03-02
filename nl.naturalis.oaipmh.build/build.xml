@@ -41,7 +41,7 @@
 	</target>
 
 	<target name="verify"
-	        description="Make sure everything is in place to execute Ant builds">
+	        description="Verify build environment">
 		<antcall target="-verify" unless:set="signal.clear" />
 	</target>
 
@@ -93,30 +93,29 @@
 	</target>
 
 	<target name="git-info"
-	        description="Show information about the Git branch you will be doing your build on">
+	        description="Show Git-related info">
 		<antcall target="-git-get-info" unless:set="git.got.info" />
 	</target>
 
-	<target name="clean"
-	        description="Execute subsequently specified target as if for the first time">
-		<property name="signal.clean" value="on" />
+	<target name="clean" description="Build from scratch">
+		<ant antfile="../nl.naturalis.oaipmh.api/build.xml"
+		     useNativeBasedir="true"
+		     target="clean" />
+		<ant antfile="../nl.naturalis.oaipmh.geneious/build.xml"
+		     useNativeBasedir="true"
+		     target="clean" />
+		<ant antfile="../nl.naturalis.oaipmh.rest/build.xml"
+		     useNativeBasedir="true"
+		     target="clean" />
 	</target>
 
 	<target name="build" description="Create the war file">
-		<ant if:set="signal.clean"
-		     antfile="../nl.naturalis.oaipmh.rest/build.xml"
-		     useNativeBasedir="true"
-		     target="clean" />
 		<ant antfile="../nl.naturalis.oaipmh.rest/build.xml"
 		     useNativeBasedir="true"
 		     target="build" />
 	</target>
 
-	<target name="install" description="Create the war file">
-		<ant if:set="signal.clean"
-		     antfile="../nl.naturalis.oaipmh.rest/build.xml"
-		     useNativeBasedir="true"
-		     target="clean" />
+	<target name="install" depends="-git-get-info,clean" description="Build and deploy the OAIPMH REST service">
 		<ant antfile="../nl.naturalis.oaipmh.rest/build.xml"
 		     useNativeBasedir="true"
 		     target="install" />

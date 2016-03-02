@@ -8,13 +8,6 @@ import static nl.naturalis.oaipmh.rest.RESTUtil.xmlResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.URI;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -78,8 +71,6 @@ public class OAIPMHResource {
 	@Context
 	private UriInfo uriInfo;
 
-	private BeanPrinter beanPrinter;
-
 	/**
 	 * Show some welcome content.
 	 * 
@@ -91,10 +82,12 @@ public class OAIPMHResource {
 	{
 		InputStream in = getClass().getResourceAsStream("welcome.html");
 		String s = new String(IOUtil.readAllBytes(in));
-		ConfigObject cfg = Registry.getInstance().getConfig();
-		s = s.replace("%version%", cfg.get("version", "not set"));
-		s = s.replace("%branch%", cfg.get("git.branch", "not set"));
-		s = s.replace("%commit%", cfg.get("git.commit", "not set"));
+		ConfigObject cfg = new ConfigObject(getClass().getResourceAsStream("/version.properties"));
+
+		s = s.replace("%branch%", cfg.get("git.branch"));
+		s = s.replace("%tag%", cfg.get("git.tag"));
+		s = s.replace("%commit%", cfg.get("git.commit"));
+		s = s.replace("%built%", cfg.get("built"));
 		return s;
 	}
 
