@@ -53,8 +53,9 @@
 		<!-- Location to which to temporarily move the official library directory -->
 		<property name="orig.lib.dir" location="build/orig-lib" />
 		<delete dir="${tmp.lib.dir}" />
-		<mkdir dir="${tmp.lib.dir}" />
 		<delete dir="${orig.lib.dir}" />
+		<mkdir dir="${war.lib.dir}" />
+		<mkdir dir="${tmp.lib.dir}" />
 		<!-- Add api module -->
 		<copy file="${api.module.location}/build/${api.module.artifact}"
 		      todir="${tmp.lib.dir}" />
