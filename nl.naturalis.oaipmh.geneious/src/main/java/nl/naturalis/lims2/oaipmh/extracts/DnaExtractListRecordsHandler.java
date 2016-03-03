@@ -96,7 +96,7 @@ public class DnaExtractListRecordsHandler extends ListRecordsHandler {
 		DocumentNotes notes = ad.getDocument().getNotes();
 		ExtractUnit unit = new ExtractUnit();
 		unit.setUnitID(notes.get(Note.ExtractIDCode_Samples));
-		unit.setAssociatedUnitID(notes.get(Note.BOLDIDCode_BOLD));
+		unit.setAssociatedUnitID(notes.get(Note.RegistrationNumberCode_Samples));
 		unit.setInstitutePlateID(notes.get(Note.ExtractPlateNumberCode_Samples));
 		unit.setPlatePosition(notes.get(Note.PlatePositionCode_Samples));
 		return unit;
