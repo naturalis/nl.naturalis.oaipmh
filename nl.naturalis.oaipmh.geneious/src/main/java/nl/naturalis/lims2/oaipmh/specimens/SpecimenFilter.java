@@ -4,8 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import nl.naturalis.lims2.oaipmh.AnnotatedDocument;
-import nl.naturalis.lims2.oaipmh.Document;
-import nl.naturalis.lims2.oaipmh.DocumentNotes.Note;
 import nl.naturalis.lims2.oaipmh.IAnnotatedDocumentPostFilter;
 import nl.naturalis.lims2.oaipmh.IAnnotatedDocumentPreFilter;
 
@@ -30,12 +28,7 @@ public class SpecimenFilter implements IAnnotatedDocumentPostFilter, IAnnotatedD
 	@Override
 	public boolean accept(AnnotatedDocument ad)
 	{
-		Document d = ad.getDocument();
-		if (d == null)
-			return false;
-		if (d.getNotes() == null)
-			return false;
-		return "true".equals(d.getNotes().get(Note.CRSCode_CRS));
+		return true;
 	}
 
 }

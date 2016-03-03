@@ -77,6 +77,13 @@ public abstract class ListRecordsHandler {
 		}
 	}
 
+	/**
+	 * Generate the OAI-PMH.
+	 * 
+	 * @return
+	 * @throws RepositoryException
+	 * @throws OAIPMHException
+	 */
 	public OAIPMHtype handleRequest() throws RepositoryException, OAIPMHException
 	{
 		checkMetadataPrefix(request);
@@ -107,21 +114,54 @@ public abstract class ListRecordsHandler {
 		return root;
 	}
 
+	/**
+	 * Template method to be implemented by concrete subclasses: provide extra
+	 * pre-filters for the particular resource to subclass deals with. The extra
+	 * pre-filters are applied after the {@link SharedPreFilter}.
+	 */
 	protected abstract List<IAnnotatedDocumentPreFilter> getAnnotatedDocumentPreFilters();
 
+	/**
+	 * Template method to be implemented by concrete subclasses: provide extra
+	 * post-filters for the particular resource to subclass deals with. The
+	 * extra post-filters are applied after the {@link SharedPostFilter}.
+	 */
 	protected abstract List<IAnnotatedDocumentPostFilter> getAnnotatedDocumentPostFilters();
 
+	/**
+	 * Template method to be implemented by concrete subclasses: provide the
+	 * child element of the &lt;geneious&gt; element.
+	 * 
+	 * @param geneious
+	 * @param ad
+	 */
 	protected abstract void setMetadata(Geneious geneious, AnnotatedDocument ad);
 
+	/**
+	 * Template method to be implemented by concrete subclasses: return the page
+	 * size (number of records per request) for the particular resource to
+	 * subclass deals with.
+	 * 
+	 * @return
+	 */
 	protected abstract int getPageSize();
 
+	/**
+	 * Returns the database query retrieving the initial set of records (before
+	 * any programmatical filtering). Could be overrided by subclasses should
+	 * the need arise. The default implementation sorts records by their
+	 * database ID in descending order.
+	 * 
+	 * @return
+	 */
 	protected String getSQLQuery()
 	{
 		StringBuilder sb = new StringBuilder(1000);
 		sb.append("SELECT id,folder_id,UNIX_TIMESTAMP(modified) AS modified,\n");
 		sb.append("       urn,document_xml,plugin_document_xml,reference_count\n");
 		sb.append("  FROM annotated_document\n");
-		sb.append(" WHERE reference_count=0");
+		sb.append(" WHERE reference_count=0\n");
+		sb.append(" ORDER BY id DESC");
 		if (request.getFrom() != null) {
 			/*
 			 * Column "modified" contains the number of seconds since 01-01-1970
@@ -178,7 +218,7 @@ public abstract class ListRecordsHandler {
 		LOOP: while (rs.next()) {
 			numRows++;
 			if (logger.isDebugEnabled()) {
-				logger.debug("Processing annotated_document record (id={})", rs.getInt("id"));
+				logger.debug("Processing annotated_document record with id {}", rs.getInt("id"));
 			}
 			for (IAnnotatedDocumentPreFilter preFilter : preFilters) {
 				if (!preFilter.accept(rs)) {

@@ -24,8 +24,8 @@ public class Registry {
 
 	/*
 	 * System property that tells us where the configuration directory
-	 * (containing purl.properties) is. When using Wildfly, this system property
-	 * is probably set in standalone.xml
+	 * (containing oaipmh.properties) is. When using Wildfly, this system
+	 * property is probably set in standalone.xml
 	 */
 	private static final String SYSPROP_CONFIG_DIR = "nl.naturalis.oaipmh.conf.dir";
 
@@ -71,7 +71,7 @@ public class Registry {
 
 	/**
 	 * Get a {@link ConfigObject} for the main configuration file
-	 * (oaipmh-rest.properties).
+	 * (oaipmh.properties).
 	 * 
 	 * @return
 	 */
@@ -82,7 +82,7 @@ public class Registry {
 
 	/**
 	 * Get the directory designated to contain the application's configuration
-	 * files. This directory will contain at least purl.properties, but may
+	 * files. This directory will contain at least oaipmh.properties, but may
 	 * contain additional files that the application expects to be there.
 	 * 
 	 * @return

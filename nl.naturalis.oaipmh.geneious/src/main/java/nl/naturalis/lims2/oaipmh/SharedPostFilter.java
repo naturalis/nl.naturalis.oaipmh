@@ -1,13 +1,21 @@
 package nl.naturalis.lims2.oaipmh;
 
+import nl.naturalis.lims2.oaipmh.DocumentNotes.Note;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Filters (eliminates) records from the annotated_document table after they
- * have been converted to {@link AnnotatedDocument} instances by an
- * {@link AnnotatedDocumentFactory}. This class contains fine-grained logic for
- * determining if a record should be part of the OAI-PMH output.
+ * Post-filter shared by all geneious repositories. Will be applied
+ * <i>before</i> any repository-specific post-filters. This filters checks that
+ * <ul>
+ * <li>The document_xml column contains valid XML
+ * <li>The plugin_document_xml columns contains valid XML
+ * <li>The document_xml column contains at least one &lt;note&gt; element
+ * <li>The CRSCode_CRS note is present and has value "true"
+ * <li>The is_contig attribute in the plugin_document_xml column has value true
+ * in case of a DefaultAlignmentDocument
+ * </ul>
  * 
  * @author Ayco Holleman
  *
@@ -30,9 +38,17 @@ public class SharedPostFilter implements IAnnotatedDocumentPostFilter {
 			 */
 			return false;
 		}
-		if (ad.getDocument().getNotes() == null) {
+		DocumentNotes notes;
+		if ((notes = ad.getDocument().getNotes()) == null) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Record discarded: document_xml column contains no usable <note> elements");
+			}
+			return false;
+		}
+		String s = notes.get(Note.CRSCode_CRS);
+		if (s == null || !s.equals("true")) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Record discarded: CRSCode_CRS flag absent or not \"true\"");
 			}
 			return false;
 		}

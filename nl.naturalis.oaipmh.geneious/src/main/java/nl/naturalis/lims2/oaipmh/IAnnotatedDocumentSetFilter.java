@@ -13,6 +13,12 @@ import java.util.List;
  */
 public interface IAnnotatedDocumentSetFilter {
 
+	/**
+	 * Prune the provided list of {@link AnnotatedDocument} instances.
+	 * 
+	 * @param input
+	 * @return
+	 */
 	List<AnnotatedDocument> filter(List<AnnotatedDocument> input);
 
 }

@@ -46,7 +46,9 @@ class DnaExtractPlateListRecordsHandler extends ListRecordsHandler {
 	@Override
 	protected List<IAnnotatedDocumentPostFilter> getAnnotatedDocumentPostFilters()
 	{
-		return new ArrayList<>(0);
+		List<IAnnotatedDocumentPostFilter> filters = new ArrayList<>(1);
+		filters.add(new DnaExtractPlateFilter());
+		return filters;
 	}
 
 	@Override
