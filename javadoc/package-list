@@ -8,7 +8,6 @@ nl.naturalis.oaipmh.api.jaxb.abcd
 nl.naturalis.oaipmh.api.jaxb.ggbn
 nl.naturalis.oaipmh.api.util
 nl.naturalis.oaipmh.rest
-org.domainobject.test.foo
 org.domainobject.util
 org.domainobject.util.convert
 org.domainobject.util.debug
