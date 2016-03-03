@@ -1,6 +1,7 @@
 package nl.naturalis.lims2.oaipmh;
 
 import static org.junit.Assert.*;
+import nl.naturalis.lims2.oaipmh.DocumentNotes.Note;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +30,9 @@ public class SharedPostFilterTest {
 		dad.setContig(Boolean.FALSE);
 		assertFalse("03", filter.accept(ad));
 		dad.setContig(Boolean.TRUE);
-		assertTrue("04", filter.accept(ad));
+		assertFalse("04", filter.accept(ad));
+		notes.set(Note.CRSCode_CRS, "true");
+		assertTrue("05", filter.accept(ad));
 	}
 
 }
