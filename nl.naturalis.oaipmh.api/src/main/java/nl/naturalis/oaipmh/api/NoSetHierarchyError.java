@@ -20,4 +20,17 @@ public class NoSetHierarchyError extends OAIPMHerrorType {
 		this.value = message;
 	}
 
+	public NoSetHierarchyError(OAIPMHRequest request)
+	{
+		super();
+		this.code = NO_SET_HIERARCHY;
+		this.value = "Sets not supported. (Set provided: " + request.getSet() + ")";
+	}
+
+	public NoSetHierarchyError()
+	{
+		super();
+		this.code = NO_SET_HIERARCHY;
+	}
+
 }

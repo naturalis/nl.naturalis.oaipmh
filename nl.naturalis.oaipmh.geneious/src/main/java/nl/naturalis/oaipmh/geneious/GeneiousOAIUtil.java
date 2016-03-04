@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import nl.naturalis.oaipmh.api.CannotDisseminateFormatError;
+import nl.naturalis.oaipmh.api.NoSetHierarchyError;
 import nl.naturalis.oaipmh.api.OAIPMHException;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.RepositoryException;
@@ -23,13 +24,13 @@ import org.domainobject.util.ConfigObject;
 public class GeneiousOAIUtil {
 
 	/**
-	 * XML namespace for lims2 elements (http://data.naturalis.nl/geneious).
+	 * XML namespace for geneious elements (http://data.naturalis.nl/geneious).
 	 */
-	public static final String LIMS2_XMLNS = "http://data.naturalis.nl/geneious";
+	public static final String GENEIOUS_XMLNS = "http://data.naturalis.nl/geneious";
 	/**
-	 * XML namespace prefix for lims2 elements ("geneious").
+	 * XML namespace prefix for geneious elements ("geneious").
 	 */
-	public static final String LIMS2_XMLNS_PREFIX = "geneious";
+	public static final String GENEIOUS_XMLNS_PREFIX = "geneious";
 
 	private static final Logger logger = LogManager.getLogger(GeneiousOAIUtil.class);
 
@@ -43,10 +44,12 @@ public class GeneiousOAIUtil {
 	 * @param request
 	 * @throws OAIPMHException
 	 */
-	public static void checkMetadataPrefix(OAIPMHRequest request) throws OAIPMHException
+	public static void checkRequest(OAIPMHRequest request) throws OAIPMHException
 	{
-		if (!request.getMetadataPrefix().equals(LIMS2_XMLNS_PREFIX))
+		if (!request.getMetadataPrefix().equals(GENEIOUS_XMLNS_PREFIX))
 			throw new OAIPMHException(new CannotDisseminateFormatError(request));
+		if (request.getSet() != null)
+			throw new OAIPMHException(new NoSetHierarchyError(request));
 	}
 
 	/**

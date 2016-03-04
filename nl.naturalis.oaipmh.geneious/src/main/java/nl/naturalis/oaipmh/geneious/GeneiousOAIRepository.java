@@ -1,6 +1,6 @@
 package nl.naturalis.oaipmh.geneious;
 
-import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.LIMS2_XMLNS;
+import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.GENEIOUS_XMLNS;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -133,7 +133,7 @@ public abstract class GeneiousOAIRepository implements IOAIRepository {
 		streamer.setRootElement(oaipmh);
 		streamer.addJaxbPackage("nl.naturalis.oaipmh.geneious.jaxb");
 		String schemaLocation = repoBaseURL + "xsd/geneious.xsd";
-		streamer.addSchemaLocation(LIMS2_XMLNS, schemaLocation);
+		streamer.addSchemaLocation(GENEIOUS_XMLNS, schemaLocation);
 		try {
 			streamer.stream(out);
 		}

@@ -3,7 +3,7 @@ package nl.naturalis.oaipmh.geneious;
 import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.createResponseSkeleton;
 import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormatter;
 import static nl.naturalis.oaipmh.api.util.ObjectFactories.oaiFactory;
-import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.checkMetadataPrefix;
+import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.checkRequest;
 import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.connect;
 import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.disconnect;
 
@@ -86,7 +86,7 @@ public abstract class ListRecordsHandler {
 	 */
 	public OAIPMHtype handleRequest() throws RepositoryException, OAIPMHException
 	{
-		checkMetadataPrefix(request);
+		checkRequest(request);
 		preFilters.addAll(getAnnotatedDocumentPreFilters());
 		postFilters.addAll(getAnnotatedDocumentPostFilters());
 		List<AnnotatedDocument> records = getAnnotatedDocuments();

@@ -76,7 +76,7 @@ class DnaExtractPlateListRecordsHandler extends ListRecordsHandler {
 	@SuppressWarnings("static-method")
 	OAIPMHtype handleRequest_old(OAIPMHRequest request) throws OAIPMHException
 	{
-		GeneiousOAIUtil.checkMetadataPrefix(request);
+		GeneiousOAIUtil.checkRequest(request);
 		OAIPMHtype root = createResponseSkeleton(request);
 		ListRecordsType listRecords = oaiFactory.createListRecordsType();
 		root.setListRecords(listRecords);
