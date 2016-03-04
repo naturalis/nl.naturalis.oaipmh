@@ -34,10 +34,6 @@ public class RepositoryFactory {
 		if (instance == null) {
 			instance = new RepositoryFactory();
 		}
-		/*
-		 * Singletons don't behave nicely within Wildfly container, so we just
-		 * create a new instance every time this method is called.
-		 */
 		return instance;
 	}
 
@@ -49,41 +45,40 @@ public class RepositoryFactory {
 
 	/**
 	 * Returns an {@link IOAIRepository} instance of the OAI repository with the
-	 * specified name. The name comes from the path following the base URL of
-	 * the REST service (see {@link OAIPMHResource}). The name is resolved to an
-	 * actual {@link IOAIRepository} instance as follows:
+	 * specified name. This name is resolved to an actual {@link IOAIRepository}
+	 * instance as follows:
 	 * <ul>
 	 * <li>
-	 * First the configuration file for the REST service is checked to see if it
-	 * contains a property named <b>repository.${repoDescriptor}.config</b>.
-	 * Thus, given a base URL of http://example.com/oaipmh, a request for
-	 * http://example.com/oaipmh/repo1 first results in oaipmh.properties being
-	 * searched for a property named repository.repo1.config. If this property
-	 * is present, its value is taken to be the <i>full path</i> to the
+	 * First the configuration file for the REST service itself
+	 * (oaipmh.properties) is checked to see if it contains a property named
+	 * <code>repository.&#36;{repoGroup}.config</code>. Thus, given a base URL
+	 * of http://example.com/oaipmh, a request for
+	 * http://example.com/oaipmh/my-repo first results in oaipmh.properties
+	 * being searched for a property named repository.my-repo.config. If this
+	 * property is present, its value is taken to be the full path to the
 	 * configuration file for the OAI repository.
-	 * <li>If oaipmh.properties does <i>not</i> contain this property, the
-	 * classpath is searched for the repository configuration file. The name of
-	 * the repository configuration file then is assumed to be
-	 * <b>oai-repo.${repoDescriptor}.properties</b>.
+	 * <li>If oaipmh.properties does not contain this property, the classpath is
+	 * searched for the repository configuration file. The name of the
+	 * repository configuration file is assumed to be
+	 * <code>oai-repo.&#36;{repoGroup}.properties</code>.
 	 * <li>The repository configuration file must be a standard Java properties
-	 * file and it must contain at least one property: if the {@code repoName}
-	 * argument is {@code null}, the property must be named
-	 * <b>repo.impl.class</b>; if the {@code repoName} argument is not
-	 * {@code null}, it must be named <b>${repoName}.repo.impl.class</b>. In
-	 * either case it must specify the fully-qualified name of the class
-	 * implementing {@link IOAIRepository}. Note that this implies that multiple
-	 * repositories can share the same configuration file, allowing similar
-	 * repositories to be configured in one place. One configuration file can
-	 * specify multiple {@link IOAIRepository} implementations.
-	 * <li>Finally, the class specified by repo.impl.class property or
-	 * ${repoName}.repo.impl.class property is instantiated using its
-	 * assumed-to-be-present no-arg constructor.
+	 * file and it must contain at least one property. When using repository
+	 * groups, the property must be named
+	 * <code>&#36;{repoName}.repo.impl.class</code>. Otherwise it must be named
+	 * <code>repo.impl.class</code>. In either case it must specify the
+	 * fully-qualified name of the class implementing {@link IOAIRepository}.
+	 * <li>Finally, the class specified by <code>repo.impl.class</code> or
+	 * <code>&#36;{repoName}.repo.impl.class</code> is instantiated using its
+	 * no-arg constructor.
 	 * </ul>
+	 * See {@link OAIPMHResource} for an explanation of repository groups.
 	 * 
 	 * @param repoGroup
 	 * @param repoName
 	 * @return
 	 * @throws RepositoryInitializationException
+	 * 
+	 * @see {@link OAIPMHResource}
 	 * 
 	 */
 	@SuppressWarnings("unchecked")

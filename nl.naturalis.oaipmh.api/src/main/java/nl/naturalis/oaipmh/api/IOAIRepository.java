@@ -8,23 +8,19 @@ import nl.naturalis.oaipmh.api.util.ResumptionToken;
 
 /**
  * <p>
- * Life-cycle interface defining the capacities of an OAI repository. This is
- * the only interface that OAI repositories must implement, although they can
- * optionally implement a few other interfaces (e.g.
- * {@link IResumptionTokenParser}). OAI repositories do not provide the full
- * OAI-PMH XML response. The REST layer sets up an XML skeleton and embeds the
- * response from methods like {@link #listRecords()} and {@link #getErrors()}
- * within the skeleton.
+ * Call-back interface for OAI repositories. This is the only interface that OAI
+ * repositories must implement, although they can optionally implement a few
+ * other interfaces (e.g. {@link IResumptionTokenParser}).
  * </p>
  * <h3>Life Cycle</h3>
  * <p>
  * For each OAI-PMH request the REST layer cycles through the following calls
  * against the repository:
  * <ol>
- * <li>Call {@link #setRepositoryBaseUrl(String) setRepositoryBaseUrl} in case
- * the repository needs to include XML namespace declarations relative to the
- * base URL under which it operates. See also
- * {@link #getXSDForMetadataPrefix(OutputStream, String)
+ * <li>Call {@link #setRepositoryBaseUrl(String) setRepositoryBaseUrl}, passing
+ * the repository the base URL under which it operates. This allows the
+ * repository to include XML namespace declarations relative to the base URL.
+ * See also {@link #getXSDForMetadataPrefix(OutputStream, String)
  * getXSDForMetadataPrefix}.
  * <li>Call {@link #getResumptionTokenParser() getResumptionTokenParser} to
  * parse the value of the resumptionToken query parameter (if present).

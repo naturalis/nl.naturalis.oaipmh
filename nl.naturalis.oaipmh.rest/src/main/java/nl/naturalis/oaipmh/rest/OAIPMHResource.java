@@ -165,15 +165,15 @@ public class OAIPMHResource {
 	{
 		logRequest(repoGroup, repoName);
 		try {
-			RepositoryFactory rf = RepositoryFactory.getInstance();
-			IOAIRepository repository = rf.build(repoGroup, repoName);
+			RepositoryFactory repoFactory = RepositoryFactory.getInstance();
+			IOAIRepository repository = repoFactory.build(repoGroup, repoName);
 			repository.setRepositoryBaseUrl(getRepoBaseURL(repoGroup, repoName));
-			RequestBuilder rb = RequestBuilder.newInstance();
-			rb.setResumptionTokenParser(repository.getResumptionTokenParser());
-			OAIPMHRequest request = rb.build(uriInfo);
-			if (rb.getErrors().size() != 0) {
+			RequestBuilder requestBuilder = RequestBuilder.newInstance();
+			requestBuilder.setResumptionTokenParser(repository.getResumptionTokenParser());
+			OAIPMHRequest request = requestBuilder.build(uriInfo);
+			if (requestBuilder.getErrors().size() != 0) {
 				OAIPMHtype skeleton = createResponseSkeleton(request);
-				skeleton.getError().addAll(rb.getErrors());
+				skeleton.getError().addAll(requestBuilder.getErrors());
 				return xmlResponse(skeleton);
 			}
 			if (logger.isDebugEnabled()) {
