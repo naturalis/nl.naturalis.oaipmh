@@ -26,7 +26,7 @@ public class DocumentFactoryTest {
 		assertEquals("01", expected, actual);
 		assertNotNull("02", doc.getReferencedDocuments());
 		assertEquals("03", 1, doc.getReferencedDocuments().size());
-		assertEquals("04", 9, doc.getNotes().count());
+		assertEquals("04", 10, doc.getNotes().count());
 		assertEquals("05", DocumentClass.DefaultNucleotideGraphSequence, doc.getDocumentClass());
 	}
 

@@ -7,7 +7,7 @@ import java.util.EnumMap;
  * within the document_xml column. The document_xml column may contain a
  * &lt;notes&gt; element. The &lt;notes&gt; element contains one or more
  * &lt;note&gt; elements. Each &lt;note&gt; element contains one child element
- * whose name identifies the note, for example &lt;BOLDIDCode_BOLD&gt;. Not all
+ * whose name identifies the note, for example &lt;BOLDIDCode_Bold&gt;. Not all
  * of these child elements are relevant to the OAI-PMH generation process. Only
  * those whose name corresponds to a {@link Note} constant are extracted from
  * the XML.
@@ -31,18 +31,34 @@ public class DocumentNotes {
 		 */
 		CRSCode_CRS,
 		/**
+		 * Maps to associatedUnitID for specimens.
+		 */
+		BOLDIDCode_Bold,
+		/**
+		 * Maps to uri for specimens.
+		 */
+		BOLDURICode_FixedValue_Bold,
+		/**
+		 * Maps to consensusSequenceLength for DNA extracts.
+		 */
+		NucleotideLengthCode_Bold,
+		/**
+		 * Maps to geneticAccessionNumber for DNA extracts.
+		 */
+		GenBankIDCode_Bold,
+		/**
+		 * Maps to geneticAccessionNumberURI for DNA extracts.
+		 */
+		GenBankURICode_FixedValue_Bold,
+		/**
+		 * Maps to multiMediaObjectComment for specimens.
+		 */
+		NumberOfImagesCode_Bold,
+		/**
 		 * Maps to unitID for specimens; maps to associatedUnitID for DNA
 		 * extracts.
 		 */
 		RegistrationNumberCode_Samples,
-		/**
-		 * Maps to associatedUnitID for specimens.
-		 */
-		BOLDIDCode_BOLD,
-		/**
-		 * Maps to uri for specimens.
-		 */
-		BOLDURICode_FixedValue,
 		/**
 		 * Maps to institutePlateID
 		 */
@@ -60,9 +76,13 @@ public class DocumentNotes {
 		 */
 		ProjectPlateNumberCode_Samples,
 		/**
+		 * Maps to sequencingStaff for DNA extracts.
+		 */
+		SequencingStaffCode_FixedValue_Samples,
+		/**
 		 * Maps to versionNumber for DNA extracts.
 		 */
-		DocumentVersionCode,
+		DocumentVersionCode_Seq,
 		/**
 		 * Maps to marker for DNA extracts.
 		 */
@@ -76,29 +96,9 @@ public class DocumentNotes {
 		 */
 		ConsensusSeqPass_Code_Seq,
 		/**
-		 * Maps to consensusSequenceLength for DNA extracts.
-		 */
-		NucleotideLengthCode_Bold,
-		/**
-		 * Maps to consensusSequenceLength for DNA extracts.
-		 */
-		GenBankIDCode_Bold,
-		/**
-		 * Maps to geneticAccessionNumberURI for DNA extracts.
-		 */
-		GenBankURICode_FixedValue,
-		/**
-		 * Maps to multiMediaObjectComment for specimens.
-		 */
-		NumberOfImagesCode_BOLD,
-		/**
-		 * Maps to sequencingStaff for DNA extracts.
-		 */
-		SequencingStaffCode_FixedValue,
-		/**
 		 * Maps to amplificationStaff for DNA extracts.
 		 */
-		AmplicificationStaffCode_FixedValue
+		AmplicificationStaffCode_FixedValue_Seq
 	}
 
 	private EnumMap<Note, String> data = new EnumMap<>(Note.class);

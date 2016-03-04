@@ -1,8 +1,8 @@
 package nl.naturalis.oaipmh.geneious.specimens;
 
-import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.BOLDIDCode_BOLD;
-import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.BOLDURICode_FixedValue;
-import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.NumberOfImagesCode_BOLD;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.BOLDIDCode_Bold;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.BOLDURICode_FixedValue_Bold;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.NumberOfImagesCode_Bold;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.RegistrationNumberCode_Samples;
 
 import java.util.ArrayList;
@@ -55,9 +55,9 @@ class SpecimenListRecordsHandler extends ListRecordsHandler {
 		specimen.setUnit(unit);
 		DocumentNotes notes = ad.getDocument().getNotes();
 		unit.setUnitID(notes.get(RegistrationNumberCode_Samples));
-		unit.setAssociatedUnitID(notes.get(BOLDIDCode_BOLD));
-		unit.setUri(notes.get(BOLDURICode_FixedValue));
-		String s = notes.get(NumberOfImagesCode_BOLD);
+		unit.setAssociatedUnitID(notes.get(BOLDIDCode_Bold));
+		unit.setUri(notes.get(BOLDURICode_FixedValue_Bold));
+		String s = notes.get(NumberOfImagesCode_Bold);
 		if (s != null) {
 			Integer i = Integer.valueOf(s);
 			unit.setMultiMediaObjectComment(i);
