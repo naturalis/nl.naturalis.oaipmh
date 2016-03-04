@@ -1,7 +1,7 @@
 # Repository implementation classes
-specimens.repo.impl.class=nl.naturalis.lims2.oaipmh.specimens.SpecimenOAIRepository
-dna-extract-plates.repo.impl.class=nl.naturalis.lims2.oaipmh.plates.DnaExtractPlateOAIRepository
-dna-extracts.repo.impl.class=nl.naturalis.lims2.oaipmh.extracts.DnaExtractOAIRepository
+specimens.repo.impl.class=nl.naturalis.oaipmh.geneious.specimens.SpecimenOAIRepository
+dna-extract-plates.repo.impl.class=nl.naturalis.oaipmh.geneious.plates.DnaExtractPlateOAIRepository
+dna-extracts.repo.impl.class=nl.naturalis.oaipmh.geneious.extracts.DnaExtractOAIRepository
 
 # Page size (number of records served per request)
 specimens.repo.pagesize=20
