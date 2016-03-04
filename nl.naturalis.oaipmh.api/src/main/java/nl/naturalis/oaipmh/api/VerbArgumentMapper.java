@@ -20,8 +20,8 @@ import java.util.Set;
 import org.openarchives.oai._2.VerbType;
 
 /**
- * Maps each of the five OAI-PMH verbs to a set of required arguments and a set
- * of optional arguments.
+ * Maps each of the five OAI-PMH verbs to a set of required {@link Argument
+ * arguments} and a set of optional arguments.
  * 
  * @author Ayco Holleman
  *

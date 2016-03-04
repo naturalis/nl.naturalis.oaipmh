@@ -9,8 +9,8 @@ import nl.naturalis.oaipmh.api.util.ResumptionToken;
 /**
  * <p>
  * Life-cycle interface defining the capacities of an OAI repository. This is
- * the only interface that OAI repositories <b>must</b> implement, although they
- * can optionally implement a few other interfaces (e.g.
+ * the only interface that OAI repositories must implement, although they can
+ * optionally implement a few other interfaces (e.g.
  * {@link IResumptionTokenParser}). OAI repositories do not provide the full
  * OAI-PMH XML response. The REST layer sets up an XML skeleton and embeds the
  * response from methods like {@link #listRecords()} and {@link #getErrors()}
@@ -49,8 +49,8 @@ import nl.naturalis.oaipmh.api.util.ResumptionToken;
  * library does not provide you with the means to do this programmatically.
  * Thefore, you must update the package-info.java file in your jAXB package.
  * Include an {@code xmlns} attribute within the &#64;XmlSchema annotation that
- * you see in the package-info.java file. Note that <b>you must do this each
- * time you generate your JAXB classes using xjc</b> since this will also
+ * you see in the package-info.java file. Note that <i>you must do this each
+ * time you generate your JAXB classes using xjc</i> since this will also
  * overwrite the package-info.java file. Example:
  * 
  * <pre>

@@ -43,6 +43,12 @@ class OAIPMHStream implements StreamingOutput {
 		this.repo = repo;
 	}
 
+	/**
+	 * Puts this {@code OAIPMHStream} on the HTTP response and returns the
+	 * response.
+	 * 
+	 * @return
+	 */
 	Response stream()
 	{
 		return xmlResponse(this);
