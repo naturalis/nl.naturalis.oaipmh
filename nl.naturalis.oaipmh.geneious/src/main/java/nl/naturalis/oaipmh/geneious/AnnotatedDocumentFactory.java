@@ -50,12 +50,12 @@ public class AnnotatedDocumentFactory {
 		ad.setDocument(doc);
 		xml = rs.getString("plugin_document_xml");
 		ad.setPluginDocument(parsePluginDocumentXML(xml));
-		if (logger.isDebugEnabled()) {
+		if (logger.isTraceEnabled()) {
 			StringWriter sw = new StringWriter(2048);
 			BeanPrinter bp = new BeanPrinter(new PrintWriter(sw));
 			bp.setShowClassNames(false);
 			bp.dump(ad);
-			logger.debug("AnnotatedDocument instance created:\n{}", sw);
+			logger.trace("AnnotatedDocument instance created:\n{}", sw);
 		}
 		return ad;
 	}
