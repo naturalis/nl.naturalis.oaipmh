@@ -3,10 +3,12 @@ package nl.naturalis.oaipmh.geneious;
 import java.util.List;
 
 /**
- * A set filter filters out annotated_document records within the context of the
- * entire set of records retrieved from the database. The assumption is that the
- * entire set is need to assess whether any single element of it must be
- * filtered out of it.
+ * A set filter prunes the entire set of {@link AnnotatedDocument} instances
+ * retrieved from the the database. The assumption is that the entire set is
+ * needed to assess whether any single element of it must be filtered out of it.
+ * Set filters are applied after {@link IAnnotatedDocumentPostFilter
+ * post-filters}, which are again applied after
+ * {@link IAnnotatedDocumentPreFilter pre-filters}.
  * 
  * @author Ayco Holleman
  *
