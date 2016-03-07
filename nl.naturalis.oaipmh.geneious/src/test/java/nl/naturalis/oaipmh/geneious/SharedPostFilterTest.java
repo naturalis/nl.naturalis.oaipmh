@@ -1,5 +1,11 @@
 package nl.naturalis.oaipmh.geneious;
 
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.CRSCode_CRS;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.DocumentVersionCode_Seq;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractIDCode_Samples;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractPlateNumberCode_Samples;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.MarkerCode_Seq;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.RegistrationNumberCode_Samples;
 import static org.junit.Assert.*;
 import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
 import nl.naturalis.oaipmh.geneious.DefaultAlignmentDocument;
@@ -12,6 +18,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class SharedPostFilterTest {
+
+	private static final Note[] requiredNotes = new Note[] { CRSCode_CRS, ExtractIDCode_Samples,
+			MarkerCode_Seq, DocumentVersionCode_Seq, RegistrationNumberCode_Samples,
+			ExtractPlateNumberCode_Samples };
 
 	@Before
 	public void setUp() throws Exception
@@ -36,8 +46,12 @@ public class SharedPostFilterTest {
 		assertFalse("03", filter.accept(ad));
 		dad.setContig(Boolean.TRUE);
 		assertFalse("04", filter.accept(ad));
+		for (Note n : requiredNotes) {
+			notes.set(n, "foo");
+		}
+		assertFalse("05", filter.accept(ad));
 		notes.set(Note.CRSCode_CRS, "true");
-		assertTrue("05", filter.accept(ad));
+		assertTrue("06", filter.accept(ad));
 	}
 
 }

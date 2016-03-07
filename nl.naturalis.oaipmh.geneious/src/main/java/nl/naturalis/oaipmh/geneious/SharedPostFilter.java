@@ -1,5 +1,11 @@
 package nl.naturalis.oaipmh.geneious;
 
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.CRSCode_CRS;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.DocumentVersionCode_Seq;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractIDCode_Samples;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractPlateNumberCode_Samples;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.MarkerCode_Seq;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.RegistrationNumberCode_Samples;
 import nl.naturalis.oaipmh.geneious.DocumentNotes.Note;
 
 import org.apache.logging.log4j.LogManager;
@@ -11,8 +17,11 @@ import org.apache.logging.log4j.Logger;
  * <ul>
  * <li>The document_xml column contains valid XML
  * <li>The plugin_document_xml columns contains valid XML
- * <li>The document_xml column contains at least one &lt;note&gt; element
- * <li>The CRSCode_CRS note is present and has value "true"
+ * <li>All required notes are present. The following notes are assumed to be
+ * required: CRSCode_CRS, ExtractIDCode_Samples, MarkerCode_Seq,
+ * DocumentVersionCode_Seq, RegistrationNumberCode_Samples,
+ * ExtractPlateNumberCode_Sample
+ * <li>The CRSCode_CRS note has value "true"
  * <li>The is_contig attribute in the plugin_document_xml column has value true
  * in case of a DefaultAlignmentDocument
  * </ul>
@@ -23,6 +32,9 @@ import org.apache.logging.log4j.Logger;
 public class SharedPostFilter implements IAnnotatedDocumentPostFilter {
 
 	private static final Logger logger = LogManager.getLogger(SharedPostFilter.class);
+	private static final Note[] requiredNotes = new Note[] { CRSCode_CRS, ExtractIDCode_Samples,
+			MarkerCode_Seq, DocumentVersionCode_Seq, RegistrationNumberCode_Samples,
+			ExtractPlateNumberCode_Samples };
 
 	public SharedPostFilter()
 	{
@@ -41,14 +53,21 @@ public class SharedPostFilter implements IAnnotatedDocumentPostFilter {
 		DocumentNotes notes;
 		if ((notes = ad.getDocument().getNotes()) == null) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Record discarded: document_xml column contains no usable <note> elements");
+				discard("document_xml column contains no usable <note> elements");
 			}
 			return false;
 		}
-		String s = notes.get(Note.CRSCode_CRS);
-		if (s == null || !s.equals("true")) {
+		for (Note requiredNote : requiredNotes) {
+			if (notes.get(requiredNote) == null) {
+				if (logger.isDebugEnabled()) {
+					discard("missing required <note> element: {}", requiredNote);
+				}
+				return false;
+			}
+		}
+		if (!notes.get(CRSCode_CRS).equals("true")) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Record discarded: CRSCode_CRS flag absent or not \"true\"");
+				discard("CRSCode_CRS flag must be set to \"true\"");
 			}
 			return false;
 		}
@@ -56,12 +75,17 @@ public class SharedPostFilter implements IAnnotatedDocumentPostFilter {
 			DefaultAlignmentDocument dad = (DefaultAlignmentDocument) ad.getPluginDocument();
 			if (dad.isContig() == null || dad.isContig() == Boolean.FALSE) {
 				if (logger.isDebugEnabled()) {
-					logger.debug("Record discarded: <DefaultAlignmentDocument> only considered when is_contig=\"true\"");
+					discard("<DefaultAlignmentDocument> only considered when is_contig=\"true\"");
 				}
 				return false;
 			}
 		}
 		return true;
+	}
+
+	private static void discard(String msg, Object... args)
+	{
+		logger.debug("Record discarded: " + msg, args);
 	}
 
 }

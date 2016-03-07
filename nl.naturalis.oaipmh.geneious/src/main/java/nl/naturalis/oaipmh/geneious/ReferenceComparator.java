@@ -13,14 +13,14 @@ import org.apache.logging.log4j.Logger;
  * means it has superseded the other {@code AnnotatedDocument}. Thus when
  * sorting {@link AnnotatedDocument} instances, those that reference others
  * should be pushed up, while those that <i>are</i> referenced should be pushed
- * down.
+ * down. This comparator is used by the {@link SharedSetFilter}.
  * 
  * @author Ayco Holleman
  *
  */
-public class AnnotatedDocumentComparator implements Comparator<AnnotatedDocument> {
+public class ReferenceComparator implements Comparator<AnnotatedDocument> {
 
-	private static final Logger logger = LogManager.getLogger(AnnotatedDocumentComparator.class);
+	private static final Logger logger = LogManager.getLogger(ReferenceComparator.class);
 
 	private static final String MSG_DISCARD = "Record [id={}] is discarded in favour of "
 			+ "record [id={}]. Reason: {}";
@@ -29,7 +29,7 @@ public class AnnotatedDocumentComparator implements Comparator<AnnotatedDocument
 	private static final String INPUT_CHECK = "it is input for the latter";
 	private static final String OUTPUT_CHECK = "the latter was output from it";
 
-	public AnnotatedDocumentComparator()
+	public ReferenceComparator()
 	{
 	}
 
@@ -54,13 +54,13 @@ public class AnnotatedDocumentComparator implements Comparator<AnnotatedDocument
 
 	private int checkReferences(AnnotatedDocument first, AnnotatedDocument second)
 	{
-		// Does the 1st document reference the 2nd? Then we can discard the 2nd.
+		// Does the 1st document reference the 2nd? Then discard the 2nd.
 		List<String> urns = first.getDocument().getReferencedDocuments();
 		if (urns != null && urns.contains(second.getUrn())) {
 			dispense(second, first, REFERENCE_CHECK);
 			return -1;
 		}
-		// Does the 2nd document reference the 1st? Then we can discard the 1st.
+		// Does the 2nd document reference the 1st? Then discard the 1st.
 		urns = second.getDocument().getReferencedDocuments();
 		if (urns != null && urns.contains(first.getUrn())) {
 			dispense(first, second, REFERENCE_CHECK);
@@ -71,8 +71,7 @@ public class AnnotatedDocumentComparator implements Comparator<AnnotatedDocument
 
 	public int checkInputDocuments(AnnotatedDocument first, AnnotatedDocument second)
 	{
-		// Is the 2nd document an input document for 1st? Then we can discard
-		// the 2nd.
+		// Is the 2nd document an input document for 1st? Then discard the 2nd.
 		if (first.getPluginDocument() instanceof XMLSerialisableRootElement) {
 			XMLSerialisableRootElement x = (XMLSerialisableRootElement) first.getPluginDocument();
 			List<String> inputForFirst = x.getInputDocuments();
@@ -81,8 +80,7 @@ public class AnnotatedDocumentComparator implements Comparator<AnnotatedDocument
 				return -1;
 			}
 		}
-		// Is the 1st document an input document for 2nd? Then we can discard
-		// the 1st.
+		// Is the 1st document an input document for 2nd? Then discard the 1st.
 		if (second.getPluginDocument() instanceof XMLSerialisableRootElement) {
 			XMLSerialisableRootElement x = (XMLSerialisableRootElement) second.getPluginDocument();
 			List<String> inputForSecond = x.getInputDocuments();
@@ -96,8 +94,7 @@ public class AnnotatedDocumentComparator implements Comparator<AnnotatedDocument
 
 	public int checkOutputDocuments(AnnotatedDocument first, AnnotatedDocument second)
 	{
-		// Is the 1st document generated from the 2nd? The we can discard the
-		// 2nd.
+		// Is the 1st document generated from the 2nd? The discard the 2nd.
 		if (second.getPluginDocument() instanceof XMLSerialisableRootElement) {
 			XMLSerialisableRootElement x = (XMLSerialisableRootElement) second.getPluginDocument();
 			String outputOfSecond = x.getOutputDocument();
@@ -106,8 +103,7 @@ public class AnnotatedDocumentComparator implements Comparator<AnnotatedDocument
 			}
 			return -1;
 		}
-		// Is the 2nd document generated from the 1st? The we can discard the
-		// 1st.
+		// Is the 2nd document generated from the 1st? The discard the 1st.
 		if (first.getPluginDocument() instanceof XMLSerialisableRootElement) {
 			XMLSerialisableRootElement x = (XMLSerialisableRootElement) first.getPluginDocument();
 			String outputOfFirst = x.getOutputDocument();

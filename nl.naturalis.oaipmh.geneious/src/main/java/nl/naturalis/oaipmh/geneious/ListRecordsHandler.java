@@ -64,17 +64,18 @@ public abstract class ListRecordsHandler {
 		postFilters = new ArrayList<>(4);
 		postFilters.add(new SharedPostFilter());
 		setFilters = new ArrayList<>(4);
+		SharedSetFilter ssf = new SharedSetFilter();
 		/*
-		 * Currently, applying the SharedSetFilter has no effect, since it
-		 * filters out only and exactly those records whose reference_count
-		 * column equals 0 (so it's quite a bit easier and cheaper to use that
-		 * WHERE clause). However we still apply this filter when in DEBUG mode,
-		 * just to make sure we got the logic right and see no surprising stuff
-		 * when debugging.
+		 * We tie filtering by means of a ReferenceComparator to the logger
+		 * being in DEBUG mode. Applying a ReferenceComparator is probably
+		 * useless because it filters out only and exactly those records where
+		 * reference_count column equals 0, so it's quite a bit easier and
+		 * cheaper to use that WHERE clause. However we still apply this filter
+		 * when in DEBUG mode, just to make sure we got the logic right and see
+		 * no surprising stuff when debugging.
 		 */
-		if (logger.isDebugEnabled()) {
-			setFilters.add(new SharedSetFilter());
-		}
+		ssf.setUseReferenceComparator(logger.isDebugEnabled());
+		setFilters.add(ssf);
 	}
 
 	/**
