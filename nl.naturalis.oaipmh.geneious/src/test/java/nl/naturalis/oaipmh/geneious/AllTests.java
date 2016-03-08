@@ -9,8 +9,9 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ AnnotatedDocumentFactoryTest.class, DocumentFactoryTest.class,
-		SharedPostFilterTest.class, XMLSerialisableRootElementFactoryTest.class,
-		DnaExtractFilterTest.class, SpecimenFilterTest.class })
+		SharedPostFilterTest.class, SharedSetFilterTest.class,
+		XMLSerialisableRootElementFactoryTest.class, DnaExtractFilterTest.class,
+		SpecimenFilterTest.class })
 public class AllTests {
 
 }

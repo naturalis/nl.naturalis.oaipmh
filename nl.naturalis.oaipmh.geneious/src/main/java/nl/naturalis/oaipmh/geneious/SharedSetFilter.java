@@ -60,6 +60,8 @@ public class SharedSetFilter implements IAnnotatedDocumentSetFilter {
 			if (extractId.equals(prevExtractId) && marker.equals(prevMarker))
 				continue;
 			result.add(ad);
+			prevExtractId = extractId;
+			prevMarker = marker;
 		}
 		return result;
 	}
