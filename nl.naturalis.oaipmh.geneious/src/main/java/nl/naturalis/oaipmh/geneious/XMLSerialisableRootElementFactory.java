@@ -7,6 +7,12 @@ import org.domainobject.util.DOMUtil;
 import org.domainobject.util.convert.Stringifier;
 import org.w3c.dom.Element;
 
+/**
+ * Factory for {@link XMLSerialisableRootElement} instances.
+ * 
+ * @author Ayco Holleman
+ *
+ */
 public class XMLSerialisableRootElementFactory {
 
 	private static final String DUMMY_CHAR_SEQUENCE = "NNNNNNNNNN";
@@ -15,6 +21,13 @@ public class XMLSerialisableRootElementFactory {
 	{
 	}
 
+	/**
+	 * Converts the XML contents of the plugin_document_xml column to an
+	 * instance of {@link XMLSerialisableRootElement}.
+	 * 
+	 * @param root
+	 * @return
+	 */
 	@SuppressWarnings("static-method")
 	public XMLSerialisableRootElement build(Element root)
 	{

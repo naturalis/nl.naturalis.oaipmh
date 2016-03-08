@@ -1,6 +1,7 @@
 /**
  * 
- * Implementation classes for the specimens repository.
+ * Implementation classes for the Geneious OAI repository for DNA extract
+ * plates.
  * 
  * @author Ayco Holleman
  *
