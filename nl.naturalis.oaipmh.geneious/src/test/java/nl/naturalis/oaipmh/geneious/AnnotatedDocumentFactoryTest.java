@@ -50,7 +50,7 @@ public class AnnotatedDocumentFactoryTest {
 		String actual = BeanPrinter.toString(ad);
 		InputStream is = getClass().getResourceAsStream("/annotated_document_01_deserialized");
 		String expected = FileUtil.getContents(is);
-		// assertEquals("01", expected.hashCode(), actual.hashCode());
+		assertEquals("01", expected, actual);
 		assertEquals("02", 32321, ad.getId());
 		assertEquals("03", 729, ad.getFolderId());
 		DocumentNotes notes = ad.getDocument().getNotes();

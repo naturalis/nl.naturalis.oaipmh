@@ -1,34 +1,35 @@
-(nl.naturalis.lims2.oaipmh.AnnotatedDocument) {
+(nl.naturalis.oaipmh.geneious.AnnotatedDocument) {
 	id: (int) 32321
 	folderId: (int) 729
 	modified: (long) 1456227005000
 	urn: (String) "urn:local:Reinier.Kartowikromo:my-5sr8a1x"
 	referenceCount: (int) 0
-	document: (nl.naturalis.lims2.oaipmh.Document) {
-		documentClass: (nl.naturalis.lims2.oaipmh.DocumentClass) DefaultNucleotideGraphSequence
+	document: (nl.naturalis.oaipmh.geneious.Document) {
+		documentClass: (nl.naturalis.oaipmh.geneious.DocumentClass) DefaultNucleotideGraphSequence
 		referencedDocuments: (java.util.ArrayList$Itr) {
 			0: (String) "urn:local:Reinier.Kartowikromo:me-5sr89qb"
 		}
-		notes: (nl.naturalis.lims2.oaipmh.DocumentNotes) {
-			data: (java.util.EnumMap[9]) {
+		notes: (nl.naturalis.oaipmh.geneious.DocumentNotes) {
+			data: (java.util.EnumMap[10]) {
 				CRSCode_CRS => (String) "true"
 				RegistrationNumberCode_Samples => (String) "RMNH.INS.556182"
 				ExtractPlateNumberCode_Samples => (String) "NCBN000678"
 				ExtractIDCode_Samples => (String) "e4010125023"
 				PlatePositionCode_Samples => (String) "A-09"
 				ProjectPlateNumberCode_Samples => (String) "BCP0047-40"
-				DocumentVersionCode => (String) "1"
+				SequencingStaffCode_FixedValue_Samples => (String) "Naturalis Biodiversity Center\n\t\t\t\tLaboratories"
 				MarkerCode_Seq => (String) "COI"
 				PCRplateIDCode_Seq => (String) "MJ243"
+				AmplicificationStaffCode_FixedValue_Seq => (String) "Naturalis Biodiversity Center\n\t\t\t\tLaboratories"
 			}
 		}
 	}
-	pluginDocument: (nl.naturalis.lims2.oaipmh.XMLSerialisableRootElement) {
-		super: (nl.naturalis.lims2.oaipmh.PluginDocument) {
+	pluginDocument: (nl.naturalis.oaipmh.geneious.XMLSerialisableRootElement) {
+		super: (nl.naturalis.oaipmh.geneious.PluginDocument) {
 		}
-		name: (String) "Reads Assembly Contig 10 consensus sequence"
-		description: (String) "Assembly of 2 reads:\n\t\te4010125023_Cyp_lon_MJ243_COI-A09_M13R_B17_040.ab1 (reversed),\n\t\te4010125023_Cyp_lon_MJ243_COI-A09_M13F_A17_040.ab1"
-		dummyCharSequence: (Boolean) false
+		name: (String) "foo"
+		description: (String) null
+		dummyCharSequence: (Boolean) true
 		finishedAddingOutputDocuments: (Boolean) null
 		inputDocuments: (java.util.ArrayList$Itr) { /* Empty */ }
 		outputDocument: (String) null
