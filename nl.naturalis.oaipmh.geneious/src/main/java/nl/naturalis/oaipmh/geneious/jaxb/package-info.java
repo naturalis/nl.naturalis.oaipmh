@@ -7,7 +7,7 @@
 // Generated on: 2015.12.24 at 09:46:24 AM CET
 //
 /**
- * JAXB classes generated from the LIMS2 XML schema.
+ * JAXB classes generated from the geneious&#46;xsd.
  */
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://data.naturalis.nl/geneious",
 		xmlns = @XmlNs(namespaceURI = "http://data.naturalis.nl/geneious", prefix = "geneious"),
