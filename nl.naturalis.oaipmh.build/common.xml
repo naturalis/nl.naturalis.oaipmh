@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns:ivy="antlib:org.apache.ivy.ant"
+         xmlns:naturalis="antlib:nl.naturalis.ant.contrib"
          xmlns:if="ant:if"
          xmlns:unless="ant:unless"
          basedir="."
@@ -11,13 +12,17 @@
 	<!-- Static configuration -->
 	<import file="../nl.naturalis.oaipmh.build/properties.xml" />
 
-	<!-- Configure Ivy. Only required for ant builds within Eclipse. -->
-	<path id="ivy.lib.path">
-		<fileset dir="${build.module.location}/apache-ivy-2.4.0" includes="**/*.jar" />
-	</path>
-	<taskdef resource="org/apache/ivy/ant/antlib.xml"
-	         uri="antlib:org.apache.ivy.ant"
-	         classpathref="ivy.lib.path" />
+	<!-- Configure Ivy ant tasks -->
+	<taskdef uri="antlib:org.apache.ivy.ant"
+	         classpath="${build.module.location}/antlib/ivy-2.4.0.jar"
+	         resource="org/apache/ivy/ant/antlib.xml" />
+
+	<!-- Configure naturalis ant tasks -->
+	<taskdef uri="antlib:nl.naturalis.ant.contrib"
+	         classpath="${build.module.location}/antlib/nl.naturalis.ant.contrib.jar"
+	         resource="nl/naturalis/ant/contrib/antlib.xml" />
+
+
 
 	<!-- ===============[ COMMON TASKS ]=============== -->
 
