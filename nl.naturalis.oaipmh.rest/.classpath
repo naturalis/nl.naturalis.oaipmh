@@ -16,10 +16,8 @@
 			<attribute name="owner.project.facets" value="jst.web" />
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con"
-		path="org.eclipse.jst.j2ee.internal.web.container" />
-	<classpathentry combineaccessrules="false" kind="src"
-		path="/nl.naturalis.oaipmh.api" />
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container" />
+	<classpathentry combineaccessrules="false" kind="src" path="/nl.naturalis.oaipmh.api" />
 	<classpathentry kind="con"
 		path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=nl.naturalis.oaipmh.rest&amp;ivyXmlPath=ivy.xml&amp;confs=*" />
 	<classpathentry kind="output" path="build/classes" />
