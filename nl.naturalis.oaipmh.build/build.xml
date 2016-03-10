@@ -116,6 +116,8 @@
 	<target name="install"
 	        depends="-git-get-info,clean"
 	        description="Build and deploy the OAIPMH REST service">
+		<delete file="log/build.log" />
+		<record name="log/build.log" />
 		<ant antfile="../nl.naturalis.oaipmh.rest/build.xml"
 		     useNativeBasedir="true"
 		     target="install" />

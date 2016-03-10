@@ -156,8 +156,9 @@
 	</target>
 
 	<target name="test" depends="compile-test-sources">
-		<echo message="Testing ${ant.project.name}" />
-		<mkdir dir="${build.module.location}/test-reports" />
+		<echo message="Executing tests for ${ant.project.name}" />
+		<delete dir="${build.module.location}/log/test-reports" />
+		<mkdir dir="${build.module.location}/log/test-reports" />
 		<junit printsummary="yes" haltonfailure="yes">
 			<sysproperty key="ndaConfDir" value="${nda.import.install.dir}/conf" />
 			<assertions>
@@ -171,7 +172,7 @@
 				<dirset dir="build/test" />
 			</classpath>
 			<formatter type="plain" />
-			<batchtest todir="${build.module.location}/test-reports">
+			<batchtest todir="${build.module.location}/log/test-reports">
 				<fileset dir="src/test/java">
 					<include name="**/*Test.java" />
 				</fileset>
