@@ -8,13 +8,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
-import nl.naturalis.oaipmh.geneious.AnnotatedDocumentFactory;
-import nl.naturalis.oaipmh.geneious.DocumentNotes;
 import nl.naturalis.oaipmh.geneious.DocumentNotes.Note;
 
 import org.domainobject.util.FileUtil;
-import org.domainobject.util.debug.BeanPrinter;
 import org.junit.Before;
 import org.junit.Test;
 

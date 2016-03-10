@@ -77,7 +77,6 @@
 			<xs:element type="xs:string" name="consensusSequenceID" />
 			<xs:element type="xs:string" name="consensusSequenceLength" />
 			<xs:element type="xs:string" name="consensusSequenceQuality" />
-			<xs:element type="xs:string" name="amplificationStaff" />
 			<xs:element name="geneticAccession" type="self:GeneticAccession"></xs:element>
 		</xs:sequence>
 	</xs:complexType>

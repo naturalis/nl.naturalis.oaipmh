@@ -94,7 +94,7 @@ public class DocumentNotes {
 		/**
 		 * Maps to consensusSequenceQuality for DNA extracts.
 		 */
-		ConsensusSeqPass_Code_Seq,
+		ConsensusSeqPassCode_Seq,
 		/**
 		 * Maps to amplificationStaff for DNA extracts.
 		 */
