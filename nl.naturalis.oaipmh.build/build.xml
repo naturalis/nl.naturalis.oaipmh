@@ -117,6 +117,7 @@
 	        depends="-git-get-info,clean"
 	        description="Build and deploy the OAIPMH REST service">
 		<delete file="log/build.log" />
+		<mkdir dir="log"/>
 		<record name="log/build.log" />
 		<ant antfile="../nl.naturalis.oaipmh.rest/build.xml"
 		     useNativeBasedir="true"
