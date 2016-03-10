@@ -191,7 +191,10 @@ public class OAIPMHResource {
 
 	private String getRepoBaseURL(String repoGroup, String repoName)
 	{
-		String url = uriInfo.getBaseUri().toString();
+		String url = Registry.getInstance().getConfig().get("baseUrl");
+		if (url == null) {
+			url = uriInfo.getBaseUri().toString();
+		}
 		StringBuilder sb = new StringBuilder(95);
 		sb.append(url);
 		if (!url.endsWith("/"))
