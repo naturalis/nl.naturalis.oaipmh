@@ -29,6 +29,7 @@ import nl.naturalis.oaipmh.geneious.DocumentNotes;
 import nl.naturalis.oaipmh.geneious.GeneiousOAIUtil;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPostFilter;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPreFilter;
+import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentSetFilter;
 import nl.naturalis.oaipmh.geneious.ListRecordsHandler;
 import nl.naturalis.oaipmh.geneious.XMLSerialisableRootElement;
 import nl.naturalis.oaipmh.geneious.jaxb.Amplification;
@@ -63,12 +64,18 @@ public class DnaExtractListRecordsHandler extends ListRecordsHandler {
 	protected List<IAnnotatedDocumentPreFilter> getAnnotatedDocumentPreFilters()
 	{
 		List<IAnnotatedDocumentPreFilter> filters = new ArrayList<>(1);
-		filters.add(new DnaExtractFilter());
+		filters.add(new DnaExtractPreFilter());
 		return filters;
 	}
 
 	@Override
 	protected List<IAnnotatedDocumentPostFilter> getAnnotatedDocumentPostFilters()
+	{
+		return new ArrayList<>(0);
+	}
+
+	@Override
+	protected List<IAnnotatedDocumentSetFilter> getAnnotatedDocumentSetFilters()
 	{
 		return new ArrayList<>(0);
 	}
@@ -149,7 +156,7 @@ public class DnaExtractListRecordsHandler extends ListRecordsHandler {
 		return amp;
 	}
 
-	@SuppressWarnings("static-method")
+	@SuppressWarnings({ "static-method", "unused" })
 	private OAIPMHtype handleRequest_old(OAIPMHRequest request) throws OAIPMHException
 	{
 		GeneiousOAIUtil.checkRequest(request);

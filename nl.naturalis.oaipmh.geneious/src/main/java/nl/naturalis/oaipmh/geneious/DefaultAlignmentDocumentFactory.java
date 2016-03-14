@@ -2,12 +2,24 @@ package nl.naturalis.oaipmh.geneious;
 
 import org.w3c.dom.Element;
 
+/**
+ * A factory for {@link DefaultAlignmentDocument} instances.
+ * 
+ * @author Ayco Holleman
+ *
+ */
 public class DefaultAlignmentDocumentFactory {
 
 	public DefaultAlignmentDocumentFactory()
 	{
 	}
 
+	/**
+	 * Creates a new {@link DefaultAlignmentDocument} instance.
+	 * 
+	 * @param root
+	 * @return
+	 */
 	@SuppressWarnings("static-method")
 	public DefaultAlignmentDocument build(Element root)
 	{

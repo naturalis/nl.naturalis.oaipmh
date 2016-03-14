@@ -13,6 +13,7 @@ import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
 import nl.naturalis.oaipmh.geneious.DocumentNotes;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPostFilter;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPreFilter;
+import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentSetFilter;
 import nl.naturalis.oaipmh.geneious.ListRecordsHandler;
 import nl.naturalis.oaipmh.geneious.jaxb.Geneious;
 import nl.naturalis.oaipmh.geneious.jaxb.Specimen;
@@ -22,6 +23,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.domainobject.util.ConfigObject;
 
+/**
+ * Handles ListRecords requests for specimens.
+ * 
+ * @author Ayco Holleman
+ *
+ */
 class SpecimenListRecordsHandler extends ListRecordsHandler {
 
 	@SuppressWarnings("unused")
@@ -35,13 +42,17 @@ class SpecimenListRecordsHandler extends ListRecordsHandler {
 	@Override
 	protected List<IAnnotatedDocumentPreFilter> getAnnotatedDocumentPreFilters()
 	{
-		List<IAnnotatedDocumentPreFilter> filters = new ArrayList<>(1);
-		filters.add(new SpecimenFilter());
-		return filters;
+		return new ArrayList<>(0);
 	}
 
 	@Override
 	protected List<IAnnotatedDocumentPostFilter> getAnnotatedDocumentPostFilters()
+	{
+		return new ArrayList<>(0);
+	}
+
+	@Override
+	protected List<IAnnotatedDocumentSetFilter> getAnnotatedDocumentSetFilters()
 	{
 		return new ArrayList<>(0);
 	}

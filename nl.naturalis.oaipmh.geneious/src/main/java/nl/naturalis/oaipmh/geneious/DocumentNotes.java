@@ -7,7 +7,7 @@ import java.util.EnumMap;
  * within the document_xml column. The document_xml column may contain a
  * &lt;notes&gt; element. The &lt;notes&gt; element contains one or more
  * &lt;note&gt; elements. Each &lt;note&gt; element contains one child element
- * whose name identifies the note, for example &lt;BOLDIDCode_Bold&gt;. Not all
+ * whose name identifies the note, for example &lt;BOLDIDCode_BOLD&gt;. Not all
  * of these child elements are relevant to the OAI-PMH generation process. Only
  * those whose name corresponds to a {@link Note} constant are extracted from
  * the XML.

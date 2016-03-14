@@ -5,6 +5,7 @@ import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormatter;
 import static nl.naturalis.oaipmh.api.util.ObjectFactories.oaiFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -12,11 +13,12 @@ import nl.naturalis.oaipmh.api.OAIPMHException;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
 import nl.naturalis.oaipmh.geneious.DocumentNotes;
+import nl.naturalis.oaipmh.geneious.DocumentNotes.Note;
+import nl.naturalis.oaipmh.geneious.GeneiousOAIUtil;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPostFilter;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPreFilter;
-import nl.naturalis.oaipmh.geneious.GeneiousOAIUtil;
+import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentSetFilter;
 import nl.naturalis.oaipmh.geneious.ListRecordsHandler;
-import nl.naturalis.oaipmh.geneious.DocumentNotes.Note;
 import nl.naturalis.oaipmh.geneious.jaxb.DnaExtractPlate;
 import nl.naturalis.oaipmh.geneious.jaxb.ExtractPlateUnit;
 import nl.naturalis.oaipmh.geneious.jaxb.Geneious;
@@ -28,6 +30,12 @@ import org.openarchives.oai._2.MetadataType;
 import org.openarchives.oai._2.OAIPMHtype;
 import org.openarchives.oai._2.RecordType;
 
+/**
+ * Handles ListRecords requests for extract plates.
+ * 
+ * @author Ayco Holleman
+ *
+ */
 class DnaExtractPlateListRecordsHandler extends ListRecordsHandler {
 
 	public DnaExtractPlateListRecordsHandler(ConfigObject config, OAIPMHRequest request)
@@ -39,15 +47,21 @@ class DnaExtractPlateListRecordsHandler extends ListRecordsHandler {
 	protected List<IAnnotatedDocumentPreFilter> getAnnotatedDocumentPreFilters()
 	{
 		List<IAnnotatedDocumentPreFilter> filters = new ArrayList<>(1);
-		filters.add(new DnaExtractPlateFilter());
+		filters.add(new DnaExtractPlatePreFilter());
 		return filters;
 	}
 
 	@Override
 	protected List<IAnnotatedDocumentPostFilter> getAnnotatedDocumentPostFilters()
 	{
-		List<IAnnotatedDocumentPostFilter> filters = new ArrayList<>(1);
-		filters.add(new DnaExtractPlateFilter());
+		return new ArrayList<>(0);
+	}
+
+	@Override
+	protected List<IAnnotatedDocumentSetFilter> getAnnotatedDocumentSetFilters()
+	{
+		List<IAnnotatedDocumentSetFilter> filters = new ArrayList<>(1);
+		filters.add(new DnaExtractPlateSetFilter());
 		return filters;
 	}
 

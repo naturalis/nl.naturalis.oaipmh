@@ -2,12 +2,14 @@ package nl.naturalis.oaipmh.geneious;
 
 /**
  * Filters records from the annotated_document table <i>after</i> they have been
- * converted to {@link AnnotatedDocument} instances. Therefore post-filters have
- * access to all information extracted from the document_xml and
- * plugin_document_xml columns. Post-filters are explicitly allowed to maintain
- * state; each concrete implementation is instantiated just once and then used
- * for all records coming back from the database (no new instance is created for
- * every record).
+ * converted to {@link AnnotatedDocument} instances. Post-filters have access to
+ * structured data extracted from the document_xml and plugin_document_xml
+ * columns. Post-filters are explicitly allowed to maintain state; one instance
+ * is used for all records coming back from the database.
+ * 
+ * @see IAnnotatedDocumentPreFilter
+ * @see IAnnotatedDocumentSetFilter
+ * @see ListRecordsHandler
  * 
  * @author Ayco Holleman
  *

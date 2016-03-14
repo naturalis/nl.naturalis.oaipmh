@@ -22,8 +22,8 @@ import org.apache.logging.log4j.Logger;
  * DocumentVersionCode_Seq, RegistrationNumberCode_Samples,
  * ExtractPlateNumberCode_Sample
  * <li>The CRSCode_CRS note has value "true"
- * <li>The is_contig attribute in the plugin_document_xml column has value true
- * in case of a DefaultAlignmentDocument
+ * <li>The is_contig attribute in the plugin_document_xml column has value
+ * "true" in case of a DefaultAlignmentDocument
  * </ul>
  * 
  * @author Ayco Holleman

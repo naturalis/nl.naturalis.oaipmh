@@ -10,13 +10,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Removes annotated_document records from the set of annotated_document records
- * retrieved from the database by means of a {@link DocumentVersionComparator}.
- * Optionally you can also choose to also filter records by means of a
- * {@link ReferenceComparator}. In principle, however, using a
- * {@code ReferenceComparator} is probably useless since it filters out only and
- * exactly those records whose reference_count column equals 0, so it's quite a
- * bit easier and cheaper to use that WHERE clause.
+ * Set filter shared by all geneious repositories. Filters
+ * {@link AnnotatedDocument} records by means of a
+ * {@link DocumentVersionComparator}. Optionally you can also choose to filter
+ * records by means of a {@link ReferenceComparator}. In principle, however,
+ * using a {@code ReferenceComparator} is probably useless and unnecessarily
+ * expensive since it filters out exactly those records whose reference_count
+ * column equals 0, so it's quite a bit easier and cheaper to use that SQL WHERE
+ * clause.
  * 
  * @author Ayco Holleman
  *
@@ -28,11 +29,23 @@ public class SharedSetFilter implements IAnnotatedDocumentSetFilter {
 
 	private boolean useReferenceComparator;
 
+	/**
+	 * Whether or not to also apply filtering by means of a
+	 * {@link ReferenceComparator}.
+	 * 
+	 * @return
+	 */
 	public boolean isUseReferenceComparator()
 	{
 		return useReferenceComparator;
 	}
 
+	/**
+	 * Determine whether or not to also apply filtering by means of a
+	 * {@link ReferenceComparator}.
+	 * 
+	 * @param useReferenceComparator
+	 */
 	public void setUseReferenceComparator(boolean useReferenceComparator)
 	{
 		this.useReferenceComparator = useReferenceComparator;
@@ -66,6 +79,7 @@ public class SharedSetFilter implements IAnnotatedDocumentSetFilter {
 		return result;
 	}
 
+	@SuppressWarnings("deprecation")
 	private static List<AnnotatedDocument> filterReferencedDocuments(List<AnnotatedDocument> input)
 	{
 		ReferenceComparator comparator = new ReferenceComparator();

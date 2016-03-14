@@ -3,28 +3,23 @@ package nl.naturalis.oaipmh.geneious.extracts;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
-import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPostFilter;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPreFilter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Implements both pre and post filtering for DNA extracts. Only the method
- * specified by {@link IAnnotatedDocumentPreFilter} actually contains filter
- * logic. The method specified by {@link IAnnotatedDocumentPostFilter} currently
- * just returns {@code true}.
+ * A pre-filter for DNA extracts.
  * 
  * @author Ayco Holleman
  *
  */
-public class DnaExtractFilter implements IAnnotatedDocumentPostFilter, IAnnotatedDocumentPreFilter {
+public class DnaExtractPreFilter implements IAnnotatedDocumentPreFilter {
 
-	private static final Logger logger = LogManager.getLogger(DnaExtractFilter.class);
+	private static final Logger logger = LogManager.getLogger(DnaExtractPreFilter.class);
 	private static final String[] SEARCH_STRINGS = new String[] { "<ExtractIDCode_Samples>" };
 
-	public DnaExtractFilter()
+	public DnaExtractPreFilter()
 	{
 	}
 
@@ -42,12 +37,6 @@ public class DnaExtractFilter implements IAnnotatedDocumentPostFilter, IAnnotate
 				return false;
 			}
 		}
-		return true;
-	}
-
-	@Override
-	public boolean accept(AnnotatedDocument ad)
-	{
 		return true;
 	}
 

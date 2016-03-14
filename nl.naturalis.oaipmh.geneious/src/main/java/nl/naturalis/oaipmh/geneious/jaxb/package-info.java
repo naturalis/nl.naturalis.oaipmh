@@ -6,6 +6,9 @@
 // schema.
 // Generated on: 2016.03.10 at 12:34:04 PM CET
 //
+/**
+ * JAXB classes generated from geneious&#46;xsd.
+ */
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://data.naturalis.nl/geneious",
 		xmlns = @XmlNs(namespaceURI = "http://data.naturalis.nl/geneious", prefix = "geneious"),
 		elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)

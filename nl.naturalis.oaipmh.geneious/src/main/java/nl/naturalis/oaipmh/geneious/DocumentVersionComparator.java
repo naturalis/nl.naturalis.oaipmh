@@ -4,6 +4,14 @@ import java.util.Comparator;
 
 import nl.naturalis.oaipmh.geneious.DocumentNotes.Note;
 
+/**
+ * A {@link Comparator} for {@link AnnotatedDocument} instances that, extract ID
+ * and marker being equal, selects the instance with the highest
+ * {@link DocumentNotes.Note#DocumentVersionCode_Seq document version}.
+ * 
+ * @author Ayco Holleman
+ *
+ */
 public class DocumentVersionComparator implements Comparator<AnnotatedDocument> {
 
 	public DocumentVersionComparator()

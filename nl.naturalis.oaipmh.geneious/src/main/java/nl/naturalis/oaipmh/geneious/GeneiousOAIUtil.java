@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.domainobject.util.ConfigObject;
 
 /**
- * Provides common functionality for LIMS2/Geneious repositories.
+ * Provides common functionality for Geneious OAI repositories.
  * 
  * @author Ayco Holleman
  *

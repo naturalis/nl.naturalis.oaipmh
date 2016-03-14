@@ -8,7 +8,6 @@ import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import nl.naturalis.oaipmh.api.IOAIRepository;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 
 import org.openarchives.oai._2.OAIPMHtype;
@@ -56,9 +55,7 @@ public class OAIPMHUtil {
 	}
 
 	/**
-	 * Creates the outer XML elements of an OAI-PMH response. The method is
-	 * called by the REST layer to initialize the response, leaving it to the
-	 * {@link IOAIRepository OAI repository} to fill in the blanks.
+	 * Creates the outer XML elements of an OAI-PMH response.
 	 * 
 	 * @param request
 	 * @return

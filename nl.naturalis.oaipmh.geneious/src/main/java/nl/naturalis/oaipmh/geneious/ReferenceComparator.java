@@ -8,16 +8,18 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Compares {@link AnnotatedDocument} instances based on whether one references
- * the other, or whether one is input for the other. If one
- * {@code AnnotatedDocument} references another {@code AnnotatedDocument}, it
- * means it has superseded the other {@code AnnotatedDocument}. Thus when
- * sorting {@link AnnotatedDocument} instances, those that reference others
- * should be pushed up, while those that <i>are</i> referenced should be pushed
- * down. This comparator is used by the {@link SharedSetFilter}.
+ * the other. If one {@code AnnotatedDocument} references another
+ * {@code AnnotatedDocument}, it means it has superseded the other
+ * {@code AnnotatedDocument}. Thus, the referenced {@code AnnotatedDocument}
+ * should not end up in the OAI-PMH output. Filtering by means of this
+ * comparator can optionally be enabled in the {@link SharedSetFilter}. However,
+ * this comparator can most likely be done away with (see comments for
+ * {@link SharedSetFilter}).
  * 
  * @author Ayco Holleman
  *
  */
+@Deprecated
 public class ReferenceComparator implements Comparator<AnnotatedDocument> {
 
 	private static final Logger logger = LogManager.getLogger(ReferenceComparator.class);
@@ -69,7 +71,7 @@ public class ReferenceComparator implements Comparator<AnnotatedDocument> {
 		return 0;
 	}
 
-	public int checkInputDocuments(AnnotatedDocument first, AnnotatedDocument second)
+	private int checkInputDocuments(AnnotatedDocument first, AnnotatedDocument second)
 	{
 		// Is the 2nd document an input document for 1st? Then discard the 2nd.
 		if (first.getPluginDocument() instanceof XMLSerialisableRootElement) {
@@ -92,9 +94,9 @@ public class ReferenceComparator implements Comparator<AnnotatedDocument> {
 		return 0;
 	}
 
-	public int checkOutputDocuments(AnnotatedDocument first, AnnotatedDocument second)
+	private int checkOutputDocuments(AnnotatedDocument first, AnnotatedDocument second)
 	{
-		// Is the 1st document generated from the 2nd? The discard the 2nd.
+		// Is the 1st document generated from the 2nd? Then discard the 2nd.
 		if (second.getPluginDocument() instanceof XMLSerialisableRootElement) {
 			XMLSerialisableRootElement x = (XMLSerialisableRootElement) second.getPluginDocument();
 			String outputOfSecond = x.getOutputDocument();
@@ -103,7 +105,7 @@ public class ReferenceComparator implements Comparator<AnnotatedDocument> {
 			}
 			return -1;
 		}
-		// Is the 2nd document generated from the 1st? The discard the 1st.
+		// Is the 2nd document generated from the 1st? Then discard the 1st.
 		if (first.getPluginDocument() instanceof XMLSerialisableRootElement) {
 			XMLSerialisableRootElement x = (XMLSerialisableRootElement) first.getPluginDocument();
 			String outputOfFirst = x.getOutputDocument();
@@ -115,6 +117,12 @@ public class ReferenceComparator implements Comparator<AnnotatedDocument> {
 		return 0;
 	}
 
+	/**
+	 * Returns the number of dispensable records this comparator instance has
+	 * been fed so far.
+	 * 
+	 * @return
+	 */
 	public int countDispensableRecords()
 	{
 		return numDispensable;

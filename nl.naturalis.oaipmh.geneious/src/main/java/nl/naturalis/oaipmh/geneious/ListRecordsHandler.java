@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +37,34 @@ import org.openarchives.oai._2.RecordType;
 import org.openarchives.oai._2.ResumptionTokenType;
 
 /**
+ * <p>
  * Abstract base class for handlers for the ListRecords protocol request.
+ * </p>
+ * <h3>Filtering and sorting</h3>
+ * <p>
+ * This describes how database records are filtered and sorted as part of the
+ * OAI-PMH generation process:
+ * <ol>
+ * <li>First, a SQL query is issued that only selects records from the
+ * annotated_document table whose reference_count column equals 0. See
+ * {@link ReferenceComparator} for an explanantion. No ORDER BY clause is used;
+ * filters applied subsequently cannot rely on the records being sorted in any
+ * particular order.
+ * <li>Then the {@link SharedPreFilter} is applied. See
+ * {@link IAnnotatedDocumentPreFilter here} for an explanation of pre-filters.
+ * <li>Then all repository-specific pre-filters are applied. Any number of
+ * additional pre-filters can be defined for specimens, DNA extracts and extract
+ * plates.
+ * <li>Then the {@link SharedPostFilter} is applied. See
+ * {@link IAnnotatedDocumentPostFilter here} for an explanation of post-filters.
+ * <li>Then all repository-specific post-filters are applied.
+ * <li>Then the {@link SharedSetFilter} is applied. See
+ * {@link IAnnotatedDocumentSetFilter here} for an explanation of set filters.
+ * <li>Then all repository-specific set filters are applied.
+ * <li>Then the remaining records are sorted in descending order of their
+ * database ID.
+ * </ol>
+ * </p>
  * 
  * @author Ayco Holleman
  *
@@ -66,13 +94,9 @@ public abstract class ListRecordsHandler {
 		setFilters = new ArrayList<>(4);
 		SharedSetFilter ssf = new SharedSetFilter();
 		/*
-		 * We tie filtering by means of a ReferenceComparator to the logger
-		 * being in DEBUG mode. Applying a ReferenceComparator is probably
-		 * useless because it filters out only and exactly those records where
-		 * reference_count column equals 0, so it's quite a bit easier and
-		 * cheaper to use that WHERE clause. However we still apply this filter
-		 * when in DEBUG mode, just to make sure we got the logic right and see
-		 * no surprising stuff when debugging.
+		 * A bit ugly: we tie filtering by means of a ReferenceComparator to the
+		 * logger being in DEBUG mode, just to make sure we got the logic right
+		 * and see no surprising stuff when debugging.
 		 */
 		ssf.setUseReferenceComparator(logger.isDebugEnabled());
 		setFilters.add(ssf);
@@ -90,6 +114,7 @@ public abstract class ListRecordsHandler {
 		checkRequest(request);
 		preFilters.addAll(getAnnotatedDocumentPreFilters());
 		postFilters.addAll(getAnnotatedDocumentPostFilters());
+		setFilters.addAll(getAnnotatedDocumentSetFilters());
 		List<AnnotatedDocument> records = getAnnotatedDocuments();
 		if (records.size() == 0) {
 			throw new OAIPMHException(new NoRecordsMatchError());
@@ -116,22 +141,29 @@ public abstract class ListRecordsHandler {
 	}
 
 	/**
-	 * Template method to be implemented by concrete subclasses: provide extra
-	 * pre-filters for the particular resource to subclass deals with. The extra
-	 * pre-filters are applied after the {@link SharedPreFilter}.
+	 * Template method to be implemented by subclasses: provide extra
+	 * pre-filters for the particular resource the subclass deals with. The
+	 * extra pre-filters are applied <i>after</i> the {@link SharedPreFilter}.
 	 */
 	protected abstract List<IAnnotatedDocumentPreFilter> getAnnotatedDocumentPreFilters();
 
 	/**
-	 * Template method to be implemented by concrete subclasses: provide extra
-	 * post-filters for the particular resource to subclass deals with. The
-	 * extra post-filters are applied after the {@link SharedPostFilter}.
+	 * Template method to be implemented by subclasses: provide extra
+	 * post-filters for the particular resource the subclass deals with. The
+	 * extra post-filters are applied <i>after</i> the {@link SharedPostFilter}.
 	 */
 	protected abstract List<IAnnotatedDocumentPostFilter> getAnnotatedDocumentPostFilters();
 
 	/**
-	 * Template method to be implemented by concrete subclasses: provide the
-	 * child element of the &lt;geneious&gt; element.
+	 * Template method to be implemented by subclasses: provide extra set
+	 * filters for the particular resource the subclass deals with. The extra
+	 * post-filters are applied <i>after</i> the {@link SharedSetFilter}.
+	 */
+	protected abstract List<IAnnotatedDocumentSetFilter> getAnnotatedDocumentSetFilters();
+
+	/**
+	 * Template method to be implemented by subclasses: provide the child
+	 * element of the &lt;geneious&gt; element.
 	 * 
 	 * @param geneious
 	 * @param ad
@@ -150,8 +182,7 @@ public abstract class ListRecordsHandler {
 	/**
 	 * Returns the database query retrieving the initial set of records (before
 	 * any programmatical filtering). Could be overrided by subclasses should
-	 * the need arise. The default implementation sorts records by their
-	 * database ID in descending order.
+	 * the need arise.
 	 * 
 	 * @return
 	 */
@@ -161,7 +192,7 @@ public abstract class ListRecordsHandler {
 		sb.append("SELECT id,folder_id,UNIX_TIMESTAMP(modified) AS modified,");
 		sb.append("\n       urn,document_xml,plugin_document_xml,reference_count");
 		sb.append("\n  FROM annotated_document");
-		sb.append("\n WHERE reference_count=0");
+		sb.append("\n WHERE reference_count = 0");
 		if (request.getFrom() != null) {
 			/*
 			 * Column "modified" contains the number of seconds since 01-01-1970
@@ -175,7 +206,6 @@ public abstract class ListRecordsHandler {
 			String s = mysqlDateFormatter.format(request.getUntil());
 			sb.append("\n AND modified <= '").append(s).append('\'');
 		}
-		sb.append("\n ORDER BY id DESC");
 		return sb.toString();
 	}
 
@@ -206,6 +236,7 @@ public abstract class ListRecordsHandler {
 		}
 		int filtered = before - records.size();
 		logger.debug("Records discarded by set filters: {}", filtered);
+		Collections.sort(records, new DatabaseIDComparator());
 		return records;
 	}
 

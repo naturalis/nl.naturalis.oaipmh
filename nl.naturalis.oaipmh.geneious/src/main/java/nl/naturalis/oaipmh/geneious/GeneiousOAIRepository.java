@@ -21,7 +21,7 @@ import org.domainobject.util.IOUtil;
 import org.openarchives.oai._2.OAIPMHtype;
 
 /**
- * Abstract base class for LIMS2/Geneious OAI repositories. Provides the
+ * Abstract base class for all Geneious OAI repositories. Provides the
  * implementation of
  * {@link IOAIRepository#getXSDForMetadataPrefix(OutputStream, String)
  * getXSDForMetadataPrefix} and {@link IOAIRepository#init(OAIPMHRequest) init}
