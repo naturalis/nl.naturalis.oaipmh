@@ -25,14 +25,18 @@ import nl.naturalis.oaipmh.api.util.ResumptionToken;
  * getXSDForMetadataPrefix}.
  * <li>Call {@link #getResumptionTokenParser() getResumptionTokenParser}. This
  * is a request to the repository to provide an instance
- * {@link IResumptionTokenParser} so the REST layer can decompose and validate
+ * {@link IResumptionTokenParser}, so the REST layer can decompose and validate
  * the resumption token (if present).
- * <li>Call {@link #init(OAIPMHRequest) init}. The {@link OAIPMHRequest} object
- * passed here contains all information for the repository to carry out the
- * request.
- * <li>Call one of the six protocol request implementations (e.g.
- * {@link #listRecords(OutputStream) listRecords}). The exact method being
- * called depends on the value of the {@link Argument verb argument}.
+ * <li>Call {@link #init(OAIPMHRequest) init}. This allows the repository to
+ * initialize and prepare itself using the {@link OAIPMHRequest} object passed
+ * to the {@code init} method. The {@code OAIPMHRequest} object contains all
+ * information for the repository to carry out any of the six OAI-PMH protocol
+ * requests ({@link #getRecord(OutputStream) GetRecord},
+ * {@link #listRecords(OutputStream) ListRecords},
+ * {@link #listSets(OutputStream) ListSets}, etc.).
+ * <li>Call one of the six protocol request implementations. The exact method
+ * being called depends on the value of the {@link Argument verb argument} in
+ * the request URL.
  * <li>Call {@link #done() done} to signify that a response has been sent back
  * to client and that the request cycle is complete.
  * </ol>
