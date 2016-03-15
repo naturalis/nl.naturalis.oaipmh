@@ -9,23 +9,27 @@ import nl.naturalis.oaipmh.api.util.ResumptionToken;
 /**
  * <p>
  * Call-back interface for OAI repositories. This is the only interface that OAI
- * repositories must implement, although they can optionally implement a few
- * other interfaces (e.g. {@link IResumptionTokenParser}).
+ * repositories must implement in order to plug into the OAI-PMH REST framework,
+ * although they can optionally implement a few other interfaces (e.g.
+ * {@link IResumptionTokenParser}).
  * </p>
  * <h3>Life Cycle</h3>
  * <p>
  * For each OAI-PMH request the REST layer cycles through the following calls
  * against the repository:
  * <ol>
- * <li>Call {@link #setRepositoryBaseUrl(String) setRepositoryBaseUrl}, passing
- * the repository the base URL under which it operates. This allows the
- * repository to include XML namespace declarations relative to the base URL.
- * See also {@link #getXSDForMetadataPrefix(OutputStream, String)
+ * <li>Call {@link #setRepositoryBaseUrl(String) setRepositoryBaseUrl}. This
+ * tells the repository under which base URL it operates. This allows the
+ * repository to generate XML with namespace declarations relative to the base
+ * URL. See also {@link #getXSDForMetadataPrefix(OutputStream, String)
  * getXSDForMetadataPrefix}.
- * <li>Call {@link #getResumptionTokenParser() getResumptionTokenParser} to
- * parse the value of the resumptionToken query parameter (if present).
- * <li>Call the {@link #init(OAIPMHRequest) init} method, passing it an
- * {@link OAIPMHRequest} object.
+ * <li>Call {@link #getResumptionTokenParser() getResumptionTokenParser}. This
+ * is a request to the repository to provide an instance
+ * {@link IResumptionTokenParser} so the REST layer can decompose and validate
+ * the resumption token (if present).
+ * <li>Call {@link #init(OAIPMHRequest) init}. The {@link OAIPMHRequest} object
+ * passed here contains all information for the repository to carry out the
+ * request.
  * <li>Call one of the six protocol request implementations (e.g.
  * {@link #listRecords(OutputStream) listRecords}). The exact method being
  * called depends on the value of the {@link Argument verb argument}.
