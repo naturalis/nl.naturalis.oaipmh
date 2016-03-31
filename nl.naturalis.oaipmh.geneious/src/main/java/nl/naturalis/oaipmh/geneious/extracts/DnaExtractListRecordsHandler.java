@@ -13,6 +13,7 @@ import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.GenBankIDCode_Bold
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.GenBankURICode_FixedValue_Bold;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.MarkerCode_Seq;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.NucleotideLengthCode_Bold;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.PCRplateIDCode_Seq;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.PlatePositionCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ProjectPlateNumberCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.RegistrationNumberCode_Samples;
@@ -153,6 +154,7 @@ public class DnaExtractListRecordsHandler extends ListRecordsHandler {
 		Amplification amp = new Amplification();
 		amp.setAmplificationStaff(notes.get(AmplicificationStaffCode_FixedValue_Seq));
 		amp.setMarker(notes.get(MarkerCode_Seq));
+		amp.setPcrPlateID(notes.get(PCRplateIDCode_Seq));
 		return amp;
 	}
 

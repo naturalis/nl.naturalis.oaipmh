@@ -100,7 +100,6 @@
 		<copy todir="build/classpath">
 			<path refid="non-ivy-dependencies" />
 		</copy>
-
 		<available file="lib" type="dir" property="lib.dir.exists" />
 		<echo if:set="lib.dir.exists"
 		      message="Adding libraries in ${basedir}/lib to ${basedir}/build/classpath" />
@@ -109,7 +108,6 @@
 				<include name="**/*.jar" />
 			</fileset>
 		</copy>
-
 		<echo message="Compiling classes for ${ant.project.name}" />
 		<javac encoding="UTF8"
 		       destdir="build/main"

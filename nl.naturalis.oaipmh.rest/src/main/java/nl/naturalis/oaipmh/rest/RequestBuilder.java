@@ -16,13 +16,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.ws.rs.core.UriInfo;
 
 import nl.naturalis.oaipmh.api.Argument;
+import nl.naturalis.oaipmh.api.ArgumentChecker;
+import nl.naturalis.oaipmh.api.ArgumentCheckerFactory;
 import nl.naturalis.oaipmh.api.BadArgumentError;
 import nl.naturalis.oaipmh.api.BadResumptionTokenException;
 import nl.naturalis.oaipmh.api.BadVerbError;
@@ -33,7 +33,6 @@ import nl.naturalis.oaipmh.api.util.ResumptionToken;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.domainobject.util.CollectionUtil;
 import org.openarchives.oai._2.OAIPMHerrorType;
 import org.openarchives.oai._2.VerbType;
 
@@ -84,8 +83,8 @@ public class RequestBuilder {
 	}
 
 	/**
-	 * Build the {@code OAIPMHRequest} from the specified {@link UriInfo}
-	 * object.
+	 * Creates an {@code OAIPMHRequest} instance from the specified
+	 * {@link UriInfo} object.
 	 * 
 	 * @param uriInfo
 	 * @return
@@ -190,7 +189,7 @@ public class RequestBuilder {
 	 */
 	private void checkArguments()
 	{
-		Set<Argument> args = new HashSet<>(5);
+		EnumSet<Argument> args = EnumSet.noneOf(Argument.class);
 		for (String param : uriInfo.getQueryParameters().keySet()) {
 			Argument arg = Argument.parse(param);
 			if (arg == null) {
@@ -209,46 +208,13 @@ public class RequestBuilder {
 				}
 				if (arg != VERB) {
 					args.add(arg);
-					VerbType verb = request.getVerb();
-					if (verb != null && !arg.isArgumentFor(verb)) {
-						String fmt = "Argument %s not allowed for verb %s";
-						String msg = String.format(fmt, arg, verb.value());
-						errors.add(new BadArgumentError(msg));
-					}
 				}
 			}
 		}
-		checkRequiredArguments(args);
-		checkExclusiveArguments(args);
-	}
-
-	private void checkRequiredArguments(Set<Argument> provided)
-	{
-		VerbType verb = request.getVerb();
-		if (verb == null)
-			return;
-		Set<Argument> required = Argument.getRequiredArguments(verb);
-		required.removeAll(provided);
-		if (required.size() != 0) {
-			String missing = CollectionUtil.implode(required);
-			String msg = "Missing required argument(s): " + missing;
-			errors.add(new BadArgumentError(msg));
-		}
-	}
-
-	/*
-	 * Checks for mutually exclusive arguments. Currently just for the
-	 * ListRecords request.
-	 */
-	private void checkExclusiveArguments(Set<Argument> provided)
-	{
-		if (request.getResumptionToken() != null) {
-			EnumSet<Argument> forbidden = EnumSet.of(FROM, UNTIL, METADATA_PREFIX, SET, IDENTIFIER);
-			String fmt = "resumptionToken argument cannot be combined with %s argument";
-			for (Argument arg : provided) {
-				if (forbidden.contains(arg))
-					errors.add(new BadArgumentError(String.format(fmt, arg)));
-			}
+		if (request.getVerb() != null) {
+			ArgumentCheckerFactory acf = ArgumentCheckerFactory.getInstance();
+			ArgumentChecker ac = acf.createArgumentChecker(request.getVerb());
+			errors.addAll(ac.check(args));
 		}
 	}
 
@@ -310,8 +276,8 @@ public class RequestBuilder {
 
 	private static OAIPMHerrorType badDate(String param)
 	{
-		String fmt = "Invalid or illegal date format for parameter \"%s\" (must be either \"%s\" or \"%s\")";
-		String msg = String.format(fmt, dateTimeFormat, dateFormat);
+		String fmt = "Invalid date: \"%s\" (Must be either \"%s\" or \"%s\")";
+		String msg = String.format(fmt, param, dateTimeFormat, dateFormat);
 		return new BadArgumentError(msg);
 	}
 
