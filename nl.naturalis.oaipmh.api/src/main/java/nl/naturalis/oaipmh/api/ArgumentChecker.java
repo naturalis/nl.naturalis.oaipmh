@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.domainobject.util.CollectionUtil;
-import org.domainobject.util.debug.BeanPrinter;
 import org.openarchives.oai._2.OAIPMHerrorType;
 import org.openarchives.oai._2.VerbType;
 
@@ -24,6 +23,7 @@ import org.openarchives.oai._2.VerbType;
  */
 public abstract class ArgumentChecker {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = LogManager.getLogger(ArgumentChecker.class);
 
 	public ArgumentChecker()
