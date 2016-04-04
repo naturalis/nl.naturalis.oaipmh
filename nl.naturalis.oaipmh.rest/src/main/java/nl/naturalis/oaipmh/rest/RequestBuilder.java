@@ -19,7 +19,6 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import nl.naturalis.oaipmh.api.Argument;
@@ -244,7 +243,7 @@ public class RequestBuilder {
 		sb.append(baseUrl);
 		if (!baseUrl.endsWith("/"))
 			sb.append('/');
-		URI relative = uriInfo.getBaseUri().relativize(uriInfo.getRequestUri());
+		URI relative = uriInfo.getBaseUri().relativize(uriInfo.getAbsolutePath());
 		sb.append(relative);
 		return URI.create(sb.toString());
 	}

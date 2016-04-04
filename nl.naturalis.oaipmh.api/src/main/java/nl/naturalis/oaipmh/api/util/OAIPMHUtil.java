@@ -73,24 +73,28 @@ public class OAIPMHUtil {
 		RequestType echo = ObjectFactories.oaiFactory.createRequestType();
 		echo.setValue(request.getRequestUri().toString());
 		echo.setVerb(request.getVerb());
-		echo.setMetadataPrefix(request.getMetadataPrefix());
-		if (request.getFrom() != null) {
-			if (request.getDateFormatFrom() == dateTimeFormat)
-				echo.setFrom(dateTimeFormatter.format(request.getFrom()));
-			else
-				echo.setFrom(dateFormatter.format(request.getFrom()));
+		if (request.getResumptionToken() != null) {
+			echo.setResumptionToken(request.getResumptionToken());
 		}
+		else {
+			echo.setMetadataPrefix(request.getMetadataPrefix());
+			if (request.getFrom() != null) {
+				if (request.getDateFormatFrom() == dateTimeFormat)
+					echo.setFrom(dateTimeFormatter.format(request.getFrom()));
+				else
+					echo.setFrom(dateFormatter.format(request.getFrom()));
+			}
 
-		if (request.getUntil() != null) {
-			if (request.getDateFormatUntil() == dateTimeFormat)
-				echo.setUntil(dateTimeFormatter.format(request.getUntil()));
-			else
-				echo.setUntil(dateFormatter.format(request.getUntil()));
+			if (request.getUntil() != null) {
+				if (request.getDateFormatUntil() == dateTimeFormat)
+					echo.setUntil(dateTimeFormatter.format(request.getUntil()));
+				else
+					echo.setUntil(dateFormatter.format(request.getUntil()));
+			}
+
+			echo.setSet(request.getSet());
+			echo.setIdentifier(request.getIdentifier());
 		}
-
-		echo.setSet(request.getSet());
-		echo.setIdentifier(request.getIdentifier());
-		echo.setResumptionToken(request.getResumptionToken());
 		return echo;
 	}
 
