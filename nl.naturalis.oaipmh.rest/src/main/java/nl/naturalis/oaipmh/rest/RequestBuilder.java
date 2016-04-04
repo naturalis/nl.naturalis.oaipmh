@@ -12,12 +12,14 @@ import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateFormatter;
 import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormat;
 import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormatter;
 
+import java.net.URI;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import nl.naturalis.oaipmh.api.Argument;
@@ -94,7 +96,7 @@ public class RequestBuilder {
 		this.uriInfo = uriInfo;
 		this.request = new OAIPMHRequest();
 		this.errors = new ArrayList<>();
-		request.setRequestUri(uriInfo.getAbsolutePath());
+		request.setRequestUri(getRequestURI());
 		request.setMetadataPrefix(getArg(METADATA_PREFIX));
 		request.setIdentifier(getArg(IDENTIFIER));
 		request.setSet(getArg(SET));
@@ -232,6 +234,21 @@ public class RequestBuilder {
 		}
 	}
 
+	private URI getRequestURI()
+	{
+		String baseUrl = Registry.getInstance().getConfig().get("baseUrl");
+		if (baseUrl == null) {
+			return uriInfo.getRequestUri();
+		}
+		StringBuilder sb = new StringBuilder(95);
+		sb.append(baseUrl);
+		if (!baseUrl.endsWith("/"))
+			sb.append('/');
+		URI relative = uriInfo.getBaseUri().relativize(uriInfo.getRequestUri());
+		sb.append(relative);
+		return URI.create(sb.toString());
+	}
+
 	private String getArg(Argument arg)
 	{
 		return logger.isDebugEnabled() ? getArgDebug(arg) : getArgNoDebug(arg);
@@ -248,7 +265,7 @@ public class RequestBuilder {
 				sb.append("null");
 			}
 			else if (s.length() == 0) {
-				sb.append("\"\" (empty string, evaluates as null)");
+				sb.append("\"\" (empty string, evaluates to null)");
 				s = null;
 			}
 			else {
