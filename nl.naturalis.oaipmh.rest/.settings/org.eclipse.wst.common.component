@@ -6,9 +6,6 @@
 		<dependent-module archiveName="nl.naturalis.oaipmh.api.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/nl.naturalis.oaipmh.api/nl.naturalis.oaipmh.api">
 			<dependency-type>uses</dependency-type>
 		</dependent-module>
-		<dependent-module archiveName="org.domainobject.util.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/org.domainobject.util/org.domainobject.util">
-			<dependency-type>uses</dependency-type>
-		</dependent-module>
         <dependent-module archiveName="nl.naturalis.oaipmh.geneious.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/nl.naturalis.oaipmh.geneious/nl.naturalis.oaipmh.geneious">
             <dependency-type>uses</dependency-type>
         </dependent-module>

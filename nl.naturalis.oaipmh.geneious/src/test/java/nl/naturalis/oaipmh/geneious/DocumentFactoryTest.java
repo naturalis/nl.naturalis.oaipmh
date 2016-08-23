@@ -1,12 +1,9 @@
 package nl.naturalis.oaipmh.geneious;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.InputStream;
-
-import nl.naturalis.oaipmh.geneious.Document;
-import nl.naturalis.oaipmh.geneious.DocumentClass;
-import nl.naturalis.oaipmh.geneious.DocumentFactory;
 
 import org.domainobject.util.FileUtil;
 import org.domainobject.util.debug.BeanPrinter;
@@ -21,6 +18,7 @@ public class DocumentFactoryTest {
 		String xml = FileUtil.getContents(is);
 		Document doc = DocumentFactory.createDocument(xml);
 		String actual = BeanPrinter.toString(doc);
+		System.out.println(actual);
 		is = getClass().getResourceAsStream("/document_xml_01_deserialized");
 		String expected = FileUtil.getContents(is);
 		assertEquals("01", expected, actual);

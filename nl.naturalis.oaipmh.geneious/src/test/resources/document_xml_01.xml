@@ -71,8 +71,8 @@
 			<MarkerCode_Seq>COI</MarkerCode_Seq>
 		</note>
 		<note code="DocumentNoteUtilities-Ampl-staff (Seq)" type="note">
-			<AmplicificationStaffCode_FixedValue_Seq>Naturalis Biodiversity Center
-				Laboratories</AmplicificationStaffCode_FixedValue_Seq>
+			<AmplicificationStaffCode_FixedValue_Samples>Naturalis Biodiversity Center
+				Laboratories</AmplicificationStaffCode_FixedValue_Samples>
 		</note>
 		<note code="DocumentNoteUtilities-Pass (Seq)" type="note" />
 		<note code="DocumentNoteUtilities-CRS (CRS)" type="note">
@@ -103,8 +103,8 @@
 			<DocumentVersionCode>1</DocumentVersionCode>
 		</note>
 		<note code="DocumentNoteUtilities-Seq-staff (Samples)" type="note">
-			<SequencingStaffCode_FixedValue_Samples>Naturalis Biodiversity Center
-				Laboratories</SequencingStaffCode_FixedValue_Samples>
+			<SequencingStaffCode_FixedValue_Seq>Naturalis Biodiversity Center
+				Laboratories</SequencingStaffCode_FixedValue_Seq>
 		</note>
 		<note code="trimParams" type="note">
 			<trimParams>Error probability: 0.05</trimParams>

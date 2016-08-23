@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/main/java" />
-	<classpathentry kind="src" path="src/main/resources" />
-	<classpathentry kind="src" path="src/test/java" />
-	<classpathentry kind="src" path="src/test/resources" />
-	<classpathentry kind="con"
-		path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-7-openjdk-amd64">
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/test/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-7-openjdk-amd64">
 		<attributes>
-			<attribute name="owner.project.facets" value="java" />
+			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4" />
-	<classpathentry exported="true" kind="con"
-		path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=nl.naturalis.lims2.oaipmh&amp;ivyXmlPath=ivy.xml&amp;confs=*">
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry exported="true" kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=nl.naturalis.lims2.oaipmh&amp;ivyXmlPath=ivy.xml&amp;confs=*">
 		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="../" />
+			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/nl.naturalis.oaipmh.api" />
-	<classpathentry combineaccessrules="false" kind="src" path="/org.domainobject.util" />
-	<classpathentry kind="output" path="build/classes" />
+	<classpathentry combineaccessrules="false" kind="src" path="/nl.naturalis.oaipmh.api"/>
+	<classpathentry kind="lib" path="/nl.naturalis.oaipmh.build/lib/org.domainobject.util.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
 </classpath>

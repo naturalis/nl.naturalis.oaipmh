@@ -11,10 +11,10 @@
 			ExtractIDCode_Samples => (String) "e4010125023"
 			PlatePositionCode_Samples => (String) "A-09"
 			ProjectPlateNumberCode_Samples => (String) "BCP0047-40"
-			SequencingStaffCode_FixedValue_Samples => (String) "Naturalis Biodiversity Center\n\t\t\t\tLaboratories"
+			SequencingStaffCode_FixedValue_Seq => (String) "Naturalis Biodiversity Center\n\t\t\t\tLaboratories"
 			MarkerCode_Seq => (String) "COI"
 			PCRplateIDCode_Seq => (String) "MJ243"
-			AmplicificationStaffCode_FixedValue_Seq => (String) "Naturalis Biodiversity Center\n\t\t\t\tLaboratories"
+			AmplicificationStaffCode_FixedValue_Samples => (String) "Naturalis Biodiversity Center\n\t\t\t\tLaboratories"
 		}
 	}
 }
