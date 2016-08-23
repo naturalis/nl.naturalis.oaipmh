@@ -3,7 +3,7 @@ package nl.naturalis.oaipmh.geneious.extracts;
 import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.createResponseSkeleton;
 import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormatter;
 import static nl.naturalis.oaipmh.api.util.ObjectFactories.oaiFactory;
-import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.AmplicificationStaffCode_FixedValue_Seq;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.AmplicificationStaffCode_FixedValue_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.BOLDIDCode_Bold;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ConsensusSeqPassCode_Seq;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.DocumentVersionCode_Seq;
@@ -17,7 +17,7 @@ import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.PCRplateIDCode_Seq
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.PlatePositionCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ProjectPlateNumberCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.RegistrationNumberCode_Samples;
-import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.SequencingStaffCode_FixedValue_Samples;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.SequencingStaffCode_FixedValue_Seq;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -127,7 +127,7 @@ public class DnaExtractListRecordsHandler extends ListRecordsHandler {
 	{
 		DocumentNotes notes = ad.getDocument().getNotes();
 		Sequencing seq = new Sequencing();
-		seq.setSequencingStaff(notes.get(SequencingStaffCode_FixedValue_Samples));
+		seq.setSequencingStaff(notes.get(SequencingStaffCode_FixedValue_Seq));
 		if (ad.getPluginDocument() instanceof XMLSerialisableRootElement) {
 			XMLSerialisableRootElement e = (XMLSerialisableRootElement) ad.getPluginDocument();
 			seq.setConsensusSequenceID(e.getName());
@@ -152,7 +152,7 @@ public class DnaExtractListRecordsHandler extends ListRecordsHandler {
 	{
 		DocumentNotes notes = ad.getDocument().getNotes();
 		Amplification amp = new Amplification();
-		amp.setAmplificationStaff(notes.get(AmplicificationStaffCode_FixedValue_Seq));
+		amp.setAmplificationStaff(notes.get(AmplicificationStaffCode_FixedValue_Samples));
 		amp.setMarker(notes.get(MarkerCode_Seq));
 		amp.setPcrPlateID(notes.get(PCRplateIDCode_Seq));
 		return amp;

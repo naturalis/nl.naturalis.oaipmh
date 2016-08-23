@@ -78,7 +78,7 @@ public class DocumentNotes {
 		/**
 		 * Maps to sequencingStaff for DNA extracts.
 		 */
-		SequencingStaffCode_FixedValue_Samples,
+		SequencingStaffCode_FixedValue_Seq,
 		/**
 		 * Maps to versionNumber for DNA extracts.
 		 */
@@ -98,7 +98,7 @@ public class DocumentNotes {
 		/**
 		 * Maps to amplificationStaff for DNA extracts.
 		 */
-		AmplicificationStaffCode_FixedValue_Seq
+		AmplicificationStaffCode_FixedValue_Samples
 	}
 
 	private EnumMap<Note, String> data = new EnumMap<>(Note.class);
