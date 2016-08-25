@@ -11,11 +11,12 @@ import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentSetFilter;
 
 /**
  * A {@link IAnnotatedDocumentSetFilter set-filter} for DNA extract plates.
- * Ensures that for each extract plate only one record is selected. This is,
- * more or less arbitrarily, the record with the highest database ID. In other
- * words, for all recprds with the same
- * {@link DocumentNotes.Note#ExtractPlateNumberCode_Samples plate number}), the
- * one with the highest database ID is selected.
+ * Ensures that for each extract plate only one record from the
+ * annotated_document table is selected. This is, more or less arbitrarily, the
+ * record with the highest database ID. In other words, for all records with the
+ * same {@link DocumentNotes.Note#ExtractPlateNumberCode_Samples plate number}),
+ * only the one with the highest database ID is selected and turned into a
+ * &lt;DnaExtractPlate&gt; element in the OAI-PMH output.
  * 
  * @see PlateNumberComparator
  * 
