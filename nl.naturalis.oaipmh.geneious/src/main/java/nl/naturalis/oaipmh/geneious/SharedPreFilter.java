@@ -9,11 +9,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Pre-filter shared by all geneious repositories. Filters records from the
- * annotated_document table after they have been converted to
- * {@link AnnotatedDocument} instances by an {@link AnnotatedDocumentFactory}.
- * This class contains course-grained logic for filtering out irrelevant or
- * corrupt records.
+ * A {@link IAnnotatedDocumentPreFilter Pre-filter} shared by all geneious
+ * repositories. This class contains course-grained logic for filtering out
+ * irrelevant or corrupt records.
+ * <ul>
+ * <li>The document_xml column is not null or empty
+ * <li>The plugin_document_xml column is not null or empty
+ * <li>The document root of the XML within the document_xml column is one of
+ * &lt;XMLSerialisableRootElement&gt;, &lt;ABIDocument&gt;,
+ * &lt;DefaultAlignmentDocument&gt;
+ * </ul>
  * 
  * @author Ayco Holleman
  *

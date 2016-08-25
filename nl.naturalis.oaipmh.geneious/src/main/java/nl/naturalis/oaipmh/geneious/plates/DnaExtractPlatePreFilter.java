@@ -9,7 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * A pre-filter for DNA extract plates.
+ * A {@link IAnnotatedDocumentPreFilter pre-filter} for DNA extract plates. This
+ * filter filters out any record that does not contain the string
+ * "<ExtractPlateNumberCode_Samples>" in its document_xml column.
  * 
  * @author Ayco Holleman
  *

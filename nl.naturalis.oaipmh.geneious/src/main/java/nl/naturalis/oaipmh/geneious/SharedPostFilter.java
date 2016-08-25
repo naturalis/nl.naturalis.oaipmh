@@ -12,8 +12,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Post-filter shared by all geneious repositories. Will be applied
- * <i>before</i> any repository-specific post-filters. This filters checks that
+ * A {@link IAnnotatedDocumentPostFilter post-filter} shared by all geneious
+ * repositories. Will be applied <i>before</i> any repository-specific
+ * post-filters. This filters checks that
  * <ul>
  * <li>The document_xml column contains valid XML
  * <li>The plugin_document_xml columns contains valid XML
