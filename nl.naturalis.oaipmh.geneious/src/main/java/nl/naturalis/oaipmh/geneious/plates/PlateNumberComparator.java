@@ -25,9 +25,8 @@ public class PlateNumberComparator implements Comparator<AnnotatedDocument> {
 	{
 		String pn0 = ad0.getDocument().getNotes().get(Note.ExtractPlateNumberCode_Samples);
 		String pn1 = ad0.getDocument().getNotes().get(Note.ExtractPlateNumberCode_Samples);
-		if (!pn0.equals(pn1))
-			return pn0.compareTo(pn1);
-		return ad1.getId() - ad0.getId();
+		int i = pn0.compareTo(pn1);
+		return i == 0 ? ad1.getId() - ad0.getId() : i;
 	}
 
 }

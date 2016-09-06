@@ -5,7 +5,6 @@ import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormatter;
 import static nl.naturalis.oaipmh.api.util.ObjectFactories.oaiFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 

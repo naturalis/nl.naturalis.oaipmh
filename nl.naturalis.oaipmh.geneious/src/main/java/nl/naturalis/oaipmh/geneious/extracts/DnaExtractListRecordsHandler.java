@@ -78,7 +78,9 @@ public class DnaExtractListRecordsHandler extends ListRecordsHandler {
 	@Override
 	protected List<IAnnotatedDocumentSetFilter> getAnnotatedDocumentSetFilters()
 	{
-		return new ArrayList<>(0);
+		List<IAnnotatedDocumentSetFilter> filters = new ArrayList<>(1);
+		filters.add(new DnaExtractSetFilter());
+		return filters;
 	}
 
 	@Override

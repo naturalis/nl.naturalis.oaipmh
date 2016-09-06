@@ -3,8 +3,6 @@
 	<name>nl.naturalis.oaipmh.rest</name>
 	<comment></comment>
 	<projects>
-		<project>nl.naturalis.oaipmh.api</project>
-		<project>nl.naturalis.oaipmh.geneious</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -54,7 +54,9 @@ class SpecimenListRecordsHandler extends ListRecordsHandler {
 	@Override
 	protected List<IAnnotatedDocumentSetFilter> getAnnotatedDocumentSetFilters()
 	{
-		return new ArrayList<>(0);
+		List<IAnnotatedDocumentSetFilter> filters = new ArrayList<>(1);
+		filters.add(new SpecimenSetFilter());
+		return filters;
 	}
 
 	@Override

@@ -3,12 +3,6 @@
 		<wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
 		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
 		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-		<dependent-module archiveName="nl.naturalis.oaipmh.api.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/nl.naturalis.oaipmh.api/nl.naturalis.oaipmh.api">
-			<dependency-type>uses</dependency-type>
-		</dependent-module>
-        <dependent-module archiveName="nl.naturalis.oaipmh.geneious.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/nl.naturalis.oaipmh.geneious/nl.naturalis.oaipmh.geneious">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
 		<property name="java-output-path" value="/nl.naturalis.oaipmh.rest/build/classes"/>
 		<property name="context-root" value="nl.naturalis.oaipmh.rest"/>
 	</wb-module>
