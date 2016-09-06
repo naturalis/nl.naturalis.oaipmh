@@ -16,7 +16,7 @@ import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentSetFilter;
  * database ID. In other words, for all records with the same
  * {@link DocumentNotes.Note#RegistrationNumberCode_Samples specimen
  * registration number}), only the one with the highest database ID is selected
- * and turned into a &lt;DnaExtractPlate&gt; element in the OAI-PMH output.
+ * and turned into a &lt;Specimen&gt; element in the OAI-PMH output.
  * 
  * @see SpecimenRegNoComparator
  * 
