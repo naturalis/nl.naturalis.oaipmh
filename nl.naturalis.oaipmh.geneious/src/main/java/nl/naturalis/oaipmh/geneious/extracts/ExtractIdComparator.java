@@ -26,7 +26,13 @@ public class ExtractIdComparator implements Comparator<AnnotatedDocument> {
 		String id0 = ad0.getDocument().getNotes().get(Note.ExtractIDCode_Samples);
 		String id1 = ad0.getDocument().getNotes().get(Note.ExtractIDCode_Samples);
 		int i = id0.compareTo(id1);
-		return i == 0 ? ad1.getId() - ad0.getId() : i;
+		if (i != 0)
+			return i;
+		String marker0 = ad0.getDocument().getNotes().get(Note.MarkerCode_Seq);
+		String marker1 = ad0.getDocument().getNotes().get(Note.MarkerCode_Seq);
+		i = marker0.compareTo(marker1);
+		if (i != 0)
+			return i;
+		return ad1.getId() - ad0.getId();
 	}
-
 }

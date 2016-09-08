@@ -34,13 +34,16 @@ public class DnaExtractSetFilter implements IAnnotatedDocumentSetFilter {
 	{
 		Collections.sort(input, new ExtractIdComparator());
 		String prevID = "";
+		String prevMarker = "";
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
 		for (AnnotatedDocument ad : input) {
 			String id = ad.getDocument().getNotes().get(Note.ExtractIDCode_Samples);
-			if (id.equals(prevID))
+			String marker = ad.getDocument().getNotes().get(Note.MarkerCode_Seq);
+			if (id.equals(prevID) && marker.equals(prevMarker))
 				continue;
 			result.add(ad);
 			prevID = id;
+			prevMarker = marker;
 		}
 		return result;
 	}
