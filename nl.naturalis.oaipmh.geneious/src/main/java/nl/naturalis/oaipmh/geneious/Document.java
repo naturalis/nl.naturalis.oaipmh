@@ -13,6 +13,7 @@ public class Document {
 
 	private DocumentClass documentClass;
 	private List<String> referencedDocuments;
+	private String description;
 	private DocumentNotes notes;
 
 	/**
@@ -33,6 +34,22 @@ public class Document {
 	public void setDocumentClass(DocumentClass documentClass)
 	{
 		this.documentClass = documentClass;
+	}
+
+	public String getDescription()
+	{
+		return description;
+	}
+
+	/**
+	 * Returns the contents of the &lt;description&gt; element within the
+	 * &lt;hiddenFields&gt; element.
+	 * 
+	 * @param description
+	 */
+	public void setDescription(String description)
+	{
+		this.description = description;
 	}
 
 	/**

@@ -42,10 +42,9 @@ public class DocumentFactory {
 			return null;
 		}
 		Document doc = new Document();
-		DocumentClass documentClass = getDocumentClass(root);
-		doc.setDocumentClass(documentClass);
-		DocumentNotes notes = getDocumentNotes(root);
-		doc.setNotes(notes);
+		doc.setDocumentClass(getDocumentClass(root));
+		doc.setDescription(getDescription(root));
+		doc.setNotes(getDocumentNotes(root));
 		List<String> urns = getReferencedDocuments(root);
 		doc.setReferencedDocuments(urns);
 		return doc;
@@ -56,6 +55,15 @@ public class DocumentFactory {
 		String s = root.getAttribute("class");
 		DocumentClass documentClass = DocumentClass.parse(s);
 		return documentClass;
+	}
+
+	private static String getDescription(Element root)
+	{
+		Element hiddenFields = DOMUtil.getChild(root, "hiddenFields");
+		if (hiddenFields == null) {
+			return null;
+		}
+		return DOMUtil.getValue(hiddenFields, "description");
 	}
 
 	private static DocumentNotes getDocumentNotes(Element root)

@@ -12,9 +12,9 @@ import org.apache.logging.log4j.Logger;
  * {@code AnnotatedDocument}, it means it has superseded the other
  * {@code AnnotatedDocument}. Thus, the referenced {@code AnnotatedDocument}
  * should not end up in the OAI-PMH output. Filtering by means of this
- * comparator can optionally be enabled in the {@link SharedSetFilter}. However,
+ * comparator can optionally be enabled in the {@link DocumentVersionSetFilter}. However,
  * this comparator can most likely be done away with (see comments for
- * {@link SharedSetFilter}).
+ * {@link DocumentVersionSetFilter}).
  * 
  * @author Ayco Holleman
  *
@@ -131,12 +131,12 @@ public class ReferenceComparator implements Comparator<AnnotatedDocument> {
 	private void dispense(AnnotatedDocument dispensable, AnnotatedDocument nonDispensable,
 			String reason)
 	{
-		if (!dispensable.dispensable) {
+		if (!dispensable.doNotOutput) {
 			if (logger.isDebugEnabled()) {
 				logger.debug(MSG_DISCARD, dispensable.getId(), nonDispensable.getId(), reason);
 			}
 			++numDispensable;
-			dispensable.dispensable = true;
+			dispensable.doNotOutput = true;
 		}
 	}
 

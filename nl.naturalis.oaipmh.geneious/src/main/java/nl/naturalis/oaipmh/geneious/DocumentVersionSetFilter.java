@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import nl.naturalis.oaipmh.geneious.DocumentNotes.Note;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,16 +20,18 @@ import org.apache.logging.log4j.Logger;
  * @author Ayco Holleman
  *
  */
-public class SharedSetFilter implements IAnnotatedDocumentSetFilter {
+public class DocumentVersionSetFilter implements IAnnotatedDocumentSetFilter {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = LogManager.getLogger(SharedSetFilter.class);
+	private static final Logger logger = LogManager.getLogger(DocumentVersionSetFilter.class);
 
 	private boolean useReferenceComparator;
 
 	/**
 	 * Whether or not to also apply filtering by means of a
 	 * {@link ReferenceComparator}.
+	 * 
+	 * @deprecated Just use WHERE clause on ref_count column
 	 * 
 	 * @return
 	 */
@@ -43,6 +43,8 @@ public class SharedSetFilter implements IAnnotatedDocumentSetFilter {
 	/**
 	 * Determine whether or not to also apply filtering by means of a
 	 * {@link ReferenceComparator}.
+	 * 
+	 * @deprecated
 	 * 
 	 * @param useReferenceComparator
 	 */
@@ -64,18 +66,26 @@ public class SharedSetFilter implements IAnnotatedDocumentSetFilter {
 	private static List<AnnotatedDocument> filterOldDocumentVersions(List<AnnotatedDocument> input)
 	{
 		Collections.sort(input, new DocumentVersionComparator());
-		String prevExtractId = "";
-		String prevMarker = "";
+		// String prevExtractId = "";
+		// String prevMarker = "";
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
 		for (AnnotatedDocument ad : input) {
-			String extractId = ad.getDocument().getNotes().get(Note.ExtractIDCode_Samples);
-			String marker = ad.getDocument().getNotes().get(Note.MarkerCode_Seq);
-			if (extractId.equals(prevExtractId) && marker.equals(prevMarker))
+			if (ad.doNotOutput) {
 				continue;
+			}
 			result.add(ad);
-			prevExtractId = extractId;
-			prevMarker = marker;
 		}
+		// when using compare_old() in comparator:
+		// for (AnnotatedDocument ad : input) {
+		// String extractId =
+		// ad.getDocument().getNotes().get(Note.ExtractIDCode_Samples);
+		// String marker = ad.getDocument().getNotes().get(Note.MarkerCode_Seq);
+		// if (extractId.equals(prevExtractId) && marker.equals(prevMarker))
+		// continue;
+		// result.add(ad);
+		// prevExtractId = extractId;
+		// prevMarker = marker;
+		// }
 		return result;
 	}
 

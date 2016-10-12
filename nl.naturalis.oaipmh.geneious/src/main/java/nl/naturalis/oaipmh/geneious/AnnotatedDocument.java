@@ -20,7 +20,7 @@ public class AnnotatedDocument {
 	 * record, namely whether it can be dispensed (omitted) when generating an
 	 * OAI-PMH response.
 	 */
-	boolean dispensable;
+	boolean doNotOutput;
 
 	public int getId()
 	{

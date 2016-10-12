@@ -58,7 +58,7 @@ import org.openarchives.oai._2.ResumptionTokenType;
  * <li>Then the {@link SharedPostFilter} is applied. See
  * {@link IAnnotatedDocumentPostFilter here} for an explanation of post-filters.
  * <li>Then all repository-specific post-filters are applied.
- * <li>Then the {@link SharedSetFilter} is applied. See
+ * <li>Then the {@link DocumentVersionSetFilter} is applied. See
  * {@link IAnnotatedDocumentSetFilter here} for an explanation of set filters.
  * <li>Then all repository-specific set filters are applied.
  * <li>Then the remaining records are sorted in descending order of their
@@ -92,14 +92,8 @@ public abstract class ListRecordsHandler {
 		postFilters = new ArrayList<>(4);
 		postFilters.add(new SharedPostFilter());
 		setFilters = new ArrayList<>(4);
-		SharedSetFilter ssf = new SharedSetFilter();
-		/*
-		 * A bit ugly: we tie filtering by means of a ReferenceComparator to the
-		 * logger being in DEBUG mode, just to make sure we got the logic right
-		 * and see no surprising stuff when debugging.
-		 */
-		ssf.setUseReferenceComparator(logger.isDebugEnabled());
-		setFilters.add(ssf);
+		setFilters.add(new DocumentVersionSetFilter());
+		setFilters.add(new ContigConsensusSetFilter());
 	}
 
 	/**
@@ -157,7 +151,8 @@ public abstract class ListRecordsHandler {
 	/**
 	 * Template method to be implemented by subclasses: provide extra set
 	 * filters for the particular resource the subclass deals with. The extra
-	 * post-filters are applied <i>after</i> the {@link SharedSetFilter}.
+	 * post-filters are applied <i>after</i> the
+	 * {@link DocumentVersionSetFilter}.
 	 */
 	protected abstract List<IAnnotatedDocumentSetFilter> getAnnotatedDocumentSetFilters();
 
