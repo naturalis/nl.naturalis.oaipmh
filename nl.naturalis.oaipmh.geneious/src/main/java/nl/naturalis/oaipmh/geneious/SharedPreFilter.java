@@ -15,8 +15,8 @@ import org.apache.logging.log4j.Logger;
  * <ul>
  * <li>The document_xml column is not null or empty
  * <li>The plugin_document_xml column is not null or empty
- * <li>The document root of the XML within the document_xml column is one of
- * &lt;XMLSerialisableRootElement&gt;, &lt;ABIDocument&gt;,
+ * <li>The document root of the XML within the plugin_document_xml column is one
+ * of &lt;XMLSerialisableRootElement&gt;, &lt;ABIDocument&gt;,
  * &lt;DefaultAlignmentDocument&gt;
  * </ul>
  * 
@@ -28,7 +28,7 @@ public class SharedPreFilter implements IAnnotatedDocumentPreFilter {
 	private static final Logger logger = LogManager.getLogger(SharedPreFilter.class);
 
 	private static List<String> acceptableRoots = Arrays.asList("XMLSerialisableRootElement",
-			"ABIDocument", "DefaultAlignmentDocument");
+			"DefaultAlignmentDocument");
 
 	public SharedPreFilter()
 	{

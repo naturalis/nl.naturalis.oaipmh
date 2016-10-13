@@ -3,6 +3,8 @@ package nl.naturalis.oaipmh.geneious;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.naturalis.oaipmh.geneious.DocumentHiddenFields.HiddenField;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.domainobject.util.DOMUtil;
@@ -43,7 +45,8 @@ public class DocumentFactory {
 		}
 		Document doc = new Document();
 		doc.setDocumentClass(getDocumentClass(root));
-		doc.setDescription(getDescription(root));
+		doc.setHiddenFields(getDocumentHiddenFields(root));
+		doc.setFields(getDocumentFields(root));
 		doc.setNotes(getDocumentNotes(root));
 		List<String> urns = getReferencedDocuments(root);
 		doc.setReferencedDocuments(urns);
@@ -57,15 +60,6 @@ public class DocumentFactory {
 		return documentClass;
 	}
 
-	private static String getDescription(Element root)
-	{
-		Element hiddenFields = DOMUtil.getChild(root, "hiddenFields");
-		if (hiddenFields == null) {
-			return null;
-		}
-		return DOMUtil.getValue(hiddenFields, "description");
-	}
-
 	private static DocumentNotes getDocumentNotes(Element root)
 	{
 		Element notesElement = DOMUtil.getChild(root, "notes");
@@ -76,9 +70,6 @@ public class DocumentFactory {
 		for (DocumentNotes.Note note : DocumentNotes.Note.values()) {
 			Element e = DOMUtil.getDescendant(notesElement, note.name());
 			if (e != null) {
-				if (logger.isTraceEnabled()) {
-					logger.trace("Found document note for {}", note.name());
-				}
 				if (notes == null) {
 					notes = new DocumentNotes();
 				}
@@ -90,6 +81,44 @@ public class DocumentFactory {
 			logger.debug("Number of usable <note> elements: {}", i);
 		}
 		return notes;
+	}
+
+	private static DocumentFields getDocumentFields(Element root)
+	{
+		Element fieldsElement = DOMUtil.getChild(root, "fields");
+		if (fieldsElement == null) {
+			return null;
+		}
+		DocumentFields fields = null;
+		for (DocumentFields.Field field : DocumentFields.Field.values()) {
+			Element e = DOMUtil.getChild(fieldsElement, field.name());
+			if (e != null) {
+				if (fields == null) {
+					fields = new DocumentFields();
+				}
+				fields.set(field, e.getTextContent());
+			}
+		}
+		return fields;
+	}
+
+	private static DocumentHiddenFields getDocumentHiddenFields(Element root)
+	{
+		Element hfElement = DOMUtil.getChild(root, "hiddenFields");
+		if (hfElement == null) {
+			return null;
+		}
+		DocumentHiddenFields fields = null;
+		for (HiddenField field : HiddenField.values()) {
+			Element e = DOMUtil.getChild(hfElement, field.name());
+			if (e != null) {
+				if (fields == null) {
+					fields = new DocumentHiddenFields();
+				}
+				fields.set(field, e.getTextContent());
+			}
+		}
+		return fields;
 	}
 
 	private static List<String> getReferencedDocuments(Element root)

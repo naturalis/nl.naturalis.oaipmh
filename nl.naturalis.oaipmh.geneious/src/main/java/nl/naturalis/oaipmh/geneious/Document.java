@@ -2,6 +2,10 @@ package nl.naturalis.oaipmh.geneious;
 
 import java.util.List;
 
+import nl.naturalis.oaipmh.geneious.DocumentFields.Field;
+import nl.naturalis.oaipmh.geneious.DocumentHiddenFields.HiddenField;
+import nl.naturalis.oaipmh.geneious.DocumentNotes.Note;
+
 /**
  * Standard Java Bean reflecting the contents of the document_xml column within
  * the annotated_document table.
@@ -13,8 +17,33 @@ public class Document {
 
 	private DocumentClass documentClass;
 	private List<String> referencedDocuments;
-	private String description;
+	private DocumentHiddenFields hiddenFields;
+	private DocumentFields fields;
 	private DocumentNotes notes;
+
+	public String getHiddenField(HiddenField hiddenField)
+	{
+		if (hiddenFields == null) {
+			return null;
+		}
+		return hiddenFields.get(hiddenField);
+	}
+
+	public String getField(Field field)
+	{
+		if (fields == null) {
+			return null;
+		}
+		return fields.get(field);
+	}
+
+	public String getNote(Note note)
+	{
+		if (notes == null) {
+			return null;
+		}
+		return notes.get(note);
+	}
 
 	/**
 	 * Returns the value of the "class" attribute of the root element
@@ -34,22 +63,6 @@ public class Document {
 	public void setDocumentClass(DocumentClass documentClass)
 	{
 		this.documentClass = documentClass;
-	}
-
-	public String getDescription()
-	{
-		return description;
-	}
-
-	/**
-	 * Returns the contents of the &lt;description&gt; element within the
-	 * &lt;hiddenFields&gt; element.
-	 * 
-	 * @param description
-	 */
-	public void setDescription(String description)
-	{
-		this.description = description;
 	}
 
 	/**
@@ -94,6 +107,50 @@ public class Document {
 	public void setNotes(DocumentNotes notes)
 	{
 		this.notes = notes;
+	}
+
+	/**
+	 * Gets values from elements within the &lt;hiddenFields&gt; element in the
+	 * document_xml column.
+	 * 
+	 * @return
+	 */
+	public DocumentHiddenFields getHiddenFields()
+	{
+		return hiddenFields;
+	}
+
+	/**
+	 * Sets values from elements within the &lt;hiddenFields&gt; element in the
+	 * document_xml column.
+	 * 
+	 * @param hiddenFields
+	 */
+	public void setHiddenFields(DocumentHiddenFields hiddenFields)
+	{
+		this.hiddenFields = hiddenFields;
+	}
+
+	/**
+	 * Gets values from elements within the &lt;fields&gt; element in the
+	 * document_xml column.
+	 * 
+	 * @return
+	 */
+	public DocumentFields getFields()
+	{
+		return fields;
+	}
+
+	/**
+	 * Sets values from elements within the &lt;fields&gt; element in the
+	 * document_xml column.
+	 * 
+	 * @param fields
+	 */
+	public void setFields(DocumentFields fields)
+	{
+		this.fields = fields;
 	}
 
 }

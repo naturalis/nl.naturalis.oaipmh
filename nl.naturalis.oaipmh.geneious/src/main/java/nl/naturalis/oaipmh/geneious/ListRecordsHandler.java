@@ -83,6 +83,8 @@ public abstract class ListRecordsHandler {
 	protected List<IAnnotatedDocumentPostFilter> postFilters;
 	protected List<IAnnotatedDocumentSetFilter> setFilters;
 
+	protected List<IAnnotatedDocumentPostProcessor> postProcessors;
+
 	public ListRecordsHandler(ConfigObject config, OAIPMHRequest request)
 	{
 		this.request = request;
@@ -94,6 +96,7 @@ public abstract class ListRecordsHandler {
 		setFilters = new ArrayList<>(4);
 		setFilters.add(new DocumentVersionSetFilter());
 		setFilters.add(new ContigConsensusSetFilter());
+		postProcessors = new ArrayList<>(4);
 	}
 
 	/**
@@ -109,9 +112,16 @@ public abstract class ListRecordsHandler {
 		preFilters.addAll(getAnnotatedDocumentPreFilters());
 		postFilters.addAll(getAnnotatedDocumentPostFilters());
 		setFilters.addAll(getAnnotatedDocumentSetFilters());
+		postProcessors.addAll(getAnnotatedDocumentPostProcessors());
 		List<AnnotatedDocument> records = getAnnotatedDocuments();
 		if (records.size() == 0) {
 			throw new OAIPMHException(new NoRecordsMatchError());
+		}
+		logger.debug("Applying post processors");
+		for (IAnnotatedDocumentPostProcessor processor : postProcessors) {
+			for (AnnotatedDocument annotatedDocument : records) {
+				processor.process(annotatedDocument);
+			}
 		}
 		OAIPMHtype root = createResponseSkeleton(request);
 		ListRecordsType listRecords = oaiFactory.createListRecordsType();
@@ -155,6 +165,15 @@ public abstract class ListRecordsHandler {
 	 * {@link DocumentVersionSetFilter}.
 	 */
 	protected abstract List<IAnnotatedDocumentSetFilter> getAnnotatedDocumentSetFilters();
+
+	/**
+	 * Template method to be implemented by subclasses: provide processors for
+	 * {@link AnnotatedDocument} instances once they have gone through all
+	 * filters.
+	 * 
+	 * @return
+	 */
+	protected abstract List<IAnnotatedDocumentPostProcessor> getAnnotatedDocumentPostProcessors();
 
 	/**
 	 * Template method to be implemented by subclasses: provide the child

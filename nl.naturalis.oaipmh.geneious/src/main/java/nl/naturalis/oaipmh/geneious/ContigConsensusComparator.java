@@ -1,11 +1,23 @@
 package nl.naturalis.oaipmh.geneious;
 
+import static nl.naturalis.oaipmh.geneious.DocumentHiddenFields.HiddenField.description;
+
 import java.util.Comparator;
 
 /**
  * A {@link Comparator} for {@link AnnotatedDocument} instances according to
  * whether one can be said to represent a consensus sequence created from the
- * contig sequence represented by the other.
+ * contig sequence represented by the other. Note that we actually only use
+ * Java's compare/sort mechanism as a way of getting our hands on each
+ * combination of two annotated documents. The
+ * {@link #compare(AnnotatedDocument, AnnotatedDocument) compare} method always
+ * returns 0, so sortings with this comparator does not change the order of the
+ * annotated documents. However, a side effect of calling this method is that
+ * one of the two annotated documents passed to it may get marked as
+ * discardable. A {@link IAnnotatedDocumentSetFilter set filter} using this
+ * comparator to "sort" the annotated documents can subsequently iterate over
+ * them and simply discard all annotated documents marked as discardable by the
+ * {@code compare} method.
  * 
  * @author Ayco Holleman
  *
@@ -19,22 +31,23 @@ public class ContigConsensusComparator implements Comparator<AnnotatedDocument> 
 	@Override
 	public int compare(AnnotatedDocument ad0, AnnotatedDocument ad1)
 	{
-		String descr0 = ad0.getDocument().getDescription();
-		String descr1 = ad1.getDocument().getDescription();
-		int i = descr0.compareTo(descr1);
-		if (i != 0) {
+		String descr0 = ad0.getDocument().getHiddenField(description);
+		if (descr0 == null) {
 			return 0;
 		}
-		boolean ad0IsContig = isContig(ad0);
-		boolean ad1IsContig = isContig(ad1);
-		assert ad0IsContig || ad1IsContig;
-		if (ad0IsContig) {
-			assert ad1.getPluginDocument() instanceof XMLSerialisableRootElement;
+		String descr1 = ad1.getDocument().getHiddenField(description);
+		if (descr1 == null) {
+			return 0;
+		}
+		if (!descr0.equals(descr1)) {
+			return 0;
+		}
+		if (isContig(ad0) && isConsensus(ad1)) {
 			ad0.doNotOutput = true;
-			return 0;
 		}
-		assert ad0.getPluginDocument() instanceof XMLSerialisableRootElement;
-		ad1.doNotOutput = true;
+		else if (isContig(ad1) && isConsensus(ad0)) {
+			ad1.doNotOutput = true;
+		}
 		return 0;
 	}
 
@@ -43,6 +56,18 @@ public class ContigConsensusComparator implements Comparator<AnnotatedDocument> 
 		if (ad.getPluginDocument() instanceof DefaultAlignmentDocument) {
 			DefaultAlignmentDocument dad = (DefaultAlignmentDocument) ad.getPluginDocument();
 			return dad.isContig();
+		}
+		return false;
+	}
+
+	private static boolean isConsensus(AnnotatedDocument ad)
+	{
+		PluginDocument pd = ad.getPluginDocument();
+		if (pd instanceof XMLSerialisableRootElement) {
+			XMLSerialisableRootElement xsre = (XMLSerialisableRootElement) pd;
+			if (xsre.getName().endsWith("consensus sequence")) {
+				return true;
+			}
 		}
 		return false;
 	}

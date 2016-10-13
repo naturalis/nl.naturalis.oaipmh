@@ -12,6 +12,7 @@ import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
 import nl.naturalis.oaipmh.geneious.DocumentNotes;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPostFilter;
+import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPostProcessor;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPreFilter;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentSetFilter;
 import nl.naturalis.oaipmh.geneious.ListRecordsHandler;
@@ -57,6 +58,12 @@ class SpecimenListRecordsHandler extends ListRecordsHandler {
 		List<IAnnotatedDocumentSetFilter> filters = new ArrayList<>(1);
 		filters.add(new SpecimenSetFilter());
 		return filters;
+	}
+
+	@Override
+	protected List<IAnnotatedDocumentPostProcessor> getAnnotatedDocumentPostProcessors()
+	{
+		return new ArrayList<>(0);
 	}
 
 	@Override
