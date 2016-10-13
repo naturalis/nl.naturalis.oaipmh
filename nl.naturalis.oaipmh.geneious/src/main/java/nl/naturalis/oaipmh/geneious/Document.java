@@ -29,6 +29,14 @@ public class Document {
 		return hiddenFields.get(hiddenField);
 	}
 
+	public void setHiddenField(HiddenField hiddenField, String value)
+	{
+		if (hiddenFields == null) {
+			hiddenFields = new DocumentHiddenFields();
+		}
+		hiddenFields.set(hiddenField, value);
+	}
+
 	public String getField(Field field)
 	{
 		if (fields == null) {
@@ -37,12 +45,28 @@ public class Document {
 		return fields.get(field);
 	}
 
+	public void setField(Field field, String value)
+	{
+		if (fields == null) {
+			fields = new DocumentFields();
+		}
+		fields.set(field, value);
+	}
+
 	public String getNote(Note note)
 	{
 		if (notes == null) {
 			return null;
 		}
 		return notes.get(note);
+	}
+
+	public void setNote(Note note, String value)
+	{
+		if (notes == null) {
+			notes = new DocumentNotes();
+		}
+		notes.set(note, value);
 	}
 
 	/**

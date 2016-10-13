@@ -49,12 +49,12 @@ public class DocumentFields {
 	/**
 	 * Set the value of the specified note.
 	 * 
-	 * @param note
+	 * @param field
 	 * @param value
 	 */
-	public void set(Field note, String value)
+	public void set(Field field, String value)
 	{
-		data.put(note, value);
+		data.put(field, value);
 	}
 
 	/**
