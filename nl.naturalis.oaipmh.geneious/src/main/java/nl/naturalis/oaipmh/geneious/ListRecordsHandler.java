@@ -113,33 +113,27 @@ public abstract class ListRecordsHandler {
 		postFilters.addAll(getAnnotatedDocumentPostFilters());
 		setFilters.addAll(getAnnotatedDocumentSetFilters());
 		postProcessors.addAll(getAnnotatedDocumentPostProcessors());
-		List<AnnotatedDocument> records = getAnnotatedDocuments();
-		if (records.size() == 0) {
+		List<AnnotatedDocument> annotatedDocuments = getAnnotatedDocuments();
+		if (annotatedDocuments.size() == 0) {
 			throw new OAIPMHException(new NoRecordsMatchError());
-		}
-		logger.debug("Applying post processors");
-		for (IAnnotatedDocumentPostProcessor processor : postProcessors) {
-			for (AnnotatedDocument annotatedDocument : records) {
-				processor.process(annotatedDocument);
-			}
 		}
 		OAIPMHtype root = createResponseSkeleton(request);
 		ListRecordsType listRecords = oaiFactory.createListRecordsType();
 		root.setListRecords(listRecords);
 		int pageSize = getPageSize();
 		int offset = request.getPage() * pageSize;
-		if (offset >= records.size()) {
+		if (offset >= annotatedDocuments.size()) {
 			String msg = "Bad resumption token";
 			logger.error(msg);
 			throw new OAIPMHException(new BadResumptionTokenError(msg));
 		}
-		int last = Math.min(records.size(), offset + pageSize);
-		logResultSetInfo(records.size());
+		int last = Math.min(annotatedDocuments.size(), offset + pageSize);
+		logResultSetInfo(annotatedDocuments.size());
 		for (int i = offset; i < last; ++i) {
-			addRecord(records.get(i), listRecords);
+			addRecord(annotatedDocuments.get(i), listRecords);
 		}
-		if (last < records.size()) {
-			addResumptionToken(listRecords, records.size(), offset);
+		if (last < annotatedDocuments.size()) {
+			addResumptionToken(listRecords, annotatedDocuments.size(), offset);
 		}
 		return root;
 	}
@@ -299,11 +293,15 @@ public abstract class ListRecordsHandler {
 	}
 
 	private void addRecord(AnnotatedDocument ad, ListRecordsType listRecords)
+			throws PostProcessingException
 	{
 		RecordType record = oaiFactory.createRecordType();
 		listRecords.getRecord().add(record);
 		record.setHeader(createHeader(ad));
 		record.setMetadata(createMetadata(ad));
+		for (IAnnotatedDocumentPostProcessor processor : postProcessors) {
+			processor.process(record, ad);
+		}
 	}
 
 	private static HeaderType createHeader(AnnotatedDocument ad)

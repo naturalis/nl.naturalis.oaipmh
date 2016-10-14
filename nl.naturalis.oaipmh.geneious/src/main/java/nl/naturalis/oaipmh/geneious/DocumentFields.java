@@ -18,7 +18,7 @@ public class DocumentFields {
 	 * generation.
 	 */
 	public static enum Field {
-		sequence_length
+		sequence_length, consensusSequenceLength
 	}
 
 	private EnumMap<Field, String> data = new EnumMap<>(Field.class);

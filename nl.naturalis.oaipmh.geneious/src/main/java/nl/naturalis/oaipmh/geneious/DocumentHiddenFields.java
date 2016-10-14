@@ -18,7 +18,7 @@ public class DocumentHiddenFields {
 	 * generation.
 	 */
 	public static enum HiddenField {
-		description
+		description, cache_name, override_cache_name
 	}
 
 	private EnumMap<HiddenField, String> data = new EnumMap<>(HiddenField.class);

@@ -1,6 +1,8 @@
 package nl.naturalis.oaipmh.geneious;
 
 import static nl.naturalis.oaipmh.geneious.DocumentHiddenFields.HiddenField.description;
+import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.isConsensus;
+import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.isContig;
 
 import java.util.Comparator;
 
@@ -49,27 +51,6 @@ public class ContigConsensusComparator implements Comparator<AnnotatedDocument> 
 			ad1.doNotOutput = true;
 		}
 		return 0;
-	}
-
-	private static boolean isContig(AnnotatedDocument ad)
-	{
-		if (ad.getPluginDocument() instanceof DefaultAlignmentDocument) {
-			DefaultAlignmentDocument dad = (DefaultAlignmentDocument) ad.getPluginDocument();
-			return dad.isContig();
-		}
-		return false;
-	}
-
-	private static boolean isConsensus(AnnotatedDocument ad)
-	{
-		PluginDocument pd = ad.getPluginDocument();
-		if (pd instanceof XMLSerialisableRootElement) {
-			XMLSerialisableRootElement xsre = (XMLSerialisableRootElement) pd;
-			if (xsre.getName().endsWith("consensus sequence")) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 }

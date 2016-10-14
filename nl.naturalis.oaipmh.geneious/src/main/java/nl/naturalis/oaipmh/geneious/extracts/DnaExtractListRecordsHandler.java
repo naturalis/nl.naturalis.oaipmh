@@ -1,8 +1,9 @@
 package nl.naturalis.oaipmh.geneious.extracts;
 
-import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.createResponseSkeleton;
-import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormatter;
-import static nl.naturalis.oaipmh.api.util.ObjectFactories.oaiFactory;
+import static nl.naturalis.oaipmh.geneious.DocumentFields.Field.consensusSequenceLength;
+import static nl.naturalis.oaipmh.geneious.DocumentFields.Field.sequence_length;
+import static nl.naturalis.oaipmh.geneious.DocumentHiddenFields.HiddenField.cache_name;
+import static nl.naturalis.oaipmh.geneious.DocumentHiddenFields.HiddenField.override_cache_name;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.AmplicificationStaffCode_FixedValue_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.BOLDIDCode_Bold;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ConsensusSeqPassCode_Seq;
@@ -18,16 +19,17 @@ import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.PlatePositionCode_
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ProjectPlateNumberCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.RegistrationNumberCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.SequencingStaffCode_FixedValue_Seq;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.filename;
+import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.isConsensus;
+import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.isContig;
+import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.isFasta;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import nl.naturalis.oaipmh.api.OAIPMHException;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
 import nl.naturalis.oaipmh.geneious.DocumentNotes;
-import nl.naturalis.oaipmh.geneious.GeneiousOAIUtil;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPostFilter;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPostProcessor;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPreFilter;
@@ -43,11 +45,6 @@ import nl.naturalis.oaipmh.geneious.jaxb.GeneticAccession;
 import nl.naturalis.oaipmh.geneious.jaxb.Sequencing;
 
 import org.domainobject.util.ConfigObject;
-import org.openarchives.oai._2.HeaderType;
-import org.openarchives.oai._2.ListRecordsType;
-import org.openarchives.oai._2.MetadataType;
-import org.openarchives.oai._2.OAIPMHtype;
-import org.openarchives.oai._2.RecordType;
 
 /**
  * Handles ListRecords requests for DNA extracts.
@@ -135,16 +132,36 @@ public class DnaExtractListRecordsHandler extends ListRecordsHandler {
 	private static Sequencing createSequencing(AnnotatedDocument ad)
 	{
 		DocumentNotes notes = ad.getDocument().getNotes();
-		Sequencing seq = new Sequencing();
-		seq.setSequencingStaff(notes.get(SequencingStaffCode_FixedValue_Seq));
-		if (ad.getPluginDocument() instanceof XMLSerialisableRootElement) {
-			XMLSerialisableRootElement e = (XMLSerialisableRootElement) ad.getPluginDocument();
-			seq.setConsensusSequenceID(e.getName());
+		Sequencing sequencing = new Sequencing();
+		sequencing.setSequencingStaff(notes.get(SequencingStaffCode_FixedValue_Seq));
+		sequencing.setGeneticAccession(createGeneticAccession(ad));
+		sequencing.setConsensusSequenceQuality(notes.get(ConsensusSeqPassCode_Seq));
+		if (isFasta(ad)) {
+			String csi = ad.getDocument().getNote(filename);
+			String csl = ad.getDocument().getField(sequence_length);
+			sequencing.setConsensusSequenceID(csi);
+			sequencing.setConsensusSequenceLength(csl);
 		}
-		seq.setConsensusSequenceLength(notes.get(NucleotideLengthCode_Bold));
-		seq.setConsensusSequenceQuality(notes.get(ConsensusSeqPassCode_Seq));
-		seq.setGeneticAccession(createGeneticAccession(ad));
-		return seq;
+		else if (isContig(ad)) {
+			String csi = ad.getDocument().getHiddenField(override_cache_name);
+			String csl = ad.getDocument().getField(consensusSequenceLength);
+			sequencing.setConsensusSequenceID(csi);
+			sequencing.setConsensusSequenceLength(csl);
+		}
+		else if (isConsensus(ad)) {
+			String csi = ad.getDocument().getHiddenField(cache_name);
+			String csl = ad.getDocument().getField(consensusSequenceLength);
+			sequencing.setConsensusSequenceID(csi);
+			sequencing.setConsensusSequenceLength(csl);
+		}
+		else {
+			if (ad.getPluginDocument() instanceof XMLSerialisableRootElement) {
+				XMLSerialisableRootElement e = (XMLSerialisableRootElement) ad.getPluginDocument();
+				sequencing.setConsensusSequenceID(e.getName());
+			}
+			sequencing.setConsensusSequenceLength(notes.get(NucleotideLengthCode_Bold));
+		}
+		return sequencing;
 	}
 
 	private static GeneticAccession createGeneticAccession(AnnotatedDocument ad)
@@ -165,54 +182,6 @@ public class DnaExtractListRecordsHandler extends ListRecordsHandler {
 		amp.setMarker(notes.get(MarkerCode_Seq));
 		amp.setPcrPlateID(notes.get(PCRplateIDCode_Seq));
 		return amp;
-	}
-
-	@SuppressWarnings({ "static-method", "unused" })
-	private OAIPMHtype handleRequest_old(OAIPMHRequest request) throws OAIPMHException
-	{
-		GeneiousOAIUtil.checkRequest(request);
-		OAIPMHtype root = createResponseSkeleton(request);
-		ListRecordsType listRecords = oaiFactory.createListRecordsType();
-		root.setListRecords(listRecords);
-		RecordType record = oaiFactory.createRecordType();
-		listRecords.getRecord().add(record);
-		HeaderType header = oaiFactory.createHeaderType();
-		record.setHeader(header);
-		header.setIdentifier("123423046");
-		header.setDatestamp(dateTimeFormatter.format(new Date()));
-		MetadataType metadata = oaiFactory.createMetadataType();
-		record.setMetadata(metadata);
-		Geneious geneious = new Geneious();
-		metadata.setAny(geneious);
-
-		DnaExtract extract = new DnaExtract();
-		geneious.setDnaExtract(extract);
-		ExtractUnit unit = new ExtractUnit();
-		extract.setUnit(unit);
-		unit.setUnitID("e123214324");
-		unit.setAssociatedUnitID("RMNH.INS.23917");
-		unit.setInstitutePlateID("NBCN123456");
-		unit.setPlatePosition("A10");
-		DnaLabProject project = new DnaLabProject();
-		extract.setDnaLabProject(project);
-		project.setBatchID("BCP1234");
-		Sequencing seq = new Sequencing();
-		project.setSequencing(seq);
-		seq.setSequencingStaff("");
-		seq.setConsensusSequenceID("e4010125106_Rhy_ger_MJ243_COI-H08_M13R_P15_025");
-		seq.setConsensusSequenceLength("650");
-		seq.setConsensusSequenceQuality("fault");
-		GeneticAccession ga = new GeneticAccession();
-		seq.setGeneticAccession(ga);
-		ga.setBOLDProcessID("ANTVI001-11");
-		ga.setGeneticAccessionNumber("JQ412562");
-		ga.setGeneticAccessionNumberURI("http://www.ncbi.nlm.nih.gov/nuccore/JQ412562");
-		Amplification amp = new Amplification();
-		project.setAmplification(amp);
-		amp.setAmplificationStaff("");
-		amp.setMarker("CO1");
-
-		return root;
 	}
 
 }

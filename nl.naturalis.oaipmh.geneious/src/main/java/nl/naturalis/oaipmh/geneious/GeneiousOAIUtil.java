@@ -15,6 +15,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.domainobject.util.ConfigObject;
 
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.*;
+
 /**
  * Provides common functionality for Geneious OAI repositories.
  * 
@@ -93,6 +95,74 @@ public class GeneiousOAIUtil {
 		catch (SQLException e) {
 			logger.error("Error (ignored) while disconnecting from Geneious database", e);
 		}
+	}
+
+	/**
+	 * Returns whether or not the specified document represents a fasta document
+	 * (a&#46;k&#46;a&#46; fasta record). This is considered to be the case if:
+	 * <ol>
+	 * <li>The document_xml column contains a &lt;note&gt; element containing a
+	 * &lt;filename&gt; whose value ends with ".fas"
+	 * </ol>
+	 * 
+	 * @param ad
+	 * @return
+	 */
+	public static boolean isFasta(AnnotatedDocument ad)
+	{
+		String fileName = ad.getDocument().getNote(filename);
+		return fileName != null && fileName.endsWith(".fas");
+	}
+
+	/**
+	 * Returns whether or not the specified document represents a contig
+	 * document (a&#46;k&#46;a&#46; contig record). This is considered to be the
+	 * case if:
+	 * <ol>
+	 * <li>The plugin_xml column has a &lt;DefaultAlignmentDocument&gt; root
+	 * element
+	 * <li>The {@code isContig} attribute of the root element is set to "true"
+	 * </ol>
+	 * 
+	 * @param ad
+	 * @return
+	 */
+	public static boolean isContig(AnnotatedDocument ad)
+	{
+		if (ad.getPluginDocument() instanceof DefaultAlignmentDocument) {
+			DefaultAlignmentDocument dad = (DefaultAlignmentDocument) ad.getPluginDocument();
+			return dad.isContig() != null && dad.isContig();
+		}
+		return false;
+	}
+
+	/**
+	 * Returns whether or not the specified document represents a consensus
+	 * document (a&#46;k&#46;a&#46; consensus record). This is considered to be
+	 * the case if:
+	 * <ol>
+	 * <li>The plugin_xml column has a &lt;XMLSerialisableRootElement&gt; root
+	 * element
+	 * <li>The XML in plugin_xml contains a &lt;name&gt; whose value ends with
+	 * "consensus sequence". In other words whatever name the Geneious user
+	 * wants to give to the consensus sequence record, the last two words
+	 * <b>must</b> be "consensus sequence" (case sensitive), otherwise this
+	 * module will not be able to identify consensus sequence records and the
+	 * OAI-PMH it generates will not be correct!
+	 * </ol>
+	 * 
+	 * @param ad
+	 * @return
+	 */
+	public static boolean isConsensus(AnnotatedDocument ad)
+	{
+		PluginDocument pd = ad.getPluginDocument();
+		if (pd instanceof XMLSerialisableRootElement) {
+			XMLSerialisableRootElement xsre = (XMLSerialisableRootElement) pd;
+			String name = xsre.getName();
+			return name != null && name.endsWith("consensus sequence");
+		}
+		return false;
 	}
 
 }

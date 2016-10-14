@@ -98,7 +98,11 @@ public class DocumentNotes {
 		/**
 		 * Maps to amplificationStaff for DNA extracts.
 		 */
-		AmplicificationStaffCode_FixedValue_Samples
+		AmplicificationStaffCode_FixedValue_Samples,
+		/**
+		 * A geneious-internal note
+		 */
+		filename
 	}
 
 	private EnumMap<Note, String> data = new EnumMap<>(Note.class);
