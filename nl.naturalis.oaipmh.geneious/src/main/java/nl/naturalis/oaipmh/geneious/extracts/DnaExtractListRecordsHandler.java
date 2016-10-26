@@ -1,7 +1,5 @@
 package nl.naturalis.oaipmh.geneious.extracts;
 
-import static nl.naturalis.oaipmh.geneious.DocumentFields.Field.consensusSequenceLength;
-import static nl.naturalis.oaipmh.geneious.DocumentFields.Field.sequence_length;
 import static nl.naturalis.oaipmh.geneious.DocumentHiddenFields.HiddenField.cache_name;
 import static nl.naturalis.oaipmh.geneious.DocumentHiddenFields.HiddenField.override_cache_name;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.AmplicificationStaffCode_FixedValue_Samples;
@@ -35,7 +33,6 @@ import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPostProcessor;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPreFilter;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentSetFilter;
 import nl.naturalis.oaipmh.geneious.ListRecordsHandler;
-import nl.naturalis.oaipmh.geneious.XMLSerialisableRootElement;
 import nl.naturalis.oaipmh.geneious.jaxb.Amplification;
 import nl.naturalis.oaipmh.geneious.jaxb.DnaExtract;
 import nl.naturalis.oaipmh.geneious.jaxb.DnaLabProject;
@@ -137,29 +134,33 @@ public class DnaExtractListRecordsHandler extends ListRecordsHandler {
 		sequencing.setGeneticAccession(createGeneticAccession(ad));
 		sequencing.setConsensusSequenceQuality(notes.get(ConsensusSeqPassCode_Seq));
 		if (isFasta(ad)) {
-			String csi = ad.getDocument().getNote(filename);
-			String csl = ad.getDocument().getField(sequence_length);
+			String csi = ad.getDocument().getHiddenField(override_cache_name);
+			if (csi == null) {
+				csi = ad.getDocument().getNote(filename);
+			}
+			String csl = notes.get(NucleotideLengthCode_Bold);
 			sequencing.setConsensusSequenceID(csi);
 			sequencing.setConsensusSequenceLength(csl);
 		}
 		else if (isContig(ad)) {
 			String csi = ad.getDocument().getHiddenField(override_cache_name);
-			String csl = ad.getDocument().getField(consensusSequenceLength);
+			String csl = notes.get(NucleotideLengthCode_Bold);
 			sequencing.setConsensusSequenceID(csi);
 			sequencing.setConsensusSequenceLength(csl);
 		}
 		else if (isConsensus(ad)) {
-			String csi = ad.getDocument().getHiddenField(cache_name);
-			String csl = ad.getDocument().getField(consensusSequenceLength);
+			String csi = ad.getDocument().getHiddenField(override_cache_name);
+			if (csi == null) {
+				csi = ad.getDocument().getHiddenField(cache_name);
+			}
+			String csl = notes.get(NucleotideLengthCode_Bold);
 			sequencing.setConsensusSequenceID(csi);
 			sequencing.setConsensusSequenceLength(csl);
 		}
 		else {
-			if (ad.getPluginDocument() instanceof XMLSerialisableRootElement) {
-				XMLSerialisableRootElement e = (XMLSerialisableRootElement) ad.getPluginDocument();
-				sequencing.setConsensusSequenceID(e.getName());
-			}
-			sequencing.setConsensusSequenceLength(notes.get(NucleotideLengthCode_Bold));
+			sequencing.setConsensusSequenceID(null);
+			sequencing.setConsensusSequenceLength(null);
+			sequencing.setConsensusSequenceQuality(null);
 		}
 		return sequencing;
 	}
