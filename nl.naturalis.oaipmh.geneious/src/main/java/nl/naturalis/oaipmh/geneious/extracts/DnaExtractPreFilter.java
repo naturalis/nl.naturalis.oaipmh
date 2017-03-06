@@ -26,9 +26,6 @@ public class DnaExtractPreFilter implements IAnnotatedDocumentPreFilter {
 
 	public DnaExtractPreFilter()
 	{
-		if (logger.isDebugEnabled()) {
-			logger.debug("Instantiating {}", getClass().getSimpleName());
-		}
 	}
 
 	@Override

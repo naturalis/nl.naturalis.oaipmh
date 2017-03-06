@@ -42,9 +42,6 @@ public class SharedPostFilter implements IAnnotatedDocumentPostFilter {
 
 	public SharedPostFilter()
 	{
-		if (logger.isDebugEnabled()) {
-			logger.debug("Instantiating {}", getClass().getSimpleName());
-		}
 	}
 
 	@Override

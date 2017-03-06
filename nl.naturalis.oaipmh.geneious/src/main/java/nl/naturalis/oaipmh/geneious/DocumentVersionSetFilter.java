@@ -28,9 +28,6 @@ public class DocumentVersionSetFilter implements IAnnotatedDocumentSetFilter {
 
 	public DocumentVersionSetFilter()
 	{
-		if (logger.isDebugEnabled()) {
-			logger.debug("Instantiating {}", getClass().getSimpleName());
-		}
 	}
 
 	/**

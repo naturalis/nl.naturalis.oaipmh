@@ -33,9 +33,6 @@ public class SpecimenSetFilter implements IAnnotatedDocumentSetFilter {
 
 	public SpecimenSetFilter()
 	{
-		if (logger.isDebugEnabled()) {
-			logger.debug("Instantiating {}", getClass().getSimpleName());
-		}
 	}
 
 	@Override

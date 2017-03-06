@@ -21,9 +21,6 @@ public class ContigConsensusSetFilter implements IAnnotatedDocumentSetFilter {
 
 	public ContigConsensusSetFilter()
 	{
-		if (logger.isDebugEnabled()) {
-			logger.debug("Instantiating {}", getClass().getSimpleName());
-		}
 	}
 
 	@Override

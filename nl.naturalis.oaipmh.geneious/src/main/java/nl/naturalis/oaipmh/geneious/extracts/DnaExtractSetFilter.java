@@ -34,9 +34,6 @@ public class DnaExtractSetFilter implements IAnnotatedDocumentSetFilter {
 
 	public DnaExtractSetFilter()
 	{
-		if (logger.isDebugEnabled()) {
-			logger.debug("Instantiating {}", getClass().getSimpleName());
-		}
 	}
 
 	@Override

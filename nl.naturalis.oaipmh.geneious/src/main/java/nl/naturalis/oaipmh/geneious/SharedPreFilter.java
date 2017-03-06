@@ -35,9 +35,6 @@ public class SharedPreFilter implements IAnnotatedDocumentPreFilter {
 
 	public SharedPreFilter()
 	{
-		if (logger.isDebugEnabled()) {
-			logger.debug("Instantiating {}", getClass().getSimpleName());
-		}
 	}
 
 	@Override
