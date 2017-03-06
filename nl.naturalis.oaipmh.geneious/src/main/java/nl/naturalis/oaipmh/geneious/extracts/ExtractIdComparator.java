@@ -1,9 +1,12 @@
 package nl.naturalis.oaipmh.geneious.extracts;
 
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractIDCode_Samples;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.MarkerCode_Seq;
+
 import java.util.Comparator;
 
 import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
-import nl.naturalis.oaipmh.geneious.DocumentNotes.Note;
+import nl.naturalis.oaipmh.geneious.specimens.SpecimenSetFilter;
 
 /**
  * A {@link Comparator} for {@link AnnotatedDocument} instances that, per DNA
@@ -23,16 +26,20 @@ public class ExtractIdComparator implements Comparator<AnnotatedDocument> {
 	@Override
 	public int compare(AnnotatedDocument ad0, AnnotatedDocument ad1)
 	{
-		String id0 = ad0.getDocument().getNotes().get(Note.ExtractIDCode_Samples);
-		String id1 = ad0.getDocument().getNotes().get(Note.ExtractIDCode_Samples);
-		int i = id0.compareTo(id1);
-		if (i != 0)
-			return i;
-		String marker0 = ad0.getDocument().getNotes().get(Note.MarkerCode_Seq);
-		String marker1 = ad0.getDocument().getNotes().get(Note.MarkerCode_Seq);
-		i = marker0.compareTo(marker1);
-		if (i != 0)
-			return i;
-		return ad1.getId() - ad0.getId();
+		String s0 = ad0.getDocument().getNotes().get(ExtractIDCode_Samples);
+		String s1 = ad1.getDocument().getNotes().get(ExtractIDCode_Samples);
+		if (s0.equals(s1)) {
+			s0 = ad0.getDocument().getNotes().get(MarkerCode_Seq);
+			s1 = ad1.getDocument().getNotes().get(MarkerCode_Seq);
+			if (s0.equals(s1)) {
+				if (ad0.getId() > ad1.getId()) {
+					ad1.doNotOutput = true;
+				}
+				else {
+					ad0.doNotOutput = true;
+				}
+			}
+		}
+		return 0;
 	}
 }

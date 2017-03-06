@@ -41,22 +41,20 @@ public class SpecimenSetFilter implements IAnnotatedDocumentSetFilter {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Applying filter to {} AnnotatedDocument instances", input.size());
 			String arg0 = SpecimenRegNoComparator.class.getSimpleName();
-			logger.debug("Sorting instances using {}", arg0);
+			logger.debug("Marking duplicates using {}", arg0);
 		}
 		Collections.sort(input, new SpecimenRegNoComparator());
-		String prevRegNo = "";
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
-		DocumentNotes.Note note = RegistrationNumberCode_Samples;
 		for (AnnotatedDocument ad : input) {
-			String regNo = ad.getDocument().getNotes().get(note);
-			if (regNo.equals(prevRegNo)) {
+			if (ad.doNotOutput) {
 				if (logger.isDebugEnabled()) {
+					DocumentNotes.Note note = RegistrationNumberCode_Samples;
+					String regNo = ad.getDocument().getNotes().get(note);
 					logger.debug("Found duplicate {}: {}", note, regNo);
 				}
 				continue;
 			}
 			result.add(ad);
-			prevRegNo = regNo;
 		}
 		if (logger.isDebugEnabled()) {
 			int i = input.size() - result.size();

@@ -22,30 +22,33 @@ public class DocumentVersionComparator implements Comparator<AnnotatedDocument> 
 	{
 	}
 
+	/*
+	 * This is a "fake" Comparator, only used to set the
+	 * AnnotatedDocument.doNotOutput field when Collections.sort() is called.
+	 * The sort order won't be affected when using this comparator, since this
+	 * method always returns 0.
+	 */
 	@Override
 	public int compare(AnnotatedDocument ad0, AnnotatedDocument ad1)
 	{
-		String ad0ExtractIdCode = ad0.getDocument().getNote(ExtractIDCode_Samples);
-		String ad1ExtractIdCode = ad1.getDocument().getNote(ExtractIDCode_Samples);
-		if (!ad0ExtractIdCode.equals(ad1ExtractIdCode)) {
-			return 0;
-		}
-		String ad0MarkerCode = ad0.getDocument().getNote(MarkerCode_Seq);
-		String ad1MarkerCode = ad1.getDocument().getNote(MarkerCode_Seq);
-		if (!ad0MarkerCode.equals(ad1MarkerCode)) {
-			return 0;
-		}
-		String ad0DocumentVersion = ad0.getDocument().getNote(DocumentVersionCode_Seq);
-		String ad1DocumentVersion = ad1.getDocument().getNote(DocumentVersionCode_Seq);
-		int i0 = Integer.parseInt(ad0DocumentVersion);
-		int i1 = Integer.parseInt(ad1DocumentVersion);
-		if (i0 < i1) {
-			ad0.doNotOutput = true;
-		}
-		else if (i0 > i1) {
-			ad1.doNotOutput = true;
+		String s0 = ad0.getDocument().getNote(ExtractIDCode_Samples);
+		String s1 = ad1.getDocument().getNote(ExtractIDCode_Samples);
+		if (s0.equals(s1)) {
+			s0 = ad0.getDocument().getNote(MarkerCode_Seq);
+			s1 = ad1.getDocument().getNote(MarkerCode_Seq);
+			if (s0.equals(s1)) {
+				s0 = ad0.getDocument().getNote(DocumentVersionCode_Seq);
+				s1 = ad1.getDocument().getNote(DocumentVersionCode_Seq);
+				int i0 = Integer.parseInt(s0);
+				int i1 = Integer.parseInt(s1);
+				if (i0 < i1) {
+					ad0.doNotOutput = true;
+				}
+				else if (i0 > i1) {
+					ad1.doNotOutput = true;
+				}
+			}
 		}
 		return 0;
 	}
-
 }

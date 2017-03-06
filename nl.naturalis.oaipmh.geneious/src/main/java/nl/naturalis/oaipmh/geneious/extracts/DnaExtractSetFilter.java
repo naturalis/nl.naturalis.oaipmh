@@ -42,25 +42,21 @@ public class DnaExtractSetFilter implements IAnnotatedDocumentSetFilter {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Applying filter to {} AnnotatedDocument instances", input.size());
 			String arg0 = ExtractIdComparator.class.getSimpleName();
-			logger.debug("Sorting instances using {}", arg0);
+			logger.debug("Marking duplicates using {}", arg0);
 		}
 		Collections.sort(input, new ExtractIdComparator());
-		String prevID = "";
-		String prevMarker = "";
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
 		for (AnnotatedDocument ad : input) {
-			String id = ad.getDocument().getNotes().get(ExtractIDCode_Samples);
-			String marker = ad.getDocument().getNotes().get(MarkerCode_Seq);
-			if (id.equals(prevID) && marker.equals(prevMarker)) {
+			if (ad.doNotOutput) {
 				if (logger.isDebugEnabled()) {
+					String id = ad.getDocument().getNotes().get(ExtractIDCode_Samples);
+					String marker = ad.getDocument().getNotes().get(MarkerCode_Seq);
 					String fmt = "Found duplicate {}|{}: {}|{}";
 					logger.debug(fmt, ExtractIDCode_Samples, MarkerCode_Seq, id, marker);
 				}
 				continue;
 			}
 			result.add(ad);
-			prevID = id;
-			prevMarker = marker;
 		}
 		if (logger.isDebugEnabled()) {
 			int i = input.size() - result.size();

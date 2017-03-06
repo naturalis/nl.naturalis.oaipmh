@@ -35,7 +35,7 @@ public class ContigConsensusSetFilter implements IAnnotatedDocumentSetFilter {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Applying filter to {} AnnotatedDocument instances", input.size());
 			String arg0 = ContigConsensusComparator.class.getSimpleName();
-			logger.debug("Sorting instances using {}", arg0);
+			logger.debug("Marking duplicates using {}", arg0);
 		}
 		Collections.sort(input, new ContigConsensusComparator());
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());

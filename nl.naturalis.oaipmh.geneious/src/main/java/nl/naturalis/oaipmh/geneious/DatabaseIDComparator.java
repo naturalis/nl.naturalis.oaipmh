@@ -18,6 +18,7 @@ public class DatabaseIDComparator implements Comparator<AnnotatedDocument> {
 	@Override
 	public int compare(AnnotatedDocument ad0, AnnotatedDocument ad1)
 	{
+		/* Sort in reverse order */
 		return ad1.getId() - ad0.getId();
 	}
 

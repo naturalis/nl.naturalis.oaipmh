@@ -33,9 +33,6 @@ public class DnaExtractPlateSetFilter implements IAnnotatedDocumentSetFilter {
 
 	public DnaExtractPlateSetFilter()
 	{
-		if (logger.isDebugEnabled()) {
-			logger.debug("Instantiating {}", getClass().getSimpleName());
-		}
 	}
 
 	@Override
@@ -44,25 +41,20 @@ public class DnaExtractPlateSetFilter implements IAnnotatedDocumentSetFilter {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Applying filter {} AnnotatedDocument instances", input.size());
 			String arg0 = PlateNumberComparator.class.getSimpleName();
-			logger.debug("Sorting instances using {}", arg0);
+			logger.debug("Marking duplicates using {}", arg0);
 		}
 		Collections.sort(input, new PlateNumberComparator());
-		if (logger.isDebugEnabled()) {
-			logger.debug("Filtering ...");
-		}
-		String prevPlateNo = "";
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
-		DocumentNotes.Note note = ExtractPlateNumberCode_Samples;
 		for (AnnotatedDocument ad : input) {
-			String plateNo = ad.getDocument().getNotes().get(note);
-			if (plateNo.equals(prevPlateNo)) {
+			if (ad.doNotOutput) {
 				if (logger.isDebugEnabled()) {
+					DocumentNotes.Note note = ExtractPlateNumberCode_Samples;
+					String plateNo = ad.getDocument().getNotes().get(note);
 					logger.debug("Found duplicate {}: {}", note, plateNo);
 				}
 				continue;
 			}
 			result.add(ad);
-			prevPlateNo = plateNo;
 		}
 		if (logger.isDebugEnabled()) {
 			int i = input.size() - result.size();
