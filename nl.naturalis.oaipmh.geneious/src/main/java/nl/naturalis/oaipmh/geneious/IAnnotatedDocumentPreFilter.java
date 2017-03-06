@@ -29,4 +29,7 @@ public interface IAnnotatedDocumentPreFilter {
 	 */
 	boolean accept(ResultSet rs) throws SQLException;
 
+	int getNumAccepted();
+
+	int getNumDiscarded();
 }

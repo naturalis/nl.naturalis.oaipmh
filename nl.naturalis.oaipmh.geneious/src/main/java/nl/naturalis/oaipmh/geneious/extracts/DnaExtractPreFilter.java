@@ -21,8 +21,14 @@ public class DnaExtractPreFilter implements IAnnotatedDocumentPreFilter {
 	private static final Logger logger = LogManager.getLogger(DnaExtractPreFilter.class);
 	private static final String[] SEARCH_STRINGS = new String[] { "<ExtractIDCode_Samples>" };
 
+	private int numAccepted;
+	private int numDiscarded;
+
 	public DnaExtractPreFilter()
 	{
+		if (logger.isDebugEnabled()) {
+			logger.debug("Instantiating {}", getClass().getSimpleName());
+		}
 	}
 
 	@Override
@@ -36,10 +42,24 @@ public class DnaExtractPreFilter implements IAnnotatedDocumentPreFilter {
 					String fmt = "Record discarded: missing \"{}\" in document_xml";
 					logger.debug(fmt, s);
 				}
+				++numDiscarded;
 				return false;
 			}
 		}
+		++numAccepted;
 		return true;
+	}
+
+	@Override
+	public int getNumAccepted()
+	{
+		return numAccepted;
+	}
+
+	@Override
+	public int getNumDiscarded()
+	{
+		return numDiscarded;
 	}
 
 }

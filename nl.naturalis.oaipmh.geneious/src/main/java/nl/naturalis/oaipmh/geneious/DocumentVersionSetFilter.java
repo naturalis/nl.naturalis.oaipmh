@@ -22,10 +22,16 @@ import org.apache.logging.log4j.Logger;
  */
 public class DocumentVersionSetFilter implements IAnnotatedDocumentSetFilter {
 
-	@SuppressWarnings("unused")
 	private static final Logger logger = LogManager.getLogger(DocumentVersionSetFilter.class);
 
 	private boolean useReferenceComparator;
+
+	public DocumentVersionSetFilter()
+	{
+		if (logger.isDebugEnabled()) {
+			logger.debug("Instantiating {}", getClass().getSimpleName());
+		}
+	}
 
 	/**
 	 * Whether or not to also apply filtering by means of a
@@ -65,9 +71,12 @@ public class DocumentVersionSetFilter implements IAnnotatedDocumentSetFilter {
 
 	private static List<AnnotatedDocument> filterOldDocumentVersions(List<AnnotatedDocument> input)
 	{
+		if (logger.isDebugEnabled()) {
+			logger.debug("Applying filter to {} AnnotatedDocument instances", input.size());
+			String arg0 = DocumentVersionComparator.class.getSimpleName();
+			logger.debug("Sorting instances using {}", arg0);
+		}
 		Collections.sort(input, new DocumentVersionComparator());
-		// String prevExtractId = "";
-		// String prevMarker = "";
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
 		for (AnnotatedDocument ad : input) {
 			if (ad.doNotOutput) {
@@ -75,17 +84,11 @@ public class DocumentVersionSetFilter implements IAnnotatedDocumentSetFilter {
 			}
 			result.add(ad);
 		}
-		// when using compare_old() in comparator:
-		// for (AnnotatedDocument ad : input) {
-		// String extractId =
-		// ad.getDocument().getNotes().get(Note.ExtractIDCode_Samples);
-		// String marker = ad.getDocument().getNotes().get(Note.MarkerCode_Seq);
-		// if (extractId.equals(prevExtractId) && marker.equals(prevMarker))
-		// continue;
-		// result.add(ad);
-		// prevExtractId = extractId;
-		// prevMarker = marker;
-		// }
+		if (logger.isDebugEnabled()) {
+			int i = input.size() - result.size();
+			logger.debug("Number of duplicates found and removed: {}", i);
+			logger.debug("Number of instances remaining: {}", result.size());
+		}
 		return result;
 	}
 

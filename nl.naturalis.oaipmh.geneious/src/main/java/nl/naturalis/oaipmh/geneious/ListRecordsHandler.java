@@ -117,6 +117,9 @@ public abstract class ListRecordsHandler {
 		if (annotatedDocuments.size() == 0) {
 			throw new OAIPMHException(new NoRecordsMatchError());
 		}
+		if (logger.isDebugEnabled()) {
+			logger.debug("Converting AnnotatedDocument instances to XML");
+		}
 		OAIPMHtype root = createResponseSkeleton(request);
 		ListRecordsType listRecords = oaiFactory.createListRecordsType();
 		root.setListRecords(listRecords);
@@ -237,13 +240,13 @@ public abstract class ListRecordsHandler {
 		finally {
 			disconnect(conn);
 		}
-		logger.debug("Applying set filters");
-		int before = records.size();
 		for (IAnnotatedDocumentSetFilter setFilter : setFilters) {
 			records = setFilter.filter(records);
 		}
-		int filtered = before - records.size();
-		logger.debug("Records discarded by set filters: {}", filtered);
+		if (logger.isDebugEnabled()) {
+			String arg0 = DatabaseIDComparator.class.getSimpleName();
+			logger.debug("Sorting instances using {}", arg0);
+		}
 		Collections.sort(records, new DatabaseIDComparator());
 		return records;
 	}
@@ -253,31 +256,41 @@ public abstract class ListRecordsHandler {
 		List<AnnotatedDocument> records = new ArrayList<>(255);
 		AnnotatedDocumentFactory factory = new AnnotatedDocumentFactory();
 		int numRows = 0;
-		int preFiltered = 0;
-		int postFiltered = 0;
 		LOOP: while (rs.next()) {
 			numRows++;
 			if (logger.isDebugEnabled()) {
-				logger.debug("Processing annotated_document record with id {}", rs.getInt("id"));
+				logger.debug("Processing record with id {}", rs.getInt("id"));
 			}
 			for (IAnnotatedDocumentPreFilter preFilter : preFilters) {
 				if (!preFilter.accept(rs)) {
-					preFiltered++;
 					continue LOOP;
 				}
 			}
 			AnnotatedDocument record = factory.build(rs);
 			for (IAnnotatedDocumentPostFilter postFilter : postFilters) {
 				if (!postFilter.accept(record)) {
-					postFiltered++;
 					continue LOOP;
 				}
 			}
 			records.add(record);
 		}
-		logger.debug("Records retrieved from database: {}", numRows);
-		logger.debug("Records discarded by pre filters: {}", preFiltered);
-		logger.debug("Records discarded by post filters: {}", postFiltered);
+		if (logger.isDebugEnabled()) {
+			logger.debug("Number of records retrieved from database: {}", numRows);
+			String filter;
+			for (IAnnotatedDocumentPreFilter pf : preFilters) {
+				filter = pf.getClass().getSimpleName();
+				logger.debug("Number of records discarded by {}: {}", filter, pf.getNumDiscarded());
+				logger.debug("Number of records accepted by {}: {}", filter, pf.getNumAccepted());
+			}
+			for (IAnnotatedDocumentPostFilter pf : postFilters) {
+				filter = pf.getClass().getSimpleName();
+				logger.debug("Number of AnnotatedDocument instances discarded by {}: {}", filter,
+						pf.getNumDiscarded());
+				logger.debug("Number of AnnotatedDocument instances accepted by {}: {}", filter,
+						pf.getNumAccepted());
+			}
+			logger.debug("Number of AnnotatedDocument instances remaining: {}", records.size());
+		}
 		return records;
 	}
 

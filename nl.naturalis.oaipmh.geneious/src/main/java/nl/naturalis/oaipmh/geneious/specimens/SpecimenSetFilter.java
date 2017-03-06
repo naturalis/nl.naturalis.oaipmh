@@ -1,13 +1,17 @@
 package nl.naturalis.oaipmh.geneious.specimens;
 
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.RegistrationNumberCode_Samples;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
 import nl.naturalis.oaipmh.geneious.DocumentNotes;
-import nl.naturalis.oaipmh.geneious.DocumentNotes.Note;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentSetFilter;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A {@link IAnnotatedDocumentSetFilter set-filter} for Specimens. Ensures that
@@ -25,24 +29,43 @@ import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentSetFilter;
  */
 public class SpecimenSetFilter implements IAnnotatedDocumentSetFilter {
 
+	private static final Logger logger = LogManager.getLogger(SpecimenSetFilter.class);
+
 	public SpecimenSetFilter()
 	{
+		if (logger.isDebugEnabled()) {
+			logger.debug("Instantiating {}", getClass().getSimpleName());
+		}
 	}
 
 	@Override
 	public List<AnnotatedDocument> filter(List<AnnotatedDocument> input)
 	{
+		if (logger.isDebugEnabled()) {
+			logger.debug("Applying filter to {} AnnotatedDocument instances", input.size());
+			String arg0 = SpecimenRegNoComparator.class.getSimpleName();
+			logger.debug("Sorting instances using {}", arg0);
+		}
 		Collections.sort(input, new SpecimenRegNoComparator());
 		String prevRegNo = "";
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
+		DocumentNotes.Note note = RegistrationNumberCode_Samples;
 		for (AnnotatedDocument ad : input) {
-			String regNo = ad.getDocument().getNotes().get(Note.RegistrationNumberCode_Samples);
-			if (regNo.equals(prevRegNo))
+			String regNo = ad.getDocument().getNotes().get(note);
+			if (regNo.equals(prevRegNo)) {
+				if (logger.isDebugEnabled()) {
+					logger.debug("Found duplicate {}: {}", note, regNo);
+				}
 				continue;
+			}
 			result.add(ad);
 			prevRegNo = regNo;
 		}
+		if (logger.isDebugEnabled()) {
+			int i = input.size() - result.size();
+			logger.debug("Number of duplicates found and removed: {}", i);
+			logger.debug("Number of instances remaining: {}", result.size());
+		}
 		return result;
 	}
-
 }

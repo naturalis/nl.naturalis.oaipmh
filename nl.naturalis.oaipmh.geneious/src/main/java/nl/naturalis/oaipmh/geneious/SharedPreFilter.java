@@ -30,8 +30,14 @@ public class SharedPreFilter implements IAnnotatedDocumentPreFilter {
 	private static List<String> acceptableRoots = Arrays.asList("XMLSerialisableRootElement",
 			"DefaultAlignmentDocument");
 
+	private int numAccepted;
+	private int numDiscarded;
+
 	public SharedPreFilter()
 	{
+		if (logger.isDebugEnabled()) {
+			logger.debug("Instantiating {}", getClass().getSimpleName());
+		}
 	}
 
 	@Override
@@ -42,6 +48,7 @@ public class SharedPreFilter implements IAnnotatedDocumentPreFilter {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Record discarded: document_xml column null or empty");
 			}
+			++numDiscarded;
 			return false;
 		}
 		xml = rs.getString("plugin_document_xml");
@@ -49,6 +56,7 @@ public class SharedPreFilter implements IAnnotatedDocumentPreFilter {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Record discarded: plugin_document_xml column null or empty");
 			}
+			++numDiscarded;
 			return false;
 		}
 		String root = getRoot(xml);
@@ -59,12 +67,27 @@ public class SharedPreFilter implements IAnnotatedDocumentPreFilter {
 				break;
 			}
 		}
-		if (!ok && logger.isDebugEnabled()) {
-			logger.debug(
-					"Record discarded: <{}> not relevant for OAI-PMH service (see plugin_document_xml column)",
-					root);
+		if (ok) {
+			++numAccepted;
+			return true;
 		}
-		return ok;
+		if (logger.isDebugEnabled()) {
+			logger.debug("Record discarded: unusable XML in plugin_document_xml column: <{}>", root);
+		}
+		++numDiscarded;
+		return false;
+	}
+
+	@Override
+	public int getNumAccepted()
+	{
+		return numAccepted;
+	}
+
+	@Override
+	public int getNumDiscarded()
+	{
+		return numDiscarded;
 	}
 
 	private static String getRoot(String xml)
@@ -74,4 +97,5 @@ public class SharedPreFilter implements IAnnotatedDocumentPreFilter {
 		x = Math.min(x, y);
 		return xml.substring(1, x);
 	}
+
 }

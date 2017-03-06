@@ -41,7 +41,7 @@ public class GeneiousOAIUtil {
 	}
 
 	/**
-	 * Make sure metadataPrefix argument is "lims2".
+	 * Make sure metadataPrefix argument is "geneious".
 	 * 
 	 * @param request
 	 * @throws OAIPMHException
@@ -71,7 +71,6 @@ public class GeneiousOAIUtil {
 			String user = cfg.required("db.user");
 			String password = cfg.required("db.password");
 			Connection conn = DriverManager.getConnection(dsn, user, password);
-			logger.debug("Connected");
 			return conn;
 		}
 		catch (SQLException e) {

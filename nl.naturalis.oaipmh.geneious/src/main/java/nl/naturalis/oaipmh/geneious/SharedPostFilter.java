@@ -37,8 +37,14 @@ public class SharedPostFilter implements IAnnotatedDocumentPostFilter {
 			MarkerCode_Seq, DocumentVersionCode_Seq, RegistrationNumberCode_Samples,
 			ExtractPlateNumberCode_Samples };
 
+	private int numAccepted;
+	private int numDiscarded;
+
 	public SharedPostFilter()
 	{
+		if (logger.isDebugEnabled()) {
+			logger.debug("Instantiating {}", getClass().getSimpleName());
+		}
 	}
 
 	@Override
@@ -56,6 +62,7 @@ public class SharedPostFilter implements IAnnotatedDocumentPostFilter {
 			if (logger.isDebugEnabled()) {
 				discard("document_xml column contains no usable <note> elements");
 			}
+			++numDiscarded;
 			return false;
 		}
 		for (Note requiredNote : requiredNotes) {
@@ -63,6 +70,7 @@ public class SharedPostFilter implements IAnnotatedDocumentPostFilter {
 				if (logger.isDebugEnabled()) {
 					discard("missing required <note> element: {}", requiredNote);
 				}
+				++numDiscarded;
 				return false;
 			}
 		}
@@ -70,6 +78,7 @@ public class SharedPostFilter implements IAnnotatedDocumentPostFilter {
 			if (logger.isDebugEnabled()) {
 				discard("CRSCode_CRS flag must be set to \"true\"");
 			}
+			++numDiscarded;
 			return false;
 		}
 		if (ad.getPluginDocument() instanceof DefaultAlignmentDocument) {
@@ -78,10 +87,22 @@ public class SharedPostFilter implements IAnnotatedDocumentPostFilter {
 				if (logger.isDebugEnabled()) {
 					discard("<DefaultAlignmentDocument> only considered when is_contig=\"true\"");
 				}
+				++numDiscarded;
 				return false;
 			}
 		}
+		++numAccepted;
 		return true;
+	}
+
+	public int getNumAccepted()
+	{
+		return numAccepted;
+	}
+
+	public int getNumDiscarded()
+	{
+		return numDiscarded;
 	}
 
 	private static void discard(String msg, Object... args)

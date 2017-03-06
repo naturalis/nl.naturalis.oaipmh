@@ -17,8 +17,14 @@ import org.apache.logging.log4j.Logger;
  */
 public class ContigConsensusSetFilter implements IAnnotatedDocumentSetFilter {
 
-	@SuppressWarnings("unused")
 	private static final Logger logger = LogManager.getLogger(ContigConsensusSetFilter.class);
+
+	public ContigConsensusSetFilter()
+	{
+		if (logger.isDebugEnabled()) {
+			logger.debug("Instantiating {}", getClass().getSimpleName());
+		}
+	}
 
 	@Override
 	public List<AnnotatedDocument> filter(List<AnnotatedDocument> input)
@@ -29,6 +35,11 @@ public class ContigConsensusSetFilter implements IAnnotatedDocumentSetFilter {
 	private static List<AnnotatedDocument> filterContigIfConsensusPresent(
 			List<AnnotatedDocument> input)
 	{
+		if (logger.isDebugEnabled()) {
+			logger.debug("Applying filter to {} AnnotatedDocument instances", input.size());
+			String arg0 = ContigConsensusComparator.class.getSimpleName();
+			logger.debug("Sorting instances using {}", arg0);
+		}
 		Collections.sort(input, new ContigConsensusComparator());
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
 		for (AnnotatedDocument ad : input) {
@@ -36,6 +47,11 @@ public class ContigConsensusSetFilter implements IAnnotatedDocumentSetFilter {
 				continue;
 			}
 			result.add(ad);
+		}
+		if (logger.isDebugEnabled()) {
+			int i = input.size() - result.size();
+			logger.debug("Number of duplicates found and removed: {}", i);
+			logger.debug("Number of instances remaining: {}", result.size());
 		}
 		return result;
 	}

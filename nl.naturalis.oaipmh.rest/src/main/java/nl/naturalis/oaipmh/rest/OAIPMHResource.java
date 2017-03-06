@@ -31,7 +31,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.domainobject.util.ConfigObject;
 import org.domainobject.util.IOUtil;
-import org.domainobject.util.debug.BeanPrinter;
 import org.openarchives.oai._2.OAIPMHtype;
 
 /**
@@ -178,8 +177,7 @@ public class OAIPMHResource {
 				return xmlResponse(skeleton);
 			}
 			if (logger.isDebugEnabled()) {
-				logger.debug("Request object sent to repository:\n{}",
-						BeanPrinter.toString(request));
+				logger.debug("Sending request to OAI repository");
 			}
 			repository.init(request);
 			return new OAIPMHStream(request, repository).stream();
@@ -208,18 +206,19 @@ public class OAIPMHResource {
 
 	private static void logRequest(String repoGroup, String repoName)
 	{
-		if (logger.isInfoEnabled()) {
-			String msg;
-			if (repoName == null) {
-				String fmt = "Receiving request for OAI repository %s";
-				msg = String.format(fmt, repoGroup);
-			}
-			else {
-				String fmt = "Receiving request for OAI repository %s/%s";
-				msg = String.format(fmt, repoGroup, repoName);
-			}
-			logger.info(msg);
+		if (logger.isDebugEnabled()) {
+			logger.debug("********* NEW REQUEST *********");
 		}
+		String msg;
+		if (repoName == null) {
+			String fmt = "Receiving request for OAI repository %s";
+			msg = String.format(fmt, repoGroup);
+		}
+		else {
+			String fmt = "Receiving request for OAI repository %s/%s";
+			msg = String.format(fmt, repoGroup, repoName);
+		}
+		logger.info(msg);
 	}
 
 }

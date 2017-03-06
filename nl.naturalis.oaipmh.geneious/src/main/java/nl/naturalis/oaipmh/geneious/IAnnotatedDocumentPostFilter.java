@@ -24,4 +24,8 @@ public interface IAnnotatedDocumentPostFilter {
 	 */
 	boolean accept(AnnotatedDocument ad);
 
+	int getNumAccepted();
+
+	int getNumDiscarded();
+
 }

@@ -20,8 +20,14 @@ public class DnaExtractPlatePreFilter implements IAnnotatedDocumentPreFilter {
 
 	private static final Logger logger = LogManager.getLogger(DnaExtractPlatePreFilter.class);
 
+	private int numAccepted;
+	private int numDiscarded;
+
 	public DnaExtractPlatePreFilter()
 	{
+		if (logger.isDebugEnabled()) {
+			logger.debug("Instantiating {}", getClass().getSimpleName());
+		}
 	}
 
 	@Override
@@ -33,9 +39,22 @@ public class DnaExtractPlatePreFilter implements IAnnotatedDocumentPreFilter {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Record discarded: document_xml column does not contain string \"<ExtractPlateNumberCode_Samples>\"");
 			}
+			++numDiscarded;
 			return false;
 		}
+		++numAccepted;
 		return true;
 	}
 
+	@Override
+	public int getNumAccepted()
+	{
+		return numAccepted;
+	}
+
+	@Override
+	public int getNumDiscarded()
+	{
+		return numDiscarded;
+	}
 }
