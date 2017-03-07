@@ -28,42 +28,37 @@ public class ContigConsensusComparator implements Comparator<AnnotatedDocument> 
 	{
 	}
 
-	/*
-	 * This is a "fake" Comparator, only used to set the
-	 * AnnotatedDocument.doNotOutput field when Collections.sort() is called.
-	 * The sort order won't be affected when using this comparator, since this
-	 * method always returns 0.
-	 */
 	@Override
 	public int compare(AnnotatedDocument ad0, AnnotatedDocument ad1)
 	{
-		if (ad0.doNotOutput && ad1.doNotOutput) {
-			return 0;
-		}
 		String descr0 = ad0.getDocument().getHiddenField(description);
 		if (descr0 == null) {
-			return 0;
+			// Just some negative integer that stands out when debugging
+			return -8192;
 		}
 		String descr1 = ad1.getDocument().getHiddenField(description);
 		if (descr1 == null) {
-			return 0;
+			return 8192;
 		}
-		if (!descr0.equals(descr1)) {
-			return 0;
-		}
-		if (isContig(ad0) && isConsensus(ad1)) {
-			if (logger.isDebugEnabled()) {
-				logger.debug(MSG, ad0.getId(), ad1.getId());
+		int i = descr0.compareTo(descr1);
+		if (i == 0) {
+			if (isContig(ad0) && isConsensus(ad1)) {
+				if (logger.isDebugEnabled()) {
+					logger.debug(MSG, ad0.getId(), ad1.getId());
+				}
+				ad0.doNotOutput = true;
+				// Consensus record BEFORE contig record;
+				return Integer.MAX_VALUE;
 			}
-			ad0.doNotOutput = true;
-		}
-		else if (isContig(ad1) && isConsensus(ad0)) {
-			if (logger.isDebugEnabled()) {
-				logger.debug(MSG, ad1.getId(), ad0.getId());
+			else if (isContig(ad1) && isConsensus(ad0)) {
+				if (logger.isDebugEnabled()) {
+					logger.debug(MSG, ad1.getId(), ad0.getId());
+				}
+				ad1.doNotOutput = true;
+				return Integer.MIN_VALUE;
 			}
-			ad1.doNotOutput = true;
 		}
-		return 0;
+		return i;
 	}
 
 }

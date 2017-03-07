@@ -27,7 +27,7 @@ public class ContigConsensusComparatorTest {
 
 		int i = new ContigConsensusComparator().compare(contig, consensus);
 
-		assertEquals("01", 0, i);
+		assertEquals("01", -8192, i);
 		assertFalse("02", contig.doNotOutput);
 		assertFalse("03", consensus.doNotOutput);
 	}
@@ -54,7 +54,7 @@ public class ContigConsensusComparatorTest {
 
 		int i = new ContigConsensusComparator().compare(contig, consensus);
 
-		assertEquals("01", 0, i);
+		assertEquals("01", Integer.MAX_VALUE, i);
 		assertTrue("02", contig.doNotOutput);
 		assertFalse("03", consensus.doNotOutput);
 	}

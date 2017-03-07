@@ -7,7 +7,6 @@ import java.util.List;
 import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
 import nl.naturalis.oaipmh.geneious.DocumentNotes;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentSetFilter;
-import nl.naturalis.oaipmh.geneious.plates.PlateNumberComparator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

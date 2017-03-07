@@ -33,28 +33,29 @@ public class SpecimenUnitIDComparator implements Comparator<AnnotatedDocument> {
 	@Override
 	public int compare(AnnotatedDocument ad0, AnnotatedDocument ad1)
 	{
-		if (ad0.doNotOutput && ad1.doNotOutput) {
-			return 0;
-		}
-		String regNo0 = ad0.getDocument().getNotes().get(RegistrationNumberCode_Samples);
-		String regNo1 = ad1.getDocument().getNotes().get(RegistrationNumberCode_Samples);
-		if (regNo0.equals(regNo1)) {
-			if (ad0.getId() > ad1.getId()) {
+		DocumentNotes.Note note = RegistrationNumberCode_Samples;
+		String unitId0 = ad0.getDocument().getNotes().get(note);
+		String unitId1 = ad1.getDocument().getNotes().get(note);
+		int i = unitId0.compareTo(unitId1);
+		if (i == 0) {
+			// Higher database IDs BEFORE lower database IDs:
+			i = ad1.getId() - ad0.getId();
+			if (i < 0) {
+				// Then ad0 has a greater database ID than ad1; remove ad1
 				if (logger.isDebugEnabled()) {
-					DocumentNotes.Note note0 = RegistrationNumberCode_Samples;
-					logger.debug(MSG, ad1.getId(), note0, regNo0, ad0.getId());
+					logger.debug(MSG, ad1.getId(), note, unitId0, ad0.getId());
 				}
 				ad1.doNotOutput = true;
 			}
 			else {
 				if (logger.isDebugEnabled()) {
-					DocumentNotes.Note note0 = RegistrationNumberCode_Samples;
-					logger.debug(MSG, ad0.getId(), note0, regNo0, ad1.getId());
+					logger.debug(MSG, ad0.getId(), note, unitId0, ad1.getId());
 				}
 				ad0.doNotOutput = true;
 			}
+			return 0;
 		}
-		return 0;
+		return i;
 	}
 
 }

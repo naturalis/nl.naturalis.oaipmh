@@ -39,33 +39,39 @@ public class DocumentVersionComparator implements Comparator<AnnotatedDocument> 
 	@Override
 	public int compare(AnnotatedDocument ad0, AnnotatedDocument ad1)
 	{
-		if (ad0.doNotOutput && ad1.doNotOutput) {
-			return 0;
-		}
 		String s0 = ad0.getDocument().getNote(ExtractIDCode_Samples);
 		String s1 = ad1.getDocument().getNote(ExtractIDCode_Samples);
-		if (s0.equals(s1)) {
+		int i = s0.compareTo(s1);
+		if (i == 0) {
 			s0 = ad0.getDocument().getNote(MarkerCode_Seq);
 			s1 = ad1.getDocument().getNote(MarkerCode_Seq);
-			if (s0.equals(s1)) {
+			i = s0.compareTo(s1);
+			if (i == 0) {
 				s0 = ad0.getDocument().getNote(DocumentVersionCode_Seq);
 				s1 = ad1.getDocument().getNote(DocumentVersionCode_Seq);
-				int i0 = Integer.parseInt(s0);
-				int i1 = Integer.parseInt(s1);
-				if (i0 < i1) {
+				int version0 = Integer.parseInt(s0);
+				int version1 = Integer.parseInt(s1);
+				// Higher document versions BEFORE lower document versions
+				i = version1 - version0;
+				if (i < 0) {
+					// Then version0 > version1; remove ad1
 					if (logger.isDebugEnabled()) {
-						logger.debug(MSG, ad0.getId(), i0, ad1.getId());
-					}
-					ad0.doNotOutput = true;
-				}
-				else if (i0 > i1) {
-					if (logger.isDebugEnabled()) {
-						logger.debug(MSG, ad1.getId(), i1, ad0.getId());
+						logger.debug(MSG, ad1.getId(), version0, ad0.getId());
 					}
 					ad1.doNotOutput = true;
 				}
+				else if (i > 0) {
+					if (logger.isDebugEnabled()) {
+						logger.debug(MSG, ad0.getId(), version1, ad1.getId());
+					}
+					ad0.doNotOutput = true;
+				}
+				else {
+					String fmt = "Duplicate document version for records with ids {} and {}";
+					logger.error(fmt, ad0.getId(), ad1.getId());
+				}
 			}
 		}
-		return 0;
+		return i;
 	}
 }

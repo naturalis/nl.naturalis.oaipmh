@@ -5,6 +5,7 @@ import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractPlateNumber
 import java.util.Comparator;
 
 import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
+import nl.naturalis.oaipmh.geneious.DocumentNotes;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,26 +33,28 @@ public class PlateNumberComparator implements Comparator<AnnotatedDocument> {
 	@Override
 	public int compare(AnnotatedDocument ad0, AnnotatedDocument ad1)
 	{
-		if (ad0.doNotOutput && ad1.doNotOutput) {
-			return 0;
-		}
-		String pn0 = ad0.getDocument().getNotes().get(ExtractPlateNumberCode_Samples);
-		String pn1 = ad1.getDocument().getNotes().get(ExtractPlateNumberCode_Samples);
-		if (pn0.equals(pn1)) {
-			if (ad0.getId() > ad1.getId()) {
+		DocumentNotes.Note note = ExtractPlateNumberCode_Samples;
+		String pn0 = ad0.getDocument().getNotes().get(note);
+		String pn1 = ad1.getDocument().getNotes().get(note);
+		int i = pn0.compareTo(pn1);
+		if (i == 0) {
+			// Higher database IDs BEFORE lower database IDs:
+			i = ad1.getId() - ad0.getId();
+			if (i < 0) {
+				// Then ad0 has a greater database ID than ad1; remove ad1
 				if (logger.isDebugEnabled()) {
-					logger.debug(MSG, ad1.getId(), ExtractPlateNumberCode_Samples, pn0, ad0.getId());
+					logger.debug(MSG, ad1.getId(), note, pn0, ad0.getId());
 				}
 				ad1.doNotOutput = true;
 			}
 			else {
 				if (logger.isDebugEnabled()) {
-					logger.debug(MSG, ad0.getId(), ExtractPlateNumberCode_Samples, pn0, ad1.getId());
+					logger.debug(MSG, ad0.getId(), note, pn0, ad1.getId());
 				}
 				ad0.doNotOutput = true;
 			}
 		}
-		return 0;
+		return i;
 	}
 
 }

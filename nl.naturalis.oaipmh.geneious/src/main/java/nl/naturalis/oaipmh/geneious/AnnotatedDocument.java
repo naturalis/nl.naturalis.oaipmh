@@ -23,6 +23,30 @@ public class AnnotatedDocument {
 	 */
 	public boolean doNotOutput;
 
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj) {
+			return true;
+		}
+		if (obj != null && obj.getClass() == AnnotatedDocument.class) {
+			return id == ((AnnotatedDocument) obj).id;
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return id;
+	}
+
+	@Override
+	public String toString()
+	{
+		return getClass().getSimpleName() + "[" + id + "]";
+	}
+
 	public int getId()
 	{
 		return id;
