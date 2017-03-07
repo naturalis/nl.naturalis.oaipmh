@@ -130,7 +130,6 @@ public class SharedSetFilterTest {
 				ad9, ad10);
 
 		DocumentVersionSetFilter ssf = new DocumentVersionSetFilter();
-		ssf.setUseReferenceComparator(false);
 		List<AnnotatedDocument> output = ssf.filter(input);
 		assertEquals("01", 5, output.size());
 		assertEquals("02", ad2, output.get(0));

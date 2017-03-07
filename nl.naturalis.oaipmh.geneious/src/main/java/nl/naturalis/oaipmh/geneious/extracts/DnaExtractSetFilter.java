@@ -1,8 +1,5 @@
 package nl.naturalis.oaipmh.geneious.extracts;
 
-import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractIDCode_Samples;
-import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.MarkerCode_Seq;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,22 +38,15 @@ public class DnaExtractSetFilter implements IAnnotatedDocumentSetFilter {
 	{
 		if (logger.isDebugEnabled()) {
 			logger.debug("Applying filter to {} AnnotatedDocument instances", input.size());
-			String arg0 = ExtractIdComparator.class.getSimpleName();
-			logger.debug("Marking duplicates using {}", arg0);
+			logger.debug("Marking records for removal using {}",
+					ExtractIdComparator.class.getSimpleName());
 		}
 		Collections.sort(input, new ExtractIdComparator());
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
 		for (AnnotatedDocument ad : input) {
-			if (ad.doNotOutput) {
-				if (logger.isDebugEnabled()) {
-					String id = ad.getDocument().getNotes().get(ExtractIDCode_Samples);
-					String marker = ad.getDocument().getNotes().get(MarkerCode_Seq);
-					String fmt = "Found duplicate {}|{}: {}|{}";
-					logger.debug(fmt, ExtractIDCode_Samples, MarkerCode_Seq, id, marker);
-				}
-				continue;
+			if (!ad.doNotOutput) {
+				result.add(ad);
 			}
-			result.add(ad);
 		}
 		if (logger.isDebugEnabled()) {
 			int i = input.size() - result.size();

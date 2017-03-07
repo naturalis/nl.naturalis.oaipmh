@@ -26,24 +26,17 @@ public class ContigConsensusSetFilter implements IAnnotatedDocumentSetFilter {
 	@Override
 	public List<AnnotatedDocument> filter(List<AnnotatedDocument> input)
 	{
-		return filterContigIfConsensusPresent(input);
-	}
-
-	private static List<AnnotatedDocument> filterContigIfConsensusPresent(
-			List<AnnotatedDocument> input)
-	{
 		if (logger.isDebugEnabled()) {
 			logger.debug("Applying filter to {} AnnotatedDocument instances", input.size());
-			String arg0 = ContigConsensusComparator.class.getSimpleName();
-			logger.debug("Marking duplicates using {}", arg0);
+			logger.debug("Marking records for removal using {}",
+					ContigConsensusComparator.class.getSimpleName());
 		}
 		Collections.sort(input, new ContigConsensusComparator());
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
 		for (AnnotatedDocument ad : input) {
-			if (ad.doNotOutput) {
-				continue;
+			if (!ad.doNotOutput) {
+				result.add(ad);
 			}
-			result.add(ad);
 		}
 		if (logger.isDebugEnabled()) {
 			int i = input.size() - result.size();

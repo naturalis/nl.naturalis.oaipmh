@@ -24,62 +24,24 @@ public class DocumentVersionSetFilter implements IAnnotatedDocumentSetFilter {
 
 	private static final Logger logger = LogManager.getLogger(DocumentVersionSetFilter.class);
 
-	private boolean useReferenceComparator;
-
 	public DocumentVersionSetFilter()
 	{
-	}
-
-	/**
-	 * Whether or not to also apply filtering by means of a
-	 * {@link ReferenceComparator}.
-	 * 
-	 * @deprecated Just use WHERE clause on ref_count column
-	 * 
-	 * @return
-	 */
-	public boolean isUseReferenceComparator()
-	{
-		return useReferenceComparator;
-	}
-
-	/**
-	 * Determine whether or not to also apply filtering by means of a
-	 * {@link ReferenceComparator}.
-	 * 
-	 * @deprecated
-	 * 
-	 * @param useReferenceComparator
-	 */
-	public void setUseReferenceComparator(boolean useReferenceComparator)
-	{
-		this.useReferenceComparator = useReferenceComparator;
 	}
 
 	@Override
 	public List<AnnotatedDocument> filter(List<AnnotatedDocument> input)
 	{
-		input = filterOldDocumentVersions(input);
-		if (useReferenceComparator) {
-			input = filterReferencedDocuments(input);
-		}
-		return input;
-	}
-
-	private static List<AnnotatedDocument> filterOldDocumentVersions(List<AnnotatedDocument> input)
-	{
 		if (logger.isDebugEnabled()) {
 			logger.debug("Applying filter to {} AnnotatedDocument instances", input.size());
-			String arg0 = DocumentVersionComparator.class.getSimpleName();
-			logger.debug("Marking duplicates using {}", arg0);
+			logger.debug("Marking records for removal using {}",
+					DocumentVersionComparator.class.getSimpleName());
 		}
 		Collections.sort(input, new DocumentVersionComparator());
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
 		for (AnnotatedDocument ad : input) {
-			if (ad.doNotOutput) {
-				continue;
+			if (!ad.doNotOutput) {
+				result.add(ad);
 			}
-			result.add(ad);
 		}
 		if (logger.isDebugEnabled()) {
 			int i = input.size() - result.size();
@@ -87,15 +49,6 @@ public class DocumentVersionSetFilter implements IAnnotatedDocumentSetFilter {
 			logger.debug("Number of instances remaining: {}", result.size());
 		}
 		return result;
-	}
-
-	@SuppressWarnings("deprecation")
-	private static List<AnnotatedDocument> filterReferencedDocuments(List<AnnotatedDocument> input)
-	{
-		ReferenceComparator comparator = new ReferenceComparator();
-		Collections.sort(input, comparator);
-		int discarded = comparator.countDispensableRecords();
-		return input.subList(0, input.size() - discarded);
 	}
 
 }

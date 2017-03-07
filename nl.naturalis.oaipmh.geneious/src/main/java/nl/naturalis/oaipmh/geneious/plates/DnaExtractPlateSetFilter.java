@@ -1,7 +1,5 @@
 package nl.naturalis.oaipmh.geneious.plates;
 
-import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractPlateNumberCode_Samples;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,21 +38,15 @@ public class DnaExtractPlateSetFilter implements IAnnotatedDocumentSetFilter {
 	{
 		if (logger.isDebugEnabled()) {
 			logger.debug("Applying filter {} AnnotatedDocument instances", input.size());
-			String arg0 = PlateNumberComparator.class.getSimpleName();
-			logger.debug("Marking duplicates using {}", arg0);
+			logger.debug("Marking records for removal using {}",
+					PlateNumberComparator.class.getSimpleName());
 		}
 		Collections.sort(input, new PlateNumberComparator());
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
 		for (AnnotatedDocument ad : input) {
-			if (ad.doNotOutput) {
-				if (logger.isDebugEnabled()) {
-					DocumentNotes.Note note = ExtractPlateNumberCode_Samples;
-					String plateNo = ad.getDocument().getNotes().get(note);
-					logger.debug("Found duplicate {}: {}", note, plateNo);
-				}
-				continue;
+			if (!ad.doNotOutput) {
+				result.add(ad);
 			}
-			result.add(ad);
 		}
 		if (logger.isDebugEnabled()) {
 			int i = input.size() - result.size();
