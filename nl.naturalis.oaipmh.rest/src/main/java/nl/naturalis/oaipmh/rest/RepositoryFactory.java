@@ -172,7 +172,9 @@ public class RepositoryFactory {
 
 	private static void logConfigLocation(String repoGroup, String location)
 	{
-		logger.info("Loading configuration for {}: {}", repoGroup, location);
+		if (logger.isDebugEnabled()) {
+			logger.debug("Loading configuration for {} repositories: {}", repoGroup, location);
+		}
 	}
 
 }

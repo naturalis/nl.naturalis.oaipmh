@@ -23,7 +23,9 @@ public class DnaExtractPlateOAIRepository extends GeneiousOAIRepository {
 	@Override
 	public void listRecords(OutputStream out) throws OAIPMHException, RepositoryException
 	{
-		logger.info("Instantiating handler for ListRecords request");
+		if (logger.isDebugEnabled()) {
+			logger.debug("Instantiating handler for ListRecords request");
+		}
 		DnaExtractPlateListRecordsHandler handler;
 		handler = new DnaExtractPlateListRecordsHandler(config, request);
 		OAIPMHtype oaipmh = handler.handleRequest();

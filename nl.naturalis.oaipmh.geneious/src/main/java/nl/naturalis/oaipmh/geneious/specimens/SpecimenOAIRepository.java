@@ -29,7 +29,9 @@ public class SpecimenOAIRepository extends GeneiousOAIRepository {
 	@Override
 	public void listRecords(OutputStream out) throws OAIPMHException, RepositoryException
 	{
-		logger.info("Instantiating handler for ListRecords request");
+		if (logger.isDebugEnabled()) {
+			logger.debug("Instantiating handler for ListRecords request");
+		}
 		SpecimenListRecordsHandler handler = new SpecimenListRecordsHandler(config, request);
 		OAIPMHtype oaipmh = handler.handleRequest();
 		if (logger.isTraceEnabled()) {

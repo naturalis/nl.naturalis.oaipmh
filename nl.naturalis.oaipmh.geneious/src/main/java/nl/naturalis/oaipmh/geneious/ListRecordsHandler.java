@@ -119,6 +119,7 @@ public abstract class ListRecordsHandler {
 		}
 		if (logger.isDebugEnabled()) {
 			logger.debug("Converting AnnotatedDocument instances to XML");
+			logger.debug("N.B. set log level to TRACE to see generated XML");
 		}
 		OAIPMHtype root = createResponseSkeleton(request);
 		ListRecordsType listRecords = oaiFactory.createListRecordsType();
@@ -337,15 +338,17 @@ public abstract class ListRecordsHandler {
 
 	private void logResultSetInfo(int resultSetSize)
 	{
-		int pageSize = getPageSize();
-		int offset = request.getPage() * pageSize;
-		int recordsToGo = Math.max(0, resultSetSize - offset - pageSize);
-		int requestsToGo = (int) Math.ceil(recordsToGo / pageSize);
 		logger.info("Records satisfying request: " + resultSetSize);
-		logger.debug("Records served per request: " + pageSize);
-		logger.debug("Remaining records: " + recordsToGo);
-		String fmt = "%s more request%s needed for full harvest";
-		String plural = requestsToGo == 1 ? "" : "s";
-		logger.info(String.format(fmt, requestsToGo, plural));
+		if (logger.isDebugEnabled()) {
+			int pageSize = getPageSize();
+			int offset = request.getPage() * pageSize;
+			int recordsToGo = Math.max(0, resultSetSize - offset - pageSize);
+			int requestsToGo = (int) Math.ceil(recordsToGo / pageSize);
+			logger.debug("Records served per request: " + pageSize);
+			logger.debug("Remaining records: " + recordsToGo);
+			String fmt = "%s more request%s needed for full harvest";
+			String plural = requestsToGo == 1 ? "" : "s";
+			logger.debug(String.format(fmt, requestsToGo, plural));
+		}
 	}
 }

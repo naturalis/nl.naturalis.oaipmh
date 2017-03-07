@@ -43,7 +43,7 @@ public class ContigConsensusComparator implements Comparator<AnnotatedDocument> 
 		int i = descr0.compareTo(descr1);
 		if (i == 0) {
 			if (isContig(ad0) && isConsensus(ad1)) {
-				if (logger.isDebugEnabled()) {
+				if (!ad0.doNotOutput && logger.isDebugEnabled()) {
 					logger.debug(MSG, ad0.getId(), ad1.getId());
 				}
 				ad0.doNotOutput = true;
@@ -51,7 +51,7 @@ public class ContigConsensusComparator implements Comparator<AnnotatedDocument> 
 				return Integer.MAX_VALUE;
 			}
 			else if (isContig(ad1) && isConsensus(ad0)) {
-				if (logger.isDebugEnabled()) {
+				if (!ad1.doNotOutput && logger.isDebugEnabled()) {
 					logger.debug(MSG, ad1.getId(), ad0.getId());
 				}
 				ad1.doNotOutput = true;

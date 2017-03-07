@@ -59,13 +59,13 @@ public class ExtractIdComparator implements Comparator<AnnotatedDocument> {
 				i = ad1.getId() - ad0.getId();
 				if (i < 0) {
 					// Then ad0 has a greater database ID than ad1; remove ad1
-					if (logger.isDebugEnabled()) {
+					if (!ad1.doNotOutput && logger.isDebugEnabled()) {
 						logger.debug(MSG, ad1.getId(), note0, note1, id0, marker0, ad0.getId());
 					}
 					ad1.doNotOutput = true;
 				}
 				else {
-					if (logger.isDebugEnabled()) {
+					if (!ad0.doNotOutput && logger.isDebugEnabled()) {
 						logger.debug(MSG, ad0.getId(), note0, note1, id0, marker0, ad1.getId());
 					}
 					ad0.doNotOutput = true;

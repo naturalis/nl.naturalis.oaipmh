@@ -55,13 +55,13 @@ public class DocumentVersionComparator implements Comparator<AnnotatedDocument> 
 				i = version1 - version0;
 				if (i < 0) {
 					// Then version0 > version1; remove ad1
-					if (logger.isDebugEnabled()) {
+					if (!ad1.doNotOutput && logger.isDebugEnabled()) {
 						logger.debug(MSG, ad1.getId(), version0, ad0.getId());
 					}
 					ad1.doNotOutput = true;
 				}
 				else if (i > 0) {
-					if (logger.isDebugEnabled()) {
+					if (!ad0.doNotOutput && logger.isDebugEnabled()) {
 						logger.debug(MSG, ad0.getId(), version1, ad1.getId());
 					}
 					ad0.doNotOutput = true;
