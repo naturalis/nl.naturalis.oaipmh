@@ -43,7 +43,7 @@ public class SharedPreFilter implements IAnnotatedDocumentPreFilter {
 		String xml = rs.getString("document_xml");
 		if (rs.wasNull() || xml.trim().isEmpty()) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Record discarded: document_xml column null or empty");
+				logger.debug("document_xml column null or empty");
 			}
 			++numDiscarded;
 			return false;
@@ -51,7 +51,7 @@ public class SharedPreFilter implements IAnnotatedDocumentPreFilter {
 		xml = rs.getString("plugin_document_xml");
 		if (rs.wasNull() || (xml = xml.trim()).isEmpty()) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Record discarded: plugin_document_xml column null or empty");
+				logger.debug("plugin_document_xml column null or empty");
 			}
 			++numDiscarded;
 			return false;
@@ -69,7 +69,7 @@ public class SharedPreFilter implements IAnnotatedDocumentPreFilter {
 			return true;
 		}
 		if (logger.isDebugEnabled()) {
-			logger.debug("Record discarded: unusable XML in plugin_document_xml column: <{}>", root);
+			discard("Unusable XML in plugin_document_xml: <{}>", root);
 		}
 		++numDiscarded;
 		return false;
@@ -95,4 +95,8 @@ public class SharedPreFilter implements IAnnotatedDocumentPreFilter {
 		return xml.substring(1, x);
 	}
 
+	private static void discard(String msg, Object... args)
+	{
+		logger.debug("Record discarded. " + msg, args);
+	}
 }

@@ -50,7 +50,7 @@ public class SpecimenSetFilter implements IAnnotatedDocumentSetFilter {
 		}
 		if (logger.isDebugEnabled()) {
 			int i = input.size() - result.size();
-			logger.debug("Number of duplicates found and removed: {}", i);
+			logger.debug("Number of removed instances: {}", i);
 			logger.debug("Number of instances remaining: {}", result.size());
 		}
 		return result;

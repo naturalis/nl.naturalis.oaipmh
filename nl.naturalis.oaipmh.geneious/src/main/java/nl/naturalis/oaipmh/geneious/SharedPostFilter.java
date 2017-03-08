@@ -57,7 +57,7 @@ public class SharedPostFilter implements IAnnotatedDocumentPostFilter {
 		DocumentNotes notes;
 		if ((notes = ad.getDocument().getNotes()) == null) {
 			if (logger.isDebugEnabled()) {
-				discard("document_xml column contains no usable <note> elements");
+				discard("No usable <note> elements in document_xml");
 			}
 			++numDiscarded;
 			return false;
@@ -65,7 +65,7 @@ public class SharedPostFilter implements IAnnotatedDocumentPostFilter {
 		for (Note requiredNote : requiredNotes) {
 			if (notes.get(requiredNote) == null) {
 				if (logger.isDebugEnabled()) {
-					discard("missing required <note> element: {}", requiredNote);
+					discard("Missing required element: <{}>", requiredNote);
 				}
 				++numDiscarded;
 				return false;
@@ -104,7 +104,7 @@ public class SharedPostFilter implements IAnnotatedDocumentPostFilter {
 
 	private static void discard(String msg, Object... args)
 	{
-		logger.debug("Record discarded: " + msg, args);
+		logger.debug("Record discarded. " + msg, args);
 	}
 
 }

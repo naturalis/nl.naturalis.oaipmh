@@ -23,16 +23,6 @@ import org.apache.logging.log4j.Logger;
  */
 public class ExtractIdComparator implements Comparator<AnnotatedDocument> {
 
-	public static void main(String[] args)
-	{
-		String s0 = "Ayco Holleman";
-		String s1 = "Ayco Hollemam ";
-		System.out.println("length s0: " + s0.length());
-		System.out.println("length s1: " + s1.length());
-		System.out.println("diff: " + (s0.length() - s1.length()));
-		System.out.println("comp: " + s1.compareTo(s0));
-	}
-
 	private static final Logger logger = LogManager.getLogger(ExtractIdComparator.class);
 
 	private static final String MSG = "Record with id {} marked for removal. "

@@ -87,7 +87,8 @@ public class GeneiousOAIUtil {
 	{
 		if (conn == null)
 			return;
-		logger.debug("Disconnecting from Geneious database");
+		if (logger.isDebugEnabled())
+			logger.debug("Disconnecting from Geneious database");
 		try {
 			conn.close();
 		}

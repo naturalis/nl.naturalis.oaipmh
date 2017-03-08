@@ -36,7 +36,7 @@ public class DnaExtractPreFilter implements IAnnotatedDocumentPreFilter {
 		for (String s : SEARCH_STRINGS) {
 			if (xml.indexOf(s) == -1) {
 				if (logger.isDebugEnabled()) {
-					String fmt = "Record discarded: missing \"{}\" in document_xml";
+					String fmt = "Record discarded. Missing required element {} in document_xml";
 					logger.debug(fmt, s);
 				}
 				++numDiscarded;

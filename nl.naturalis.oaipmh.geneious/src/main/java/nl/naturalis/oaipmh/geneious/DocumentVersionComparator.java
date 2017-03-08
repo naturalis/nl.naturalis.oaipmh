@@ -30,45 +30,39 @@ public class DocumentVersionComparator implements Comparator<AnnotatedDocument> 
 	{
 	}
 
-	/*
-	 * This is a "fake" Comparator, only used to set the
-	 * AnnotatedDocument.doNotOutput field when Collections.sort() is called.
-	 * The sort order won't be affected when using this comparator, since this
-	 * method always returns 0.
-	 */
 	@Override
 	public int compare(AnnotatedDocument ad0, AnnotatedDocument ad1)
 	{
-		String s0 = ad0.getDocument().getNote(ExtractIDCode_Samples);
-		String s1 = ad1.getDocument().getNote(ExtractIDCode_Samples);
-		int i = s0.compareTo(s1);
+		String e0 = ad0.getDocument().getNote(ExtractIDCode_Samples);
+		String e1 = ad1.getDocument().getNote(ExtractIDCode_Samples);
+		int i = e0.compareTo(e1);
 		if (i == 0) {
-			s0 = ad0.getDocument().getNote(MarkerCode_Seq);
-			s1 = ad1.getDocument().getNote(MarkerCode_Seq);
-			i = s0.compareTo(s1);
+			String m0 = ad0.getDocument().getNote(MarkerCode_Seq);
+			String m1 = ad1.getDocument().getNote(MarkerCode_Seq);
+			i = m0.compareTo(m1);
 			if (i == 0) {
-				s0 = ad0.getDocument().getNote(DocumentVersionCode_Seq);
-				s1 = ad1.getDocument().getNote(DocumentVersionCode_Seq);
-				int version0 = Integer.parseInt(s0);
-				int version1 = Integer.parseInt(s1);
+				String s0 = ad0.getDocument().getNote(DocumentVersionCode_Seq);
+				String s1 = ad1.getDocument().getNote(DocumentVersionCode_Seq);
+				int v0 = Integer.parseInt(s0);
+				int v1 = Integer.parseInt(s1);
 				// Higher document versions BEFORE lower document versions
-				i = version1 - version0;
+				i = v1 - v0;
 				if (i < 0) {
 					// Then version0 > version1; remove ad1
 					if (!ad1.doNotOutput && logger.isDebugEnabled()) {
-						logger.debug(MSG, ad1.getId(), version0, ad0.getId());
+						logger.debug(MSG, ad1.getId(), v0, ad0.getId());
 					}
 					ad1.doNotOutput = true;
 				}
 				else if (i > 0) {
 					if (!ad0.doNotOutput && logger.isDebugEnabled()) {
-						logger.debug(MSG, ad0.getId(), version1, ad1.getId());
+						logger.debug(MSG, ad0.getId(), v1, ad1.getId());
 					}
 					ad0.doNotOutput = true;
 				}
 				else {
-					String fmt = "Duplicate document version for records with ids {} and {}";
-					logger.error(fmt, ad0.getId(), ad1.getId());
+					String fmt = "Illegal duplication in records with ids {} and {}: [{}|{}|{}]";
+					logger.error(fmt, ad0.getId(), ad1.getId(), e0, m0, v0);
 				}
 			}
 		}

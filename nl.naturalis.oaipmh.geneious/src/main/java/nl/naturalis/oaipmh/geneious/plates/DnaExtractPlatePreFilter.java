@@ -34,7 +34,9 @@ public class DnaExtractPlatePreFilter implements IAnnotatedDocumentPreFilter {
 		String xml = rs.getString("document_xml");
 		if (xml.indexOf("<ExtractPlateNumberCode_Samples>") == -1) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Record discarded: document_xml column does not contain string \"<ExtractPlateNumberCode_Samples>\"");
+				String msg = "Record discarded. Missing required element "
+						+ "<ExtractPlateNumberCode_Samples> in document_xml";
+				logger.debug(msg);
 			}
 			++numDiscarded;
 			return false;
