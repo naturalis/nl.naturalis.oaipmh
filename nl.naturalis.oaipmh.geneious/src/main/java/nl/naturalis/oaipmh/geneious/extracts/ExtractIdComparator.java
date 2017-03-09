@@ -25,8 +25,13 @@ public class ExtractIdComparator implements Comparator<AnnotatedDocument> {
 
 	private static final Logger logger = LogManager.getLogger(ExtractIdComparator.class);
 
-	private static final String MSG = "Record with id {} marked for removal. "
+	private static final String MSG0 = "Record with id {} marked for removal. "
 			+ "Duplicate <{}>|<{}>: {}|{}. Preferring record with id {}";
+
+	private static final String MSG1 = "Record with id {} marked for removal. "
+			+ "Record with dummy marker code superseded by record with id {} ({})";
+
+	private static final String DUMMY_MARKER = "Dum";
 
 	public ExtractIdComparator()
 	{
@@ -43,25 +48,56 @@ public class ExtractIdComparator implements Comparator<AnnotatedDocument> {
 		if (i == 0) {
 			String marker0 = ad0.getDocument().getNotes().get(MarkerCode_Seq);
 			String marker1 = ad1.getDocument().getNotes().get(MarkerCode_Seq);
-			i = marker0.compareTo(marker1);
-			if (i == 0) {
-				// Higher database IDs BEFORE lower database IDs:
-				i = ad1.getId() - ad0.getId();
-				if (i < 0) {
-					// Then ad0 has a greater database ID than ad1; remove ad1
-					if (!ad1.doNotOutput && logger.isDebugEnabled()) {
-						logger.debug(MSG, ad1.getId(), note0, note1, id0, marker0, ad0.getId());
-					}
-					ad1.doNotOutput = true;
-				}
-				else {
+			if (marker0.equals(DUMMY_MARKER)) {
+				if (!marker1.equals(DUMMY_MARKER)) {
 					if (!ad0.doNotOutput && logger.isDebugEnabled()) {
-						logger.debug(MSG, ad0.getId(), note0, note1, id0, marker0, ad1.getId());
+						msg1(ad0.getId(), ad1.getId(), marker1);
 					}
 					ad0.doNotOutput = true;
+					// Just some large number that stands out when debugging
+					i = 8192;
+				}
+			}
+			else if (marker1.equals(DUMMY_MARKER)) {
+				if (!ad1.doNotOutput && logger.isDebugEnabled()) {
+					msg1(ad1.getId(), ad0.getId(), marker0);
+				}
+				ad1.doNotOutput = true;
+				i = -8192;
+			}
+			else {
+				i = marker0.compareTo(marker1);
+				if (i == 0) {
+					// Higher database IDs BEFORE lower database IDs:
+					i = ad1.getId() - ad0.getId();
+					if (i < 0) {
+						// Then ad0 has a greater database ID than ad1; remove
+						// ad1
+						if (!ad1.doNotOutput && logger.isDebugEnabled()) {
+							msg0(ad1.getId(), note0, note1, id0, marker0, ad0.getId());
+						}
+						ad1.doNotOutput = true;
+					}
+					else {
+						if (!ad0.doNotOutput && logger.isDebugEnabled()) {
+							msg0(ad0.getId(), note0, note1, id0, marker0, ad1.getId());
+						}
+						ad0.doNotOutput = true;
+					}
 				}
 			}
 		}
 		return i;
 	}
+
+	private static void msg0(Object... args)
+	{
+		logger.debug(MSG0, args);
+	}
+
+	private static void msg1(Object... args)
+	{
+		logger.debug(MSG1, args);
+	}
+
 }
