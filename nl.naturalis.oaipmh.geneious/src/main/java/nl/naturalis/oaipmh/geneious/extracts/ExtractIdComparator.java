@@ -48,17 +48,15 @@ public class ExtractIdComparator implements Comparator<AnnotatedDocument> {
 		if (i == 0) {
 			String marker0 = ad0.getDocument().getNotes().get(MarkerCode_Seq);
 			String marker1 = ad1.getDocument().getNotes().get(MarkerCode_Seq);
-			if (marker0.equals(DUMMY_MARKER)) {
-				if (!marker1.equals(DUMMY_MARKER)) {
-					if (!ad0.doNotOutput && logger.isDebugEnabled()) {
-						msg1(ad0.getId(), ad1.getId(), marker1);
-					}
-					ad0.doNotOutput = true;
-					// Just some large number that stands out when debugging
-					i = 8192;
+			if (marker0.equals(DUMMY_MARKER) && !marker1.equals(DUMMY_MARKER)) {
+				if (!ad0.doNotOutput && logger.isDebugEnabled()) {
+					msg1(ad0.getId(), ad1.getId(), marker1);
 				}
+				ad0.doNotOutput = true;
+				// Just some large number that stands out when debugging
+				i = 8192;
 			}
-			else if (marker1.equals(DUMMY_MARKER)) {
+			else if (marker1.equals(DUMMY_MARKER) && !marker0.equals(DUMMY_MARKER)) {
 				if (!ad1.doNotOutput && logger.isDebugEnabled()) {
 					msg1(ad1.getId(), ad0.getId(), marker0);
 				}
