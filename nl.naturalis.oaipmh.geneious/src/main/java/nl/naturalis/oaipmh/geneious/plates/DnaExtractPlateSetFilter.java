@@ -44,9 +44,10 @@ public class DnaExtractPlateSetFilter implements IAnnotatedDocumentSetFilter {
 		Collections.sort(input, new PlateNumberComparator());
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
 		for (AnnotatedDocument ad : input) {
-			if (!ad.doNotOutput) {
-				result.add(ad);
+			if (ad.doNotOutput) {
+				break;
 			}
+			result.add(ad);
 		}
 		if (logger.isDebugEnabled()) {
 			int i = input.size() - result.size();

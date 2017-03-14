@@ -53,7 +53,6 @@ public class SpecimenUnitIDComparator implements Comparator<AnnotatedDocument> {
 				}
 				ad0.doNotOutput = true;
 			}
-			return 0;
 		}
 		return i;
 	}
