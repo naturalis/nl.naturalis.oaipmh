@@ -44,10 +44,9 @@ public class DnaExtractSetFilter implements IAnnotatedDocumentSetFilter {
 		Collections.sort(input, new ExtractIdComparator());
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
 		for (AnnotatedDocument ad : input) {
-			if (ad.doNotOutput) {
-				break;
+			if (!ad.doNotOutput) {
+				result.add(ad);
 			}
-			result.add(ad);
 		}
 		if (logger.isDebugEnabled()) {
 			int i = input.size() - result.size();
