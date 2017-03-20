@@ -94,8 +94,6 @@ public abstract class ListRecordsHandler {
 		postFilters = new ArrayList<>(4);
 		postFilters.add(new SharedPostFilter());
 		setFilters = new ArrayList<>(4);
-		setFilters.add(new DocumentVersionSetFilter());
-		setFilters.add(new ContigConsensusSetFilter());
 		postProcessors = new ArrayList<>(4);
 	}
 

@@ -39,9 +39,9 @@ public class DnaExtractSetFilter implements IAnnotatedDocumentSetFilter {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Applying filter to {} AnnotatedDocument instances", input.size());
 			logger.debug("Marking records for removal using {}",
-					ExtractIdComparator.class.getSimpleName());
+					DnaExtractComparator.class.getSimpleName());
 		}
-		Collections.sort(input, new ExtractIdComparator());
+		Collections.sort(input, new DnaExtractComparator());
 		List<AnnotatedDocument> result = new ArrayList<>(input.size());
 		for (AnnotatedDocument ad : input) {
 			if (!ad.doNotOutput) {

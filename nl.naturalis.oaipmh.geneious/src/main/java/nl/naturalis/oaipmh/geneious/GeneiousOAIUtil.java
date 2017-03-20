@@ -97,6 +97,21 @@ public class GeneiousOAIUtil {
 		}
 	}
 
+	public static int getDocumentMaturity(AnnotatedDocument ad)
+	{
+		if (isConsensus(ad))
+			return 10;
+		if (isContig(ad))
+			return 9;
+		if (isFasta(ad))
+			return 8;
+		if (isAb1(ad))
+			return 7;
+		if (isDummy(ad))
+			return 6;
+		throw new RuntimeException("Cannot determine maturity of annotated_document record");
+	}
+
 	/**
 	 * Returns whether or not the specified document represents a fasta document
 	 * (a&#46;k&#46;a&#46; fasta record). This is considered to be the case if:
@@ -161,6 +176,40 @@ public class GeneiousOAIUtil {
 			XMLSerialisableRootElement xsre = (XMLSerialisableRootElement) pd;
 			String name = xsre.getName();
 			return name != null && name.endsWith("consensus sequence");
+		}
+		return false;
+	}
+
+	/**
+	 * Returns whether or not the specified document is an AB1 document.
+	 * 
+	 * @param ad
+	 * @return
+	 */
+	public static boolean isAb1(AnnotatedDocument ad)
+	{
+		PluginDocument pd = ad.getPluginDocument();
+		if (pd instanceof XMLSerialisableRootElement) {
+			XMLSerialisableRootElement xsre = (XMLSerialisableRootElement) pd;
+			String name = xsre.getName();
+			return name != null && name.endsWith(".ab1");
+		}
+		return false;
+	}
+
+	/**
+	 * Returns whether or not the specified document is an AB1 document.
+	 * 
+	 * @param ad
+	 * @return
+	 */
+	public static boolean isDummy(AnnotatedDocument ad)
+	{
+		PluginDocument pd = ad.getPluginDocument();
+		if (pd instanceof XMLSerialisableRootElement) {
+			XMLSerialisableRootElement xsre = (XMLSerialisableRootElement) pd;
+			String name = xsre.getName();
+			return name != null && name.endsWith(".dum");
 		}
 		return false;
 	}

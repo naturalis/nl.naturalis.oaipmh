@@ -5,6 +5,7 @@ import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.DocumentVersionCod
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractIDCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractPlateNumberCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.MarkerCode_Seq;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.PlatePositionCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.RegistrationNumberCode_Samples;
 import nl.naturalis.oaipmh.geneious.DocumentNotes.Note;
 
@@ -33,9 +34,10 @@ import org.apache.logging.log4j.Logger;
 public class SharedPostFilter implements IAnnotatedDocumentPostFilter {
 
 	private static final Logger logger = LogManager.getLogger(SharedPostFilter.class);
+
 	private static final Note[] requiredNotes = new Note[] { CRSCode_CRS, ExtractIDCode_Samples,
 			MarkerCode_Seq, DocumentVersionCode_Seq, RegistrationNumberCode_Samples,
-			ExtractPlateNumberCode_Samples };
+			ExtractPlateNumberCode_Samples, PlatePositionCode_Samples };
 
 	private int numAccepted;
 	private int numDiscarded;

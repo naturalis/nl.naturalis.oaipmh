@@ -6,6 +6,7 @@ import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.NumberOfImagesCode
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.RegistrationNumberCode_Samples;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
@@ -43,13 +44,15 @@ class SpecimenListRecordsHandler extends ListRecordsHandler {
 	@Override
 	protected List<IAnnotatedDocumentPreFilter> getAnnotatedDocumentPreFilters()
 	{
-		return new ArrayList<>(0);
+		return Collections.emptyList();
 	}
 
 	@Override
 	protected List<IAnnotatedDocumentPostFilter> getAnnotatedDocumentPostFilters()
 	{
-		return new ArrayList<>(0);
+		List<IAnnotatedDocumentPostFilter> filters = new ArrayList<>(1);
+		filters.add(new SpecimenPostFilter());
+		return filters;
 	}
 
 	@Override

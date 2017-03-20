@@ -5,6 +5,7 @@ import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.DocumentVersionCod
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractIDCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractPlateNumberCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.MarkerCode_Seq;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.PlatePositionCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.RegistrationNumberCode_Samples;
 import static org.junit.Assert.*;
 import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
@@ -21,7 +22,7 @@ public class SharedPostFilterTest {
 
 	private static final Note[] requiredNotes = new Note[] { CRSCode_CRS, ExtractIDCode_Samples,
 			MarkerCode_Seq, DocumentVersionCode_Seq, RegistrationNumberCode_Samples,
-			ExtractPlateNumberCode_Samples };
+			ExtractPlateNumberCode_Samples, PlatePositionCode_Samples };
 
 	@Before
 	public void setUp() throws Exception
