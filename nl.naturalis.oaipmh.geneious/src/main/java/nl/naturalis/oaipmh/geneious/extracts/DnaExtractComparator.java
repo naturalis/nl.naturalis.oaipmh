@@ -2,9 +2,9 @@ package nl.naturalis.oaipmh.geneious.extracts;
 
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.DocumentVersionCode_Seq;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractIDCode_Samples;
+import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractPlateNumberCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.MarkerCode_Seq;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.PlatePositionCode_Samples;
-import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ProjectPlateNumberCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.RegistrationNumberCode_Samples;
 
 import java.util.Comparator;
@@ -70,7 +70,7 @@ public class DnaExtractComparator implements Comparator<AnnotatedDocument> {
 			return i;
 		}
 
-		i = cmp(ProjectPlateNumberCode_Samples, notes0, notes1);
+		i = cmp(ExtractPlateNumberCode_Samples, notes0, notes1);
 		if (i != 0) {
 			return i;
 		}

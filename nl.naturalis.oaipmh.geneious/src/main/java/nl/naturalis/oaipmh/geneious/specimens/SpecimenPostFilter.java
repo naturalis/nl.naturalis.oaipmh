@@ -1,7 +1,6 @@
 package nl.naturalis.oaipmh.geneious.specimens;
 
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.BOLDIDCode_Bold;
-import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.BOLDURICode_FixedValue_Bold;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.RegistrationNumberCode_Samples;
 import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
 import nl.naturalis.oaipmh.geneious.DocumentNotes;
@@ -45,7 +44,7 @@ public class SpecimenPostFilter implements IAnnotatedDocumentPostFilter {
 		DocumentNotes notes = ad.getDocument().getNotes();
 		boolean ok = checkPresent(RegistrationNumberCode_Samples, notes);
 		ok = ok && checkPresent(BOLDIDCode_Bold, notes);
-		ok = ok && checkPresent(BOLDURICode_FixedValue_Bold, notes);
+		// ok = ok && checkPresent(BOLDURICode_FixedValue_Bold, notes);
 		return ok;
 	}
 
@@ -61,7 +60,7 @@ public class SpecimenPostFilter implements IAnnotatedDocumentPostFilter {
 
 	private boolean checkPresent(DocumentNotes.Note note, DocumentNotes notes)
 	{
-		if (notes.isSet(note) && !notes.get(note).trim().isEmpty()) {
+		if (notes.isSet(note) && notes.get(note).trim().length() != 0) {
 			return true;
 		}
 		if (logger.isDebugEnabled()) {
