@@ -94,6 +94,7 @@ public class GeneiousOAIUtil {
 		}
 		catch (SQLException e) {
 			logger.error("Error (ignored) while disconnecting from Geneious database", e);
+			conn = null;
 		}
 	}
 

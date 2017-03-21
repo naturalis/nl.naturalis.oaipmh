@@ -2,7 +2,6 @@ package nl.naturalis.oaipmh.geneious;
 
 import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.GENEIOUS_XMLNS;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -61,12 +60,7 @@ public abstract class GeneiousOAIRepository implements IOAIRepository {
 				throw new XSDNotFoundException(prefix);
 			}
 			IOUtil.pipe(in, out, 2048);
-			try {
-				in.close();
-			}
-			catch (IOException e) {
-				throw new RepositoryException(e);
-			}
+			IOUtil.close(in);
 		}
 		else {
 			throw new XSDNotFoundException(prefix);

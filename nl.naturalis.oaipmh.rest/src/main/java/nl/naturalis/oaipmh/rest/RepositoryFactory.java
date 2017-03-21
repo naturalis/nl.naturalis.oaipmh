@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.domainobject.util.ConfigObject;
 import org.domainobject.util.FileUtil;
+import org.domainobject.util.IOUtil;
 
 /**
  * Factory class producing {@link IOAIRepository} instances.
@@ -165,7 +166,9 @@ public class RepositoryFactory {
 		}
 		if (is != null) {
 			logConfigLocation(repoGroup, getClass().getResource(cfgFileName).toExternalForm());
-			return new ConfigObject(is);
+			ConfigObject cfg = new ConfigObject(is);
+			IOUtil.close(is);
+			return cfg;
 		}
 		return null;
 	}

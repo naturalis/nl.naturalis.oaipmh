@@ -232,6 +232,7 @@ public abstract class ListRecordsHandler {
 			}
 			ResultSet rs = stmt.executeQuery(sql.toString());
 			records = createAnnotatedDocuments(rs);
+			rs.close();
 		}
 		catch (SQLException e) {
 			throw new RepositoryException("Error while executing query", e);
