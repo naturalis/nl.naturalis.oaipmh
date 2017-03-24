@@ -78,7 +78,7 @@ public class DnaExtractComparator implements Comparator<AnnotatedDocument> {
 		i = cmp(MarkerCode_Seq, notes0, notes1);
 		if (i != 0) {
 			String marker0 = notes0.get(MarkerCode_Seq);
-			String marker1 = notes0.get(MarkerCode_Seq);
+			String marker1 = notes1.get(MarkerCode_Seq);
 			if (marker0.equals(DUMMY_MARKER) && !marker1.equals(DUMMY_MARKER)) {
 				if (!ad0.doNotOutput && logger.isDebugEnabled()) {
 					logger.debug(MSG3, ad0.getId(), ad1.getId());
@@ -89,7 +89,7 @@ public class DnaExtractComparator implements Comparator<AnnotatedDocument> {
 				if (!ad1.doNotOutput && logger.isDebugEnabled()) {
 					logger.debug(MSG3, ad1.getId(), ad0.getId());
 				}
-				ad0.doNotOutput = true;
+				ad1.doNotOutput = true;
 			}
 			return i;
 		}
