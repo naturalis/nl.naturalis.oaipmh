@@ -30,6 +30,8 @@ public class DnaExtractComparator implements Comparator<AnnotatedDocument> {
 
 	private static final Logger logger = LogManager.getLogger(DnaExtractComparator.class);
 
+	private static final String DUMMY_MARKER = "Dum";
+
 	private static final String MSG0 = "Record with id {} marked for removal. "
 			+ "Maturity superseded by record with id {}";
 
@@ -38,6 +40,9 @@ public class DnaExtractComparator implements Comparator<AnnotatedDocument> {
 
 	private static final String MSG2 = "Record with id {} marked for removal. "
 			+ "Duplicate record. Preferring record with id {}";
+
+	private static final String MSG3 = "Record with id {} marked for removal. "
+			+ "Record with dummy marker obsolete in presence of record with id {}";
 
 	public DnaExtractComparator()
 	{
@@ -65,13 +70,27 @@ public class DnaExtractComparator implements Comparator<AnnotatedDocument> {
 			return i;
 		}
 
-		i = cmp(MarkerCode_Seq, notes0, notes1);
+		i = cmp(ExtractPlateNumberCode_Samples, notes0, notes1);
 		if (i != 0) {
 			return i;
 		}
 
-		i = cmp(ExtractPlateNumberCode_Samples, notes0, notes1);
+		i = cmp(MarkerCode_Seq, notes0, notes1);
 		if (i != 0) {
+			String marker0 = notes0.get(MarkerCode_Seq);
+			String marker1 = notes0.get(MarkerCode_Seq);
+			if (marker0.equals(DUMMY_MARKER) && !marker1.equals(DUMMY_MARKER)) {
+				if (!ad0.doNotOutput && logger.isDebugEnabled()) {
+					logger.debug(MSG3, ad0.getId(), ad1.getId());
+				}
+				ad0.doNotOutput = true;
+			}
+			else if (marker1.equals(DUMMY_MARKER) && !marker0.equals(DUMMY_MARKER)) {
+				if (!ad1.doNotOutput && logger.isDebugEnabled()) {
+					logger.debug(MSG3, ad1.getId(), ad0.getId());
+				}
+				ad0.doNotOutput = true;
+			}
 			return i;
 		}
 
