@@ -28,6 +28,7 @@ import java.util.List;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
 import nl.naturalis.oaipmh.geneious.DocumentNotes;
+import nl.naturalis.oaipmh.geneious.GeneiousOAIUtil;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPostFilter;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPostProcessor;
 import nl.naturalis.oaipmh.geneious.IAnnotatedDocumentPreFilter;
@@ -100,7 +101,9 @@ public class DnaExtractListRecordsHandler extends ListRecordsHandler {
 	{
 		DnaExtract extract = new DnaExtract();
 		extract.setUnit(createExtractUnit(ad));
-		extract.setDnaLabProject(createDnaLabProject(ad));
+		if (!GeneiousOAIUtil.isDummy(ad)) {
+			extract.setDnaLabProject(createDnaLabProject(ad));
+		}
 		return extract;
 	}
 
