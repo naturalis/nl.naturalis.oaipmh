@@ -209,12 +209,17 @@ public abstract class ListRecordsHandler {
 			 * while Date.getTime() returns the number of milliseconds since
 			 * 01-01-1970.
 			 */
-			String s = mysqlDateFormatter.format(request.getFrom());
-			sb.append("\n AND modified >= '").append(s).append('\'');
+			// MySQL does not seem to like this:
+			// String s = mysqlDateFormatter.format(request.getFrom());
+			// sb.append("\n AND modified >= '").append(s).append('\'');
+			int unixTimestamp = (int) (request.getFrom().getTime() / 1000);
+			sb.append("\n AND modified >= ").append(unixTimestamp);
 		}
 		if (request.getUntil() != null) {
-			String s = mysqlDateFormatter.format(request.getUntil());
-			sb.append("\n AND modified <= '").append(s).append('\'');
+			// String s = mysqlDateFormatter.format(request.getUntil());
+			// sb.append("\n AND modified <= '").append(s).append('\'');
+			int unixTimestamp = (int) (request.getUntil().getTime() / 1000);
+			sb.append("\n AND modified <= ").append(unixTimestamp);
 		}
 		return sb.toString();
 	}
