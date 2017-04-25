@@ -82,8 +82,13 @@ class SpecimenListRecordsHandler extends ListRecordsHandler {
 		unit.setUri(notes.get(BOLDURICode_FixedValue_Bold));
 		String s = notes.get(NumberOfImagesCode_Bold);
 		if (s != null) {
-			Integer i = Integer.valueOf(s);
-			unit.setMultiMediaObjectComment(i);
+			try {
+				Integer i = Integer.valueOf(s);
+				unit.setMultiMediaObjectComment(i);
+			}
+			catch (NumberFormatException e) {
+				logger.warn("Bad number for NumberOfImagesCode_Bold: {}", s);
+			}
 		}
 	}
 
