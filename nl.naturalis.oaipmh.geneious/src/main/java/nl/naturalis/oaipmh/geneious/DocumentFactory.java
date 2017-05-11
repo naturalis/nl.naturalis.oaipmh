@@ -76,7 +76,7 @@ public class DocumentFactory {
 				notes.set(note, e.getTextContent());
 			}
 		}
-		if (logger.isDebugEnabled() && notes.count() == 0) {
+		if (logger.isDebugEnabled() && (notes == null || notes.count() == 0)) {
 			logger.debug("No usuable <note> elements found in XML");
 		}
 		return notes;
