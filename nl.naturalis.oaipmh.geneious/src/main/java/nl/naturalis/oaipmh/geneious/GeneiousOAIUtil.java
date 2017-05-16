@@ -63,13 +63,13 @@ public class GeneiousOAIUtil {
 	 */
 	public static Connection connect(ConfigObject cfg) throws RepositoryException
 	{
-		logger.debug("Connecting to Geneious database");
+		String dsn = cfg.required("db.dsn");
+		logger.info("Connecting to Geneious database: " + dsn);
+		String user = cfg.required("db.user");
+		String password = cfg.required("db.password");
 		try {
 			@SuppressWarnings("unused")
 			Driver driver = new com.mysql.jdbc.Driver();
-			String dsn = cfg.required("db.dsn");
-			String user = cfg.required("db.user");
-			String password = cfg.required("db.password");
 			Connection conn = DriverManager.getConnection(dsn, user, password);
 			return conn;
 		}

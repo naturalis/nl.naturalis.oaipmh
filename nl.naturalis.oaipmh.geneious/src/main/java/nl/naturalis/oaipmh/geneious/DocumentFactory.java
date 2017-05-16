@@ -126,7 +126,7 @@ public class DocumentFactory {
 		Element e = DOMUtil.getDescendant(root, "referenced_documents");
 		if (e != null) {
 			List<Element> elems = DOMUtil.getChildren(e);
-			if (elems.size() > 0) {
+			if (elems != null) {
 				urns = new ArrayList<>(elems.size());
 				for (Element elem : elems) {
 					String val = elem.getTextContent();
