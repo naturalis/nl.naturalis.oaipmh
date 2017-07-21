@@ -108,8 +108,10 @@ public class GeneiousOAIUtil {
 			return 8;
 		if (isAb1(ad))
 			return 7;
-		if (isDummy(ad))
+		if (isAb1Reversed(ad))
 			return 6;
+		if (isDummy(ad))
+			return 5;
 		throw new RuntimeException("Cannot determine maturity of annotated_document record");
 	}
 
@@ -194,6 +196,24 @@ public class GeneiousOAIUtil {
 			XMLSerialisableRootElement xsre = (XMLSerialisableRootElement) pd;
 			String name = xsre.getName();
 			return name != null && name.endsWith(".ab1");
+		}
+		return false;
+	}
+
+	/**
+	 * Returns whether or not the specified document is an reversed AB1
+	 * document.
+	 * 
+	 * @param ad
+	 * @return
+	 */
+	public static boolean isAb1Reversed(AnnotatedDocument ad)
+	{
+		PluginDocument pd = ad.getPluginDocument();
+		if (pd instanceof XMLSerialisableRootElement) {
+			XMLSerialisableRootElement xsre = (XMLSerialisableRootElement) pd;
+			String name = xsre.getName();
+			return name != null && name.endsWith(".ab1.(reversed)");
 		}
 		return false;
 	}
