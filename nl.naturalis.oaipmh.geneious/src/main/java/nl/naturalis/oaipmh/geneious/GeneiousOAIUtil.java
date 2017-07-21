@@ -112,7 +112,7 @@ public class GeneiousOAIUtil {
 			return 6;
 		if (isDummy(ad))
 			return 5;
-		throw new RuntimeException("Cannot XXXXXX determine maturity of annotated_document record");
+		throw new RuntimeException("Cannot determine maturity of annotated_document record");
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class GeneiousOAIUtil {
 		if (pd instanceof XMLSerialisableRootElement) {
 			XMLSerialisableRootElement xsre = (XMLSerialisableRootElement) pd;
 			String name = xsre.getName();
-			return name != null && name.indexOf("(reversed)") != -1;
+			return name != null && name.endsWith(".ab1 (reversed)");
 		}
 		return false;
 	}
