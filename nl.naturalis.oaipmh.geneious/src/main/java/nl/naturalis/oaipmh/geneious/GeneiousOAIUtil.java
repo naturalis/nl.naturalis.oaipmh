@@ -213,7 +213,7 @@ public class GeneiousOAIUtil {
 		if (pd instanceof XMLSerialisableRootElement) {
 			XMLSerialisableRootElement xsre = (XMLSerialisableRootElement) pd;
 			String name = xsre.getName();
-			return name != null && name.endsWith(".ab1.(reversed)");
+			return name != null && name.endsWith(".ab1 (reversed)");
 		}
 		return false;
 	}
