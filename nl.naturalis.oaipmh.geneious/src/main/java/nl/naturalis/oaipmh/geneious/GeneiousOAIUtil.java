@@ -215,6 +215,7 @@ public class GeneiousOAIUtil {
 			String name = xsre.getName();
 			return name != null && name.endsWith(".ab1 (reversed)");
 		}
+
 		return false;
 	}
 
