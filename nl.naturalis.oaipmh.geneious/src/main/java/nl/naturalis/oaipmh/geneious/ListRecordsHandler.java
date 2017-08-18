@@ -202,7 +202,7 @@ public abstract class ListRecordsHandler {
 		sb.append("SELECT id,folder_id,UNIX_TIMESTAMP(modified) AS modified,");
 		sb.append("\n       urn,document_xml,plugin_document_xml,reference_count");
 		sb.append("\n  FROM annotated_document");
-		/* sb.append("\n WHERE reference_count = 0"); */
+		sb.append("\n WHERE 1 = 1");
 		if (request.getFrom() != null) {
 			/*
 			 * Column "modified" contains the number of seconds since 01-01-1970
