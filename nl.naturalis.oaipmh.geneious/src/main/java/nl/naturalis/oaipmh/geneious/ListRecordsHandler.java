@@ -199,10 +199,11 @@ public abstract class ListRecordsHandler {
 	protected String getSQLQuery()
 	{
 		StringBuilder sb = new StringBuilder(1000);
-		sb.append("SELECT id,folder_id,UNIX_TIMESTAMP(modified) AS modified,");
+		sb.append("SELECT a.id,a.folder_id,UNIX_TIMESTAMP(a.modified) AS modified,");
 		sb.append("\n       urn,document_xml,plugin_document_xml,reference_count");
-		sb.append("\n  FROM annotated_document");
-		sb.append("\n WHERE reference_count = 0");
+		sb.append("\n  FROM annotated_document a");
+		sb.append("\n  JOIN folder f ON a.folder_id = f.id");
+		sb.append("\n WHERE f.visible = 1");
 		if (request.getFrom() != null) {
 			/*
 			 * Column "modified" contains the number of seconds since 01-01-1970
@@ -210,13 +211,13 @@ public abstract class ListRecordsHandler {
 			 * 01-01-1970.
 			 */
 			String s = mysqlDateFormatter.format(request.getFrom());
-			sb.append("\n AND modified >= '").append(s).append('\'');
+			sb.append("\n AND a.modified >= '").append(s).append('\'');
 			// int unixTimestamp = (int) (request.getFrom().getTime() / 1000);
 			// sb.append("\n AND modified >= ").append(unixTimestamp);
 		}
 		if (request.getUntil() != null) {
 			String s = mysqlDateFormatter.format(request.getUntil());
-			sb.append("\n AND modified <= '").append(s).append('\'');
+			sb.append("\n AND a.modified <= '").append(s).append('\'');
 			// int unixTimestamp = (int) (request.getUntil().getTime() / 1000);
 			// sb.append("\n AND modified <= ").append(unixTimestamp);
 		}

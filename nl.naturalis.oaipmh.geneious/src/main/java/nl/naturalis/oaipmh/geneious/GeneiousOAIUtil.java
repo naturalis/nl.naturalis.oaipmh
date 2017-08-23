@@ -112,7 +112,9 @@ public class GeneiousOAIUtil {
 			return 6;
 		if (isDummy(ad))
 			return 5;
-		throw new RuntimeException("Cannot determine maturity of annotated_document record");
+		String msg = "Cannot determine maturity of annotated_document record with id " + ad.getId();
+		logger.error(msg);
+		throw new RuntimeException(msg);
 	}
 
 	/**
