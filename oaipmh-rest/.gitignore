@@ -1,0 +1,4 @@
+/build/
+/src/main/resources/version.properties
+/.tern-project
+/target/

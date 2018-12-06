@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>nl.naturalis.oaipmh</groupId>
+		<artifactId>oaipmh-motherpom</artifactId>
+		<version>1.0</version>
+	</parent>
+
+	<artifactId>oaipmh-api</artifactId>
+	<name>OAIPMH API</name>
+	<description>Java API for accessing OAI repositories</description>
+	
+	<dependencies>
+	
+		<!-- Modules -->
+		<dependency>
+			<groupId>nl.naturalis.oaipmh</groupId>
+			<artifactId>oaipmh-util</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+		</dependency>
+		
+		<!-- TEST scope -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+	</dependencies>
+	
+</project>

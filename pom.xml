@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>nl.naturalis.oaipmh</groupId>
+	<artifactId>oaipmh-motherpom</artifactId>
+	<version>1.0</version>
+	<packaging>pom</packaging>
+
+	<name>Naturalis OAI-PMH Framework</name>
+	<description>Parent project for the OAI-PMH framework</description>
+	<url>https://github.com/naturalis/nl.naturalis.oaipmh</url>
+
+	<scm>
+		<url>https://github.com/naturalis/nl.naturalis.oaipmh</url>
+		<connection>https://github.com/naturalis/nl.naturalis.oaipmh.git</connection>
+		<developerConnection>https://github.com/naturalis/nl.naturalis.oaipmh.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<prerequisites>
+		<maven>${minimumMavenVersion}</maven>
+	</prerequisites>
+
+	<properties>
+
+		<main.basedir>${project.basedir}</main.basedir>
+
+		<!-- ==================================================================== -->
+		<!-- ***  Build setting                                               *** -->
+		<!-- ==================================================================== -->
+		<minimumMavenVersion>3.3</minimumMavenVersion>
+		<jdkLevel>1.8</jdkLevel>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		
+		
+
+		<!-- ==================================================================== -->
+		<!-- ***  Library dependencies                                        *** -->
+		<!-- ***  Check for updates: mvn versions:display-dependency-updates  *** -->
+		<!-- ***  Check dependencies: mvn dependency:analyze                  *** -->
+		<!-- ==================================================================== -->
+		<log4j.version>2.11.1</log4j.version>
+		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+		<javax.ws.rs-api.version>2.1</javax.ws.rs-api.version>
+		<mysql-connector-java.version>5.1.47</mysql-connector-java.version>
+		<junit.version>4.12</junit.version>
+		
+
+
+		<!-- ==================================================================== -->
+		<!-- ***  Maven plugin versions                                       *** -->
+		<!-- ***  Check for updates: mvn versions:display-plugin-updates      *** -->
+		<!-- ==================================================================== -->
+		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+		<maven-war-plugin.version>3.2.2</maven-war-plugin.version>
+
+	</properties>
+
+	<licenses>
+		<license>
+			<name>GNU GENERAL PUBLIC LICENSE</name>
+			<url>https://github.com/naturalis/nl.naturalis.oaipmh/blob/master/LICENSE.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>Naturalis Biodiversity Center</name>
+		<url>http://www.naturalis.nl</url>
+	</organization>
+
+	<modules>
+		<module>oaipmh-api</module>
+		<module>oaipmh-util</module>
+		<module>oaipmh-geneious</module>
+		<module>oaipmh-rest</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-api</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-core</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>${javax.servlet-api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.ws.rs</groupId>
+				<artifactId>javax.ws.rs-api</artifactId>
+				<version>${javax.ws.rs-api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql-connector-java.version}</version>
+			</dependency>
+			<!-- TEST scope -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${jdkLevel}</source>
+					<target>${jdkLevel}</target>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven-war-plugin.version}</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
