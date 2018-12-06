@@ -134,6 +134,11 @@
 				<version>${maven-war-plugin.version}</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<webResources>
+						<webResource>
+							<directory>WebContent</directory>
+						</webResource>
+					</webResources>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -25,7 +25,6 @@ import nl.naturalis.oaipmh.api.IOAIRepository;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.RepositoryException;
 import nl.naturalis.oaipmh.api.XSDNotFoundException;
-import nl.naturalis.oaipmh.util.ConfigObject;
 import nl.naturalis.oaipmh.util.IOUtil;
 
 import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.createResponseSkeleton;
@@ -81,13 +80,6 @@ public class OAIPMHResource {
 	{
 		InputStream in = getClass().getResourceAsStream("welcome.html");
 		String s = new String(IOUtil.readAllBytes(in));
-		ConfigObject cfg = new ConfigObject(getClass().getResourceAsStream("/version.properties"));
-
-		s = s.replace("%git.branch%", cfg.get("git.branch"));
-		s = s.replace("%git.tag%", cfg.get("git.tag"));
-		s = s.replace("%git.commit%", cfg.get("git.commit"));
-		s = s.replace("%build.date%", cfg.get("build.date"));
-		s = s.replace("%build.number%", cfg.get("build.number"));
 		return s;
 	}
 
