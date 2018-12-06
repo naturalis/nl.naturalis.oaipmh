@@ -1,5 +1,4 @@
-/build/
 /target/
+/.settings/
 /.classpath
 /.project
-/.settings/

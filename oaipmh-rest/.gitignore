@@ -2,3 +2,6 @@
 /src/main/resources/version.properties
 /.tern-project
 /target/
+/.settings/
+/.classpath
+/.project
