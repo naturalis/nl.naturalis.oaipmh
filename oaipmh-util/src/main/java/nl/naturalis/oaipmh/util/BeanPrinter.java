@@ -107,7 +107,6 @@ public class BeanPrinter {
       this.pw = new PrintWriter(path);
       printOpaque("java.lang");
       printOpaque("java.lang.reflect");
-      printOpaque("sun.misc");
     }
     catch (FileNotFoundException e) {
       throw new RuntimeException(e);
@@ -126,7 +125,6 @@ public class BeanPrinter {
     this.pw = printWriter;
     printOpaque("java.lang");
     printOpaque("java.lang.reflect");
-    printOpaque("sun.misc");
   }
 
   /**

@@ -12,16 +12,20 @@
 	<artifactId>oaipmh-api</artifactId>
 	<name>OAIPMH API</name>
 	<description>Java API for accessing OAI repositories</description>
-	
+
 	<dependencies>
-	
-		<!-- Modules -->
+		<!-- MODULES -->
 		<dependency>
 			<groupId>nl.naturalis.oaipmh</groupId>
 			<artifactId>oaipmh-util</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+		<!-- JAVAX -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+		</dependency>
+		<!-- LOGGING -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
@@ -29,15 +33,13 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
-		</dependency>
-		
-		<!-- TEST scope -->
+		</dependency>		
+		<!-- TEST -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
 	</dependencies>
-	
+
 </project>

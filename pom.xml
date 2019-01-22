@@ -26,12 +26,10 @@
 
 	<properties>
 
-		<main.basedir>${project.basedir}</main.basedir>
 
 		<!-- ==================================================================== -->
-		<!-- ***  Build setting                                               *** -->
+		<!-- ***  Build settings                                               *** -->
 		<!-- ==================================================================== -->
-		<minimumMavenVersion>3.3</minimumMavenVersion>
 		<jdkLevel>1.8</jdkLevel>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -44,6 +42,7 @@
 		<!-- ***  Check dependencies: mvn dependency:analyze                  *** -->
 		<!-- ==================================================================== -->
 		<log4j.version>2.11.1</log4j.version>
+		<javax.xml.version>2.3.1</javax.xml.version>
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<javax.ws.rs-api.version>2.1</javax.ws.rs-api.version>
 		<mysql-connector-java.version>5.1.47</mysql-connector-java.version>
@@ -55,7 +54,7 @@
 		<!-- ***  Maven plugin versions                                       *** -->
 		<!-- ***  Check for updates: mvn versions:display-plugin-updates      *** -->
 		<!-- ==================================================================== -->
-		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
 		<maven-war-plugin.version>3.2.2</maven-war-plugin.version>
 
 	</properties>
@@ -82,15 +81,11 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- JAVAX -->
 			<dependency>
-				<groupId>org.apache.logging.log4j</groupId>
-				<artifactId>log4j-api</artifactId>
-				<version>${log4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.logging.log4j</groupId>
-				<artifactId>log4j-core</artifactId>
-				<version>${log4j.version}</version>
+				<groupId>javax.xml.bind</groupId>
+				<artifactId>jaxb-api</artifactId>
+				<version>${javax.xml.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>javax.servlet</groupId>
@@ -107,7 +102,18 @@
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql-connector-java.version}</version>
 			</dependency>
-			<!-- TEST scope -->
+			<!-- LOGGING -->
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-api</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-core</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<!-- TEST -->
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
@@ -123,9 +129,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
-					<source>${jdkLevel}</source>
-					<target>${jdkLevel}</target>
 					<showDeprecation>true</showDeprecation>
+					<release>11</release>
 				</configuration>
 			</plugin>
 			<plugin>
