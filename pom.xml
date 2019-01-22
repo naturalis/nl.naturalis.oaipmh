@@ -28,11 +28,9 @@
 
 
 		<!-- ==================================================================== -->
-		<!-- ***  Build settings                                               *** -->
+		<!-- ***  Build settings                                              *** -->
 		<!-- ==================================================================== -->
-		<jdkLevel>1.8</jdkLevel>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		
 		
 
@@ -41,6 +39,7 @@
 		<!-- ***  Check for updates: mvn versions:display-dependency-updates  *** -->
 		<!-- ***  Check dependencies: mvn dependency:analyze                  *** -->
 		<!-- ==================================================================== -->
+		<dropwizard.version>1.3.8</dropwizard.version>
 		<log4j.version>2.11.1</log4j.version>
 		<javax.xml.version>2.3.1</javax.xml.version>
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
@@ -81,6 +80,11 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>io.dropwizard</groupId>
+				<artifactId>dropwizard-core</artifactId>
+				<version>${dropwizard.version}</version>
+			</dependency>
 			<!-- JAVAX -->
 			<dependency>
 				<groupId>javax.xml.bind</groupId>
@@ -145,6 +149,10 @@
 						</webResource>
 					</webResources>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
