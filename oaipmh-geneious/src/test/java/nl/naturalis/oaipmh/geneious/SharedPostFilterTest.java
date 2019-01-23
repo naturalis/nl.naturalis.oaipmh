@@ -30,7 +30,6 @@ public class SharedPostFilterTest {
 	}
 
 	@Test
-	@SuppressWarnings("static-method")
 	public void testAccept()
 	{
 		SharedPostFilter filter = new SharedPostFilter();

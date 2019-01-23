@@ -14,7 +14,6 @@ import org.junit.Test;
 public class SharedSetFilterTest {
 
 	@Test
-	@SuppressWarnings("static-method")
 	public void testFilter()
 	{
 

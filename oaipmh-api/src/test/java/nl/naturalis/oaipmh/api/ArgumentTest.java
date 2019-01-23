@@ -10,7 +10,6 @@ import org.junit.Test;
 public class ArgumentTest {
 
 	@Test
-	@SuppressWarnings("static-method")
 	public void testParse()
 	{
 		Argument arg = parse(null);

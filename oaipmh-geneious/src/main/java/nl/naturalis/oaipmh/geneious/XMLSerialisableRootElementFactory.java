@@ -25,7 +25,6 @@ public class XMLSerialisableRootElementFactory {
    * @param root
    * @return
    */
-  @SuppressWarnings("static-method")
   public XMLSerialisableRootElement build(Element root) {
     XMLSerialisableRootElement result = new XMLSerialisableRootElement();
     result.setName(DOMUtil.getValue(root, "name"));

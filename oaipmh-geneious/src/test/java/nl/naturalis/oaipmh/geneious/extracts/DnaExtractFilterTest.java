@@ -13,7 +13,6 @@ import org.junit.Test;
 public class DnaExtractFilterTest {
 
 	@Test
-	@SuppressWarnings("static-method")
 	public void testAcceptResultSet() throws SQLException
 	{
 		MockResultSet rs = new MockResultSet();

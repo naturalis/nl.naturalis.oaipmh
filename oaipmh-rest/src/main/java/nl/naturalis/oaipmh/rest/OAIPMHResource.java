@@ -1,8 +1,6 @@
 package nl.naturalis.oaipmh.rest;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -13,7 +11,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
 
 import org.openarchives.oai._2.OAIPMHtype;
@@ -33,10 +30,10 @@ import static nl.naturalis.oaipmh.rest.RESTUtil.xmlResponse;
 
 /**
  * <p>
- * REST resource handling all OAI-PMH requests for all OAI repositories. Each OAI repository is accessed through a sub-resource of this REST
- * resource. In other words, if the base URL of the OAI-PMH REST service would be http://example.com/oaipmh, then
- * http://example.com/oaipmh<b>/geneious</b> will access the geneious repository and http://example.com/oaipmh<b>/medialib</b> will access
- * the medialib repository.
+ * REST resource handling all OAI-PMH requests for all OAI repositories. Each OAI repository is accessed through a sub-resource of
+ * this REST resource. In other words, if the base URL of the OAI-PMH REST service would be http://example.com/oaipmh, then
+ * http://example.com/oaipmh<b>/geneious</b> will access the geneious repository and http://example.com/oaipmh<b>/medialib</b>
+ * will access the medialib repository.
  * </p>
  * <h3>Grouping repositories</h3>
  * <p>
@@ -44,9 +41,9 @@ import static nl.naturalis.oaipmh.rest.RESTUtil.xmlResponse;
  * http://example.com/oaipmh/geneious/specimens<br>
  * http://example.com/oaipmh/geneious/dna-extracts<br>
  * http://example.com/oaipmh/geneious/dna-slides<br>
- * The first path segment after the base URL then becomes the name of the repository group while the next path segment specifies the name of
- * the repository within that group. Apart from providing a nice URL structure, repository groups share a single configuration file. This is
- * explained in the comments for {@link RepositoryFactory}.
+ * The first path segment after the base URL then becomes the name of the repository group while the next path segment specifies
+ * the name of the repository within that group. Apart from providing a nice URL structure, repository groups share a single
+ * configuration file. This is explained in the comments for {@link RepositoryFactory}.
  * </p>
  * 
  * @author Ayco Holleman
@@ -85,23 +82,18 @@ public class OAIPMHResource {
    */
   @GET
   @Path("/{group}/{repo}/xsd/{prefix}.xsd")
-  @SuppressWarnings("static-method")
-  public Response getXSD(@PathParam("group") String repoGroup,
-      @PathParam("repo") String repoName, @PathParam("prefix") final String prefix) {
+  public Response getXSD(@PathParam("group") String repoGroup, @PathParam("repo") String repoName,
+      @PathParam("prefix") final String prefix) {
     try {
       final RepositoryFactory factory = RepositoryFactory.getInstance();
       final IOAIRepository repository = factory.build(repoGroup, repoName);
-      return xmlResponse(new StreamingOutput() {
-
-        @Override
-        public void write(OutputStream out) throws IOException, WebApplicationException {
-          try {
-            repository.getXSDForMetadataPrefix(out, prefix);
-          } catch (XSDNotFoundException e) {
-            throw new WebApplicationException(plainTextResponse(404, e.getMessage()));
-          } catch (RepositoryException e) {
-            throw new WebApplicationException(serverError(e));
-          }
+      return xmlResponse(out -> {
+        try {
+          repository.getXSDForMetadataPrefix(out, prefix);
+        } catch (XSDNotFoundException e) {
+          throw new WebApplicationException(plainTextResponse(404, e.getMessage()));
+        } catch (RepositoryException e) {
+          throw new WebApplicationException(serverError(e));
         }
       });
     } catch (Throwable t) {
@@ -176,8 +168,8 @@ public class OAIPMHResource {
   }
 
   private static void logRequest(String repoGroup, String repoName) {
-    if (logger.isDebugEnabled()) {
-      logger.debug("********* NEW REQUEST *********");
+    if (logger.isDebugEnabled()) { // Make start of request easy to find in log file
+      logger.debug("***** [ NEW OAI-PMH REQUEST ] *****");
     }
     String msg;
     if (repoName == null) {
