@@ -9,20 +9,17 @@ import org.openarchives.oai._2.RecordType;
 /**
  * A post processor for DNA extracts.
  * 
+ * @deprecated Not actually used to filter out records.
+ * 
  * @author Ayco Holleman
  *
  */
 @Deprecated
 public class DnaExtractPostProcessor implements IAnnotatedDocumentPostProcessor {
 
-	public DnaExtractPostProcessor()
-	{
-	}
+  public DnaExtractPostProcessor() {}
 
-	@Override
-	public void process(RecordType record, AnnotatedDocument annotatedDocument)
-			throws PostProcessingException
-	{
-	}
+  @Override
+  public void process(RecordType record, AnnotatedDocument annotatedDocument) throws PostProcessingException {}
 
 }

@@ -1,17 +1,5 @@
 package nl.naturalis.oaipmh.rest;
 
-import static nl.naturalis.oaipmh.api.Argument.FROM;
-import static nl.naturalis.oaipmh.api.Argument.IDENTIFIER;
-import static nl.naturalis.oaipmh.api.Argument.METADATA_PREFIX;
-import static nl.naturalis.oaipmh.api.Argument.RESUMPTION_TOKEN;
-import static nl.naturalis.oaipmh.api.Argument.SET;
-import static nl.naturalis.oaipmh.api.Argument.UNTIL;
-import static nl.naturalis.oaipmh.api.Argument.VERB;
-import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateFormat;
-import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateFormatter;
-import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormat;
-import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormatter;
-
 import java.net.URI;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -20,6 +8,11 @@ import java.util.EnumSet;
 import java.util.List;
 
 import javax.ws.rs.core.UriInfo;
+
+import org.openarchives.oai._2.OAIPMHerrorType;
+import org.openarchives.oai._2.VerbType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import nl.naturalis.oaipmh.api.Argument;
 import nl.naturalis.oaipmh.api.ArgumentChecker;
@@ -32,10 +25,17 @@ import nl.naturalis.oaipmh.api.IResumptionTokenParser;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.util.ResumptionToken;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.openarchives.oai._2.OAIPMHerrorType;
-import org.openarchives.oai._2.VerbType;
+import static nl.naturalis.oaipmh.api.Argument.FROM;
+import static nl.naturalis.oaipmh.api.Argument.IDENTIFIER;
+import static nl.naturalis.oaipmh.api.Argument.METADATA_PREFIX;
+import static nl.naturalis.oaipmh.api.Argument.RESUMPTION_TOKEN;
+import static nl.naturalis.oaipmh.api.Argument.SET;
+import static nl.naturalis.oaipmh.api.Argument.UNTIL;
+import static nl.naturalis.oaipmh.api.Argument.VERB;
+import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateFormat;
+import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateFormatter;
+import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormat;
+import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormatter;
 
 /**
  * Builds {@link OAIPMHRequest} objects from HTTP URLs.
@@ -45,7 +45,7 @@ import org.openarchives.oai._2.VerbType;
  */
 public class RequestBuilder {
 
-	private static final Logger logger = LogManager.getLogger(RequestBuilder.class);
+	private static final Logger logger = LoggerFactory.getLogger(RequestBuilder.class);
 
 	/*
 	 * This currently just returns a new instance, but in the future we might

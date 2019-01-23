@@ -5,16 +5,16 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openarchives.oai._2.OAIPMHerrorType;
 import org.openarchives.oai._2.VerbType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Abstract base class for classes that check the validity of the {@link Argument arguments} passed allong with a certain {@link VerbType
- * verb} . For each verb has there is a subclass of this base class. An {@code ArgumentChecker} does <i>not</i> check the value of the
- * arguments. It only checks that all required arguments are present, forbidden arguments are absent, and mutually exclusive arguments are
- * not both present.
+ * Abstract base class for classes that check the validity of the {@link Argument arguments} passed along with a {@link VerbType
+ * verb} (like ListRecords). For each verb has there is a subclass of this base class. An {@code ArgumentChecker} does <i>not</i>
+ * check the value of the arguments. It only checks that all required arguments are present, forbidden arguments are absent, and
+ * mutually exclusive arguments are not both present.
  * 
  * @author Ayco Holleman
  *
@@ -22,13 +22,13 @@ import org.openarchives.oai._2.VerbType;
 public abstract class ArgumentChecker {
 
   @SuppressWarnings("unused")
-  private static final Logger logger = LogManager.getLogger(ArgumentChecker.class);
+  private static final Logger logger = LoggerFactory.getLogger(ArgumentChecker.class);
 
   public ArgumentChecker() {}
 
   /**
-   * Checks the validity of the provided arguments. The {@link Argument#VERB verb} itself must not be present in the provided set of
-   * arguments.
+   * Checks the validity of the provided arguments. The {@link Argument#VERB verb} itself must <i>not</i> be present in the provided
+   * set of arguments.
    * 
    * @param arguments
    * @return
@@ -61,9 +61,9 @@ public abstract class ArgumentChecker {
   }
 
   /**
-   * Hook for subclasses to expand and control the argument checking process. Called at the beginning of the {@link #check(EnumSet) check}
-   * method. If the {@code beforeCheck} method returns {@code false}, no further checks are done and the {@code check} method returns
-   * immediately.
+   * Hook for subclasses to expand and control the argument checking process. Called at the beginning of the {@link #check(EnumSet)
+   * check} method. If the {@code beforeCheck} method returns {@code false}, no further checks are done and the {@code check} method
+   * returns immediately.
    * 
    * @param arguments
    * @param errors

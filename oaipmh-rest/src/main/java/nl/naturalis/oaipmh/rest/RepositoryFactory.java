@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import nl.naturalis.oaipmh.api.IOAIRepository;
 import nl.naturalis.oaipmh.util.ConfigObject;
@@ -21,7 +21,7 @@ import nl.naturalis.oaipmh.util.IOUtil;
 public class RepositoryFactory {
 
   private static final String REPO_CONFIG_FILENAME_PATTERN = "oai-repo.%s.properties";
-  private static final Logger logger = LogManager.getLogger(RepositoryFactory.class);
+  private static final Logger logger = LoggerFactory.getLogger(RepositoryFactory.class);
 
   private static RepositoryFactory instance;
 
@@ -96,10 +96,10 @@ public class RepositoryFactory {
         throw new RepositoryInitializationException(msg);
       }
       try {
-        repository = repoClass.newInstance();
+        repository = repoClass.getConstructor(new Class<?>[0]).newInstance();
         repository.setConfiguration(config);
         cache.put(cacheKey, repository);
-      } catch (InstantiationException | IllegalAccessException e) {
+      } catch (Exception e) {
         throw new RepositoryInitializationException(e);
       }
     }

@@ -1,13 +1,14 @@
 package nl.naturalis.oaipmh.geneious;
 
+import java.util.Comparator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.DocumentVersionCode_Seq;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.ExtractIDCode_Samples;
 import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.MarkerCode_Seq;
 
-import java.util.Comparator;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * A {@link Comparator} for {@link AnnotatedDocument} instances that, extract ID
@@ -21,7 +22,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class DocumentVersionComparator implements Comparator<AnnotatedDocument> {
 
-	private static final Logger logger = LogManager.getLogger(DocumentVersionComparator.class);
+	private static final Logger logger = LoggerFactory.getLogger(DocumentVersionComparator.class);
 
 	private static final String MSG = "Record with id {} marked for removal. "
 			+ "Obsolete document version ({}). Record superseded by record with id {}";

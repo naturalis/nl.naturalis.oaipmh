@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import nl.naturalis.oaipmh.api.Argument;
 import nl.naturalis.oaipmh.api.BadResumptionTokenException;
@@ -37,7 +37,7 @@ import static nl.naturalis.oaipmh.api.Argument.UNTIL;
  */
 public class ResumptionToken implements IResumptionTokenParser, IResumptionTokenGenerator {
 
-  private static final Logger logger = LogManager.getLogger(ResumptionToken.class);
+  private static final Logger logger = LoggerFactory.getLogger(ResumptionToken.class);
 
   /*
    * Use capital 'X' as delimiter between in elements in the resumption token, so it blends in nicely with the elements but can never be

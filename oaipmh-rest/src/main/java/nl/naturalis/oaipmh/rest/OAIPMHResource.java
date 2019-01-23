@@ -16,9 +16,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openarchives.oai._2.OAIPMHtype;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import nl.naturalis.oaipmh.api.IOAIRepository;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
@@ -55,7 +55,7 @@ import static nl.naturalis.oaipmh.rest.RESTUtil.xmlResponse;
 @Path("/")
 public class OAIPMHResource {
 
-  private static final Logger logger = LogManager.getLogger(OAIPMHResource.class);
+  private static final Logger logger = LoggerFactory.getLogger(OAIPMHResource.class);
 
   @Context
   private HttpServletRequest httpServletRequest;

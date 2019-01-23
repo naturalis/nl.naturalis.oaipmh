@@ -51,140 +51,124 @@ import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.isFasta;
  */
 public class DnaExtractListRecordsHandler extends ListRecordsHandler {
 
-	public DnaExtractListRecordsHandler(ConfigObject config, OAIPMHRequest request)
-	{
-		super(config, request);
-	}
+  public DnaExtractListRecordsHandler(ConfigObject config, OAIPMHRequest request) {
+    super(config, request);
+  }
 
-	@Override
-	protected List<IAnnotatedDocumentPreFilter> getAnnotatedDocumentPreFilters()
-	{
-		List<IAnnotatedDocumentPreFilter> filters = new ArrayList<>(1);
-		filters.add(new DnaExtractPreFilter());
-		return filters;
-	}
+  @Override
+  protected List<IAnnotatedDocumentPreFilter> getAnnotatedDocumentPreFilters() {
+    List<IAnnotatedDocumentPreFilter> filters = new ArrayList<>(1);
+    filters.add(new DnaExtractPreFilter());
+    return filters;
+  }
 
-	@Override
-	protected List<IAnnotatedDocumentPostFilter> getAnnotatedDocumentPostFilters()
-	{
-		return new ArrayList<>(0);
-	}
+  @Override
+  protected List<IAnnotatedDocumentPostFilter> getAnnotatedDocumentPostFilters() {
+    return new ArrayList<>(0);
+  }
 
-	@Override
-	protected List<IAnnotatedDocumentSetFilter> getAnnotatedDocumentSetFilters()
-	{
-		List<IAnnotatedDocumentSetFilter> filters = new ArrayList<>(1);
-		filters.add(new DnaExtractSetFilter());
-		return filters;
-	}
+  @Override
+  protected List<IAnnotatedDocumentSetFilter> getAnnotatedDocumentSetFilters() {
+    List<IAnnotatedDocumentSetFilter> filters = new ArrayList<>(1);
+    filters.add(new DnaExtractSetFilter());
+    return filters;
+  }
 
-	@Override
-	protected List<IAnnotatedDocumentPostProcessor> getAnnotatedDocumentPostProcessors()
-	{
-		return new ArrayList<>(0);
-	}
+  @Override
+  protected List<IAnnotatedDocumentPostProcessor> getAnnotatedDocumentPostProcessors() {
+    return new ArrayList<>(0);
+  }
 
-	@Override
-	protected void setMetadata(Geneious geneious, AnnotatedDocument ad)
-	{
-		geneious.setDnaExtract(createDnaExtract(ad));
-	}
+  @Override
+  protected void setMetadata(Geneious geneious, AnnotatedDocument ad) {
+    geneious.setDnaExtract(createDnaExtract(ad));
+  }
 
-	@Override
-	protected int getPageSize()
-	{
-		return config.getInt("dna-extracts.repo.pagesize");
-	}
+  @Override
+  protected int getPageSize() {
+    return config.getInt("dna-extracts.repo.pagesize");
+  }
 
-	private static DnaExtract createDnaExtract(AnnotatedDocument ad)
-	{
-		DnaExtract extract = new DnaExtract();
-		extract.setUnit(createExtractUnit(ad));
-		if (!GeneiousOAIUtil.isDummy(ad)) {
-			extract.setDnaLabProject(createDnaLabProject(ad));
-		}
-		return extract;
-	}
+  private static DnaExtract createDnaExtract(AnnotatedDocument ad) {
+    DnaExtract extract = new DnaExtract();
+    extract.setUnit(createExtractUnit(ad));
+    if (!GeneiousOAIUtil.isDummy(ad)) {
+      extract.setDnaLabProject(createDnaLabProject(ad));
+    }
+    return extract;
+  }
 
-	private static DnaLabProject createDnaLabProject(AnnotatedDocument ad)
-	{
-		DocumentNotes notes = ad.getDocument().getNotes();
-		DnaLabProject project = new DnaLabProject();
-		project.setBatchID(notes.get(ProjectPlateNumberCode_Samples));
-		project.setVersionNumber(notes.get(DocumentVersionCode_Seq));
-		project.setSequencing(createSequencing(ad));
-		project.setAmplification(createAmplification(ad));
-		return project;
-	}
+  private static DnaLabProject createDnaLabProject(AnnotatedDocument ad) {
+    DocumentNotes notes = ad.getDocument().getNotes();
+    DnaLabProject project = new DnaLabProject();
+    project.setBatchID(notes.get(ProjectPlateNumberCode_Samples));
+    project.setVersionNumber(notes.get(DocumentVersionCode_Seq));
+    project.setSequencing(createSequencing(ad));
+    project.setAmplification(createAmplification(ad));
+    return project;
+  }
 
-	private static ExtractUnit createExtractUnit(AnnotatedDocument ad)
-	{
-		DocumentNotes notes = ad.getDocument().getNotes();
-		ExtractUnit unit = new ExtractUnit();
-		unit.setUnitID(notes.get(ExtractIDCode_Samples));
-		unit.setAssociatedUnitID(notes.get(RegistrationNumberCode_Samples));
-		unit.setInstitutePlateID(notes.get(ExtractPlateNumberCode_Samples));
-		unit.setPlatePosition(notes.get(PlatePositionCode_Samples));
-		return unit;
-	}
+  private static ExtractUnit createExtractUnit(AnnotatedDocument ad) {
+    DocumentNotes notes = ad.getDocument().getNotes();
+    ExtractUnit unit = new ExtractUnit();
+    unit.setUnitID(notes.get(ExtractIDCode_Samples));
+    unit.setAssociatedUnitID(notes.get(RegistrationNumberCode_Samples));
+    unit.setInstitutePlateID(notes.get(ExtractPlateNumberCode_Samples));
+    unit.setPlatePosition(notes.get(PlatePositionCode_Samples));
+    return unit;
+  }
 
-	private static Sequencing createSequencing(AnnotatedDocument ad)
-	{
-		DocumentNotes notes = ad.getDocument().getNotes();
-		Sequencing sequencing = new Sequencing();
-		sequencing.setSequencingStaff(notes.get(SequencingStaffCode_FixedValue_Seq));
-		sequencing.setGeneticAccession(createGeneticAccession(ad));
-		sequencing.setConsensusSequenceQuality(notes.get(ConsensusSeqPassCode_Seq));
-		if (isFasta(ad)) {
-			String csi = ad.getDocument().getHiddenField(override_cache_name);
-			if (csi == null) {
-				csi = ad.getDocument().getNote(filename);
-			}
-			String csl = notes.get(NucleotideLengthCode_Bold);
-			sequencing.setConsensusSequenceID(csi);
-			sequencing.setConsensusSequenceLength(csl);
-		}
-		else if (isContig(ad)) {
-			String csi = ad.getDocument().getHiddenField(override_cache_name);
-			String csl = notes.get(NucleotideLengthCode_Bold);
-			sequencing.setConsensusSequenceID(csi);
-			sequencing.setConsensusSequenceLength(csl);
-		}
-		else if (isConsensus(ad)) {
-			String csi = ad.getDocument().getHiddenField(override_cache_name);
-			if (csi == null) {
-				csi = ad.getDocument().getHiddenField(cache_name);
-			}
-			String csl = notes.get(NucleotideLengthCode_Bold);
-			sequencing.setConsensusSequenceID(csi);
-			sequencing.setConsensusSequenceLength(csl);
-		}
-		else {
-			sequencing.setConsensusSequenceID(null);
-			sequencing.setConsensusSequenceLength(null);
-			sequencing.setConsensusSequenceQuality(null);
-		}
-		return sequencing;
-	}
+  private static Sequencing createSequencing(AnnotatedDocument ad) {
+    DocumentNotes notes = ad.getDocument().getNotes();
+    Sequencing sequencing = new Sequencing();
+    sequencing.setSequencingStaff(notes.get(SequencingStaffCode_FixedValue_Seq));
+    sequencing.setGeneticAccession(createGeneticAccession(ad));
+    sequencing.setConsensusSequenceQuality(notes.get(ConsensusSeqPassCode_Seq));
+    if (isFasta(ad)) {
+      String csi = ad.getDocument().getHiddenField(override_cache_name);
+      if (csi == null) {
+        csi = ad.getDocument().getNote(filename);
+      }
+      String csl = notes.get(NucleotideLengthCode_Bold);
+      sequencing.setConsensusSequenceID(csi);
+      sequencing.setConsensusSequenceLength(csl);
+    } else if (isContig(ad)) {
+      String csi = ad.getDocument().getHiddenField(override_cache_name);
+      String csl = notes.get(NucleotideLengthCode_Bold);
+      sequencing.setConsensusSequenceID(csi);
+      sequencing.setConsensusSequenceLength(csl);
+    } else if (isConsensus(ad)) {
+      String csi = ad.getDocument().getHiddenField(override_cache_name);
+      if (csi == null) {
+        csi = ad.getDocument().getHiddenField(cache_name);
+      }
+      String csl = notes.get(NucleotideLengthCode_Bold);
+      sequencing.setConsensusSequenceID(csi);
+      sequencing.setConsensusSequenceLength(csl);
+    } else {
+      sequencing.setConsensusSequenceID(null);
+      sequencing.setConsensusSequenceLength(null);
+      sequencing.setConsensusSequenceQuality(null);
+    }
+    return sequencing;
+  }
 
-	private static GeneticAccession createGeneticAccession(AnnotatedDocument ad)
-	{
-		DocumentNotes notes = ad.getDocument().getNotes();
-		GeneticAccession ga = new GeneticAccession();
-		ga.setBOLDProcessID(notes.get(BOLDIDCode_Bold));
-		ga.setGeneticAccessionNumber(notes.get(GenBankIDCode_Bold));
-		ga.setGeneticAccessionNumberURI(notes.get(GenBankURICode_FixedValue_Bold));
-		return ga;
-	}
+  private static GeneticAccession createGeneticAccession(AnnotatedDocument ad) {
+    DocumentNotes notes = ad.getDocument().getNotes();
+    GeneticAccession ga = new GeneticAccession();
+    ga.setBOLDProcessID(notes.get(BOLDIDCode_Bold));
+    ga.setGeneticAccessionNumber(notes.get(GenBankIDCode_Bold));
+    ga.setGeneticAccessionNumberURI(notes.get(GenBankURICode_FixedValue_Bold));
+    return ga;
+  }
 
-	private static Amplification createAmplification(AnnotatedDocument ad)
-	{
-		DocumentNotes notes = ad.getDocument().getNotes();
-		Amplification amp = new Amplification();
-		amp.setAmplificationStaff(notes.get(AmplicificationStaffCode_FixedValue_Samples));
-		amp.setMarker(notes.get(MarkerCode_Seq));
-		amp.setPcrPlateID(notes.get(PCRplateIDCode_Seq));
-		return amp;
-	}
+  private static Amplification createAmplification(AnnotatedDocument ad) {
+    DocumentNotes notes = ad.getDocument().getNotes();
+    Amplification amp = new Amplification();
+    amp.setAmplificationStaff(notes.get(AmplicificationStaffCode_FixedValue_Samples));
+    amp.setMarker(notes.get(MarkerCode_Seq));
+    amp.setPcrPlateID(notes.get(PCRplateIDCode_Seq));
+    return amp;
+  }
 
 }

@@ -10,7 +10,6 @@ import nl.naturalis.oaipmh.api.RepositoryException;
  * @author Ayco Holleman
  *
  */
-@SuppressWarnings("serial")
 public class RepositoryInitializationException extends RepositoryException {
 
 	public RepositoryInitializationException(String message)
