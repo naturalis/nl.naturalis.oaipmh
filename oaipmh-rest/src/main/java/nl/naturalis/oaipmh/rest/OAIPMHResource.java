@@ -122,8 +122,7 @@ public class OAIPMHResource {
    */
   @GET
   @Path("/{group}/{repo}")
-  public Response handleRequest(@PathParam("group") String repoGroup,
-      @PathParam("repo") String repoName) {
+  public Response handleRequest(@PathParam("group") String repoGroup, @PathParam("repo") String repoName) {
     return handle(repoGroup, repoName);
   }
 
@@ -156,7 +155,7 @@ public class OAIPMHResource {
     if (url == null) {
       url = uriInfo.getBaseUri().toString();
     }
-    StringBuilder sb = new StringBuilder(95);
+    StringBuilder sb = new StringBuilder(100);
     sb.append(url);
     if (!url.endsWith("/"))
       sb.append('/');
@@ -173,11 +172,9 @@ public class OAIPMHResource {
     }
     String msg;
     if (repoName == null) {
-      String fmt = "Receiving request for OAI repository %s";
-      msg = String.format(fmt, repoGroup);
+      msg = String.format("Receiving request for OAI repository %s", repoGroup);
     } else {
-      String fmt = "Receiving request for OAI repository %s/%s";
-      msg = String.format(fmt, repoGroup, repoName);
+      msg = String.format("Receiving request for OAI repository %s/%s", repoGroup, repoName);
     }
     logger.info(msg);
   }

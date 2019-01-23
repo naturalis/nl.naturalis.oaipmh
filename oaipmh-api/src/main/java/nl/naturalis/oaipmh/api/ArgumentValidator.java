@@ -19,12 +19,12 @@ import org.slf4j.LoggerFactory;
  * @author Ayco Holleman
  *
  */
-public abstract class ArgumentChecker {
+public abstract class ArgumentValidator {
 
   @SuppressWarnings("unused")
-  private static final Logger logger = LoggerFactory.getLogger(ArgumentChecker.class);
+  private static final Logger logger = LoggerFactory.getLogger(ArgumentValidator.class);
 
-  public ArgumentChecker() {}
+  public ArgumentValidator() {}
 
   /**
    * Checks the validity of the provided arguments. The {@link Argument#VERB verb} itself must <i>not</i> be present in the provided
@@ -33,7 +33,7 @@ public abstract class ArgumentChecker {
    * @param arguments
    * @return
    */
-  public List<OAIPMHerrorType> check(EnumSet<Argument> arguments) {
+  public List<OAIPMHerrorType> validate(EnumSet<Argument> arguments) {
     List<OAIPMHerrorType> errors = new ArrayList<>(4);
     if (!beforeCheck(arguments, errors)) {
       return errors;
@@ -43,25 +43,23 @@ public abstract class ArgumentChecker {
     if (required.size() != 0) {
       String missing = required.stream().map(String::valueOf).collect(Collectors.joining(","));
       String s = required.size() == 1 ? "" : "s";
-      String fmt = "Missing required argument%s: %s";
-      String msg = String.format(fmt, s, missing);
+      String msg = String.format("Missing required argument%s: %s", s, missing);
       errors.add(new BadArgumentError(msg));
     }
     EnumSet<Argument> copy = EnumSet.copyOf(arguments);
     copy.removeAll(getRequiredArguments());
     copy.removeAll(getOptionalArguments());
     if (copy.size() != 0) {
-      String illegal = copy.stream().map(String::valueOf).collect(Collectors.joining(","));
+      String illegalArgs = copy.stream().map(String::valueOf).collect(Collectors.joining(","));
       String s = copy.size() == 1 ? "" : "s";
-      String fmt = "Illegal argument%s: %s";
-      String msg = String.format(fmt, s, illegal);
+      String msg = String.format("Illegal argument%s: %s", s, illegalArgs);
       errors.add(new BadArgumentError(msg));
     }
     return errors;
   }
 
   /**
-   * Hook for subclasses to expand and control the argument checking process. Called at the beginning of the {@link #check(EnumSet)
+   * Hook for subclasses to expand and control the argument checking process. Called at the beginning of the {@link #validate(EnumSet)
    * check} method. If the {@code beforeCheck} method returns {@code false}, no further checks are done and the {@code check} method
    * returns immediately.
    * 

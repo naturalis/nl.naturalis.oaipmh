@@ -8,7 +8,6 @@ package nl.naturalis.oaipmh.api;
  * @author Ayco Holleman
  *
  */
-@SuppressWarnings("serial")
 public class RepositoryException extends Exception {
 
 	public RepositoryException()

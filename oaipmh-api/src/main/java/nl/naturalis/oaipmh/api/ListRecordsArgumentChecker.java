@@ -14,12 +14,12 @@ import static nl.naturalis.oaipmh.api.Argument.SET;
 import static nl.naturalis.oaipmh.api.Argument.UNTIL;
 
 /**
- * An {@link ArgumentChecker} for the {@link VerbType#LIST_RECORDS LIST_RECORDS} protocol request.
+ * An {@link ArgumentValidator} for the {@link VerbType#LIST_RECORDS LIST_RECORDS} protocol request.
  * 
  * @author Ayco Holleman
  *
  */
-public class ListRecordsArgumentChecker extends ArgumentChecker {
+public class ListRecordsArgumentChecker extends ArgumentValidator {
 
   private static final EnumSet<Argument> required;
   private static final EnumSet<Argument> optional;

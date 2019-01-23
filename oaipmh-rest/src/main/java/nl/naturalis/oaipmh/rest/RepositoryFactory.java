@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
 
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,17 +46,19 @@ public class RepositoryFactory {
    * Returns an {@link IOAIRepository} instance of the OAI repository with the specified name. This name is resolved to an actual
    * {@link IOAIRepository} instance as follows:
    * <ul>
-   * <li>First the configuration file for the REST service itself (oaipmh.properties) is checked to see if it contains a property named
-   * <code>repository.&#36;{repoGroup}.config</code>. Thus, given a base URL of http://example.com/oaipmh, a request for
-   * http://example.com/oaipmh/my-repo first results in oaipmh.properties being searched for a property named repository.my-repo.config. If
-   * this property is present, its value is taken to be the full path to the configuration file for the OAI repository.
-   * <li>If oaipmh.properties does not contain this property, the classpath is searched for the repository configuration file. The name of
-   * the repository configuration file is assumed to be <code>oai-repo.&#36;{repoGroup}.properties</code>.
-   * <li>The repository configuration file must be a standard Java properties file and it must contain at least one property. When using
-   * repository groups, the property must be named <code>&#36;{repoName}.repo.impl.class</code>. Otherwise it must be named
-   * <code>repo.impl.class</code>. In either case it must specify the fully-qualified name of the class implementing {@link IOAIRepository}.
-   * <li>Finally, the class specified by <code>repo.impl.class</code> or <code>&#36;{repoName}.repo.impl.class</code> is instantiated using
-   * its no-arg constructor.
+   * <li>First the configuration file for the REST service itself (oaipmh.properties) is checked to see if it contains a property
+   * named <code>repository.&#36;{repoGroup}.config</code>. Thus, given a base URL of http://example.com/oaipmh, a request for
+   * http://example.com/oaipmh/my-repo first results in oaipmh.properties being searched for a property named
+   * repository.my-repo.config. If this property is present, its value is taken to be the full path to the configuration file for
+   * the OAI repository.
+   * <li>If oaipmh.properties does not contain this property, the classpath is searched for the repository configuration file. The
+   * name of the repository configuration file is assumed to be <code>oai-repo.&#36;{repoGroup}.properties</code>.
+   * <li>The repository configuration file must be a standard Java properties file and it must contain at least one property. When
+   * using repository groups, the property must be named <code>&#36;{repoName}.repo.impl.class</code>. Otherwise it must be named
+   * <code>repo.impl.class</code>. In either case it must specify the fully-qualified name of the class implementing
+   * {@link IOAIRepository}.
+   * <li>Finally, the class specified by <code>repo.impl.class</code> or <code>&#36;{repoName}.repo.impl.class</code> is
+   * instantiated using its no-arg constructor.
    * </ul>
    * See {@link OAIPMHResource} for an explanation of repository groups.
    * 
@@ -68,9 +71,9 @@ public class RepositoryFactory {
    * 
    */
   @SuppressWarnings("unchecked")
-  public IOAIRepository build(String repoGroup, String repoName)
-      throws RepositoryInitializationException {
+  public IOAIRepository build(String repoGroup, String repoName) throws RepositoryInitializationException {
     String cacheKey = "%" + repoGroup + "/" + repoName + "%";
+    logger.debug("Searching cache for requested repository (group={};name={})", repoGroup, repoName);
     IOAIRepository repository = cache.get(cacheKey);
     if (repository == null) {
       ConfigObject config = getRepoConfigFromRestConfig(repoGroup);
@@ -78,8 +81,7 @@ public class RepositoryFactory {
         config = getRepoConfigFromClasspath(repoGroup);
       }
       if (config == null) {
-        String fmt = "Missing configuration file for OAI repository \"%s\"";
-        String msg = String.format(fmt, repoGroup);
+        String msg = String.format("Missing configuration file for OAI repository \"%s\"", repoGroup);
         throw new RepositoryInitializationException(msg);
       }
       String repoClassName;
@@ -112,14 +114,13 @@ public class RepositoryFactory {
     String pattern = REPO_CONFIG_FILENAME_PATTERN;
     String key = String.format(pattern, repoGroup) + ".file";
     String val = restConfig.get(key);
-    if (val == null) {
+    if (Strings.isBlank(val)) {
       return null;
     }
     logger.debug("Searching for {}", val);
     File f = new File(val);
     if (!f.isFile()) {
-      String fmt = "Invalid value for property \"%s\" in %s. No such file: \"%s\"";
-      String msg = String.format(fmt, key, val);
+      String msg = String.format("Invalid value for property \"%s\" in %s. No such file: \"%s\"", key, val);
       throw new RepositoryInitializationException(msg);
     }
     logConfigLocation(repoGroup, key);
@@ -129,16 +130,13 @@ public class RepositoryFactory {
   private ConfigObject getRepoConfigFromClasspath(String repoGroup) {
     File confDir = Registry.getInstance().getConfDir();
     String cfgFileName = String.format(REPO_CONFIG_FILENAME_PATTERN, repoGroup);
-    if (logger.isDebugEnabled()) {
-      String fmt = "Searching for {} in {}";
-      logger.debug(fmt, cfgFileName, confDir.getAbsolutePath());
-    }
+    logger.debug("Searching for {} in {}", cfgFileName, confDir.getAbsolutePath());
     File file = FileUtil.newFile(confDir, cfgFileName);
     if (file.isFile()) {
       logConfigLocation(repoGroup, file.getAbsolutePath());
       return new ConfigObject(file);
     }
-    logger.debug("Searching classpath for file {}");
+    logger.debug("Searching classpath for file {}", file.getAbsolutePath());
     InputStream is = getClass().getResourceAsStream(cfgFileName);
     if (is == null) {
       cfgFileName = "/" + cfgFileName;
