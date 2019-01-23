@@ -41,17 +41,17 @@ public abstract class ArgumentValidator {
     EnumSet<Argument> required = EnumSet.copyOf(getRequiredArguments());
     required.removeAll(arguments);
     if (required.size() != 0) {
-      String missing = required.stream().map(String::valueOf).collect(Collectors.joining(","));
+      String missing = required.stream().map(Argument::param).collect(Collectors.joining(","));
       String s = required.size() == 1 ? "" : "s";
       String msg = String.format("Missing required argument%s: %s", s, missing);
       errors.add(new BadArgumentError(msg));
     }
-    EnumSet<Argument> copy = EnumSet.copyOf(arguments);
-    copy.removeAll(getRequiredArguments());
-    copy.removeAll(getOptionalArguments());
-    if (copy.size() != 0) {
-      String illegalArgs = copy.stream().map(String::valueOf).collect(Collectors.joining(","));
-      String s = copy.size() == 1 ? "" : "s";
+    EnumSet<Argument> args = EnumSet.copyOf(arguments);
+    args.removeAll(getRequiredArguments());
+    args.removeAll(getOptionalArguments());
+    if (args.size() != 0) {
+      String illegalArgs = args.stream().map(Argument::param).collect(Collectors.joining(","));
+      String s = args.size() == 1 ? "" : "s";
       String msg = String.format("Illegal argument%s: %s", s, illegalArgs);
       errors.add(new BadArgumentError(msg));
     }
@@ -59,9 +59,9 @@ public abstract class ArgumentValidator {
   }
 
   /**
-   * Hook for subclasses to expand and control the argument checking process. Called at the beginning of the {@link #validate(EnumSet)
-   * check} method. If the {@code beforeCheck} method returns {@code false}, no further checks are done and the {@code check} method
-   * returns immediately.
+   * Hook for subclasses to expand and control the argument checking process. Called at the beginning of the
+   * {@link #validate(EnumSet) check} method. If the {@code beforeCheck} method returns {@code false}, no further checks are done
+   * and the {@code check} method returns immediately.
    * 
    * @param arguments
    * @param errors

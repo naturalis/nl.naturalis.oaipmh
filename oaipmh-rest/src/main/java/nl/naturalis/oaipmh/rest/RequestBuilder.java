@@ -194,7 +194,7 @@ public class RequestBuilder {
       ArgumentValidatorFactory acf = ArgumentValidatorFactory.INSTANCE;
       Optional<ArgumentValidator> validator = acf.getValidatorForVerb(request.getVerb());
       if (validator.isEmpty()) {
-        String supported = acf.getSupportedVerbs().stream().map(Object::toString).collect(Collectors.joining(", "));
+        String supported = acf.getSupportedVerbs().stream().map(VerbType::value).collect(Collectors.joining(", "));
         errors.add(new BadArgumentError("Unsupported verb:" + request.getVerb() + ". Supported verbs: " + supported));
       } else {
         errors.addAll(validator.get().validate(args));
