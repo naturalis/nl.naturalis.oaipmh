@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.ws.rs.core.UriInfo;
 
@@ -194,8 +193,7 @@ public class RequestBuilder {
       ArgumentValidatorFactory acf = ArgumentValidatorFactory.INSTANCE;
       Optional<ArgumentValidator> validator = acf.getValidatorForVerb(request.getVerb());
       if (validator.isEmpty()) {
-        String supported = acf.getSupportedVerbs().stream().map(VerbType::value).collect(Collectors.joining(", "));
-        errors.add(new BadArgumentError("Unsupported verb:" + request.getVerb() + ". Supported verbs: " + supported));
+        errors.add(BadArgumentError.verbNotSupported(request.getVerb(), acf.getSupportedVerbs()));
       } else {
         errors.addAll(validator.get().validate(args));
       }
