@@ -12,8 +12,8 @@ import java.io.OutputStream;
 public class IOUtil {
 
   /**
-   * Null-save closing of one or more {@code Closeable}s. Closes the specified {@code Closeable}s and wraps any {@code IOException} into a
-   * {@code RuntimeException}. If a {@code Closeable} is {@code null}, it is ignored.
+   * Null-save closing of one or more {@code Closeable}s. Closes the specified {@code Closeable}s and wraps any {@code IOException}
+   * into a {@code RuntimeException}. If a {@code Closeable} is {@code null}, it is ignored.
    * 
    * @param closeable
    */
@@ -30,8 +30,8 @@ public class IOUtil {
   }
 
   /**
-   * Reads all bytes from the specified input stream and writes. Bytes are read in and flushed out in chunks of {@code bufsize} length.
-   * Neither the input stream nor the output stream is closed when done.
+   * Reads all bytes from the specified input stream and writes them to the specified output stream. Bytes are read in and flushed
+   * out in chunks of {@code bufsize} length. Neither the input stream nor the output stream is closed when done.
    * 
    * @param is
    * @param out
@@ -57,10 +57,20 @@ public class IOUtil {
     }
   }
 
+  /**
+   * Reads all bytes from the specified input stream using a buffer size of 2048.
+   */
   public static byte[] readAllBytes(InputStream is) {
     return readAllBytes(is, 2048);
   }
 
+  /**
+   * Reads all bytes from the specified input stream using the specified buffer size.
+   * 
+   * @param is
+   * @param bufsize
+   * @return
+   */
   public static byte[] readAllBytes(InputStream is, int bufsize) {
     ByteArrayOutputStream baos = new ByteArrayOutputStream(bufsize);
     if (!(is instanceof BufferedInputStream || is instanceof ByteArrayInputStream)) {

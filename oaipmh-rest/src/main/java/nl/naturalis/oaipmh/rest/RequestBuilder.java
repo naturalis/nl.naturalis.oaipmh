@@ -139,7 +139,7 @@ public class RequestBuilder {
         request.setDateFormatFrom(dateFormat);
       } catch (ParseException e2) {
         logger.error("Bad \"from\" date: {}", arg);
-        errors.add(badDate(arg));
+        errors.add(BadArgumentError.badDate(arg));
       }
     }
   }
@@ -159,7 +159,7 @@ public class RequestBuilder {
         request.setDateFormatUntil(dateFormat);
       } catch (ParseException e2) {
         logger.error("Bad \"until\" date: {}", arg);
-        errors.add(badDate(arg));
+        errors.add(BadArgumentError.badDate(arg));
       }
     }
   }
@@ -261,12 +261,6 @@ public class RequestBuilder {
       }
     }
     return s;
-  }
-
-  private static OAIPMHerrorType badDate(String param) {
-    String fmt = "Invalid date: \"%s\" (Must be either \"%s\" or \"%s\")";
-    String msg = String.format(fmt, param, dateTimeFormat, dateFormat);
-    return new BadArgumentError(msg);
   }
 
 }

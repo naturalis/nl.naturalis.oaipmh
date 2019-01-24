@@ -1,5 +1,6 @@
 package nl.naturalis.oaipmh.rest;
 
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -115,6 +116,14 @@ public class RESTUtil {
    */
   public static Response xmlResponse(Object jaxbObject) {
     return Response.ok(jaxbObject, MediaType.APPLICATION_XML).build();
+  }
+  
+  public static Response streamingResponse(InputStream is, MediaType mediaType) {
+    return Response.ok().type(mediaType).entity(is).build();
+  }
+  
+  public static Response streamingResponse(InputStream is, String mediaType) {
+    return Response.ok().type(mediaType).entity(is).build();
   }
 
   /**

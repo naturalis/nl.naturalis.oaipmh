@@ -16,8 +16,6 @@ import org.xml.sax.SAXParseException;
 
 public class DOMUtil {
 
-  public static DocumentBuilder docBuilder;
-
   public static Element getDocumentElement(String xml) throws SAXParseException {
     return getDocumentElement(xml, false, false);
   }
@@ -37,8 +35,8 @@ public class DOMUtil {
   }
 
   /**
-   * Returns all child elements of the specified element. This method returns {@code null} if the specified element has no children of type
-   * {@code Element}.
+   * Returns all child elements of the specified element. This method returns {@code null} if the specified element has no children
+   * of type {@code Element}.
    * 
    * @param parent
    * @return
@@ -107,8 +105,8 @@ public class DOMUtil {
   }
 
   /**
-   * Get the value (i&#46;e&#46; text content) of the first child of the specified element which has the specified tag name. This method
-   * returns {@code null} if the specified element has no child element with the specified tag name.
+   * Get the value (i&#46;e&#46; text content) of the first child of the specified element which has the specified tag name. This
+   * method returns {@code null} if the specified element has no child element with the specified tag name.
    * 
    * @param parent
    * @param tagName
@@ -120,9 +118,9 @@ public class DOMUtil {
   }
 
   /**
-   * Get the value (i&#46;e&#46; text content) of the first child of the specified element which has the specified tag name. The value is
-   * assumed to be, and converted to an integer. This method returns 0 (zero) if the specified element has no child element with the
-   * specified tag name.
+   * Get the value (i&#46;e&#46; text content) of the first child of the specified element which has the specified tag name. The
+   * value is assumed to be, and converted to an integer. This method returns 0 (zero) if the specified element has no child element
+   * with the specified tag name.
    * 
    * @param parent
    * @param tagName

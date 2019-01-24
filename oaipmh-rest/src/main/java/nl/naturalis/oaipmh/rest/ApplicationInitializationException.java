@@ -1,41 +1,35 @@
 package nl.naturalis.oaipmh.rest;
 
-
 /**
- * Exception thrown if anything goes wrong while configuring and initializing
- * the REST service.
+ * Exception thrown if anything goes wrong while configuring and initializing the REST service.
  * 
  * @see Registry
  * 
  * @author Ayco Holleman
  *
  */
-@SuppressWarnings("serial")
 public class ApplicationInitializationException extends RuntimeException {
 
-	/**
-	 * @param message
-	 */
-	public ApplicationInitializationException(String message)
-	{
-		super(message);
-	}
+  /**
+   * @param message
+   */
+  public ApplicationInitializationException(String message) {
+    super(message);
+  }
 
-	/**
-	 * @param cause
-	 */
-	public ApplicationInitializationException(Throwable cause)
-	{
-		super(cause);
-	}
+  /**
+   * @param cause
+   */
+  public ApplicationInitializationException(Throwable cause) {
+    super(cause);
+  }
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public ApplicationInitializationException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+  /**
+   * @param message
+   * @param cause
+   */
+  public ApplicationInitializationException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
 }

@@ -2,6 +2,9 @@ package nl.naturalis.oaipmh.api;
 
 import static org.openarchives.oai._2.OAIPMHerrorcodeType.BAD_ARGUMENT;
 
+import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateFormat;
+import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormat;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,6 +26,12 @@ public class BadArgumentError extends OAIPMHerrorType {
         .append(". Supported: ")
         .append(supported.stream().map(VerbType::value).collect(Collectors.joining(", ")));
     return new BadArgumentError(sb.toString());
+  }
+
+  public static BadArgumentError badDate(String param) {
+    String fmt = "Invalid date: \"%s\" (Must be either \"%s\" or \"%s\")";
+    String msg = String.format(fmt, param, dateTimeFormat, dateFormat);
+    return new BadArgumentError(msg);
   }
 
   public BadArgumentError(String message) {

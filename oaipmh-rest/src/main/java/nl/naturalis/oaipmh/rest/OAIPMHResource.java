@@ -1,5 +1,6 @@
 package nl.naturalis.oaipmh.rest;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +25,7 @@ import nl.naturalis.oaipmh.api.XSDNotFoundException;
 import nl.naturalis.oaipmh.util.IOUtil;
 
 import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.createResponseSkeleton;
-import static nl.naturalis.oaipmh.rest.RESTUtil.plainTextResponse;
+import static nl.naturalis.oaipmh.rest.RESTUtil.*;
 import static nl.naturalis.oaipmh.rest.RESTUtil.serverError;
 import static nl.naturalis.oaipmh.rest.RESTUtil.xmlResponse;
 
@@ -60,6 +61,18 @@ public class OAIPMHResource {
   private UriInfo uriInfo;
 
   /**
+   * Intercept requests for favicon
+   * @return
+   */
+  @GET
+  @Path("/favicon.ico")
+  public Response favicon() {
+    // return Response.noContent().build();
+    InputStream is = getClass().getResourceAsStream("/favicon.ico");
+    return streamingResponse(is, "image/x-icon");
+  }
+
+  /**
    * Show some welcome content.
    * 
    * @return
@@ -67,9 +80,11 @@ public class OAIPMHResource {
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String welcome() {
-    InputStream in = getClass().getResourceAsStream("welcome.html");
-    String s = new String(IOUtil.readAllBytes(in));
-    return s;
+    try (InputStream in = getClass().getResourceAsStream("welcome.html")) {
+      return new String(IOUtil.readAllBytes(in));
+    } catch (IOException e) {
+      throw new WebApplicationException("Error closing input stream for welcome.html", e);
+    }
   }
 
   /**
@@ -144,7 +159,7 @@ public class OAIPMHResource {
         logger.debug("Sending request to OAI repository");
       }
       repository.init(request);
-      return new OAIPMHStream(request, repository).stream();
+      return new OAIPMHStream(request, repository).toResponse();
     } catch (Throwable t) {
       return serverError(t);
     }
@@ -157,18 +172,20 @@ public class OAIPMHResource {
     }
     StringBuilder sb = new StringBuilder(100);
     sb.append(url);
-    if (!url.endsWith("/"))
+    if (!url.endsWith("/")) {
       sb.append('/');
+    }
     sb.append(repoGroup);
-    if (repoName != null)
+    if (repoName != null) {
       sb.append('/').append(repoName);
+    }
     sb.append('/');
     return sb.toString();
   }
 
   private static void logRequest(String repoGroup, String repoName) {
     if (logger.isDebugEnabled()) { // Make start of request easy to find in log file
-      logger.debug("***** [ NEW OAI-PMH REQUEST ] *****");
+      logger.debug("**** [ NEW OAI-PMH REQUEST ] ****");
     }
     String msg;
     if (repoName == null) {

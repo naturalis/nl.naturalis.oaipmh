@@ -49,7 +49,7 @@ class OAIPMHStream implements StreamingOutput {
 	 * 
 	 * @return
 	 */
-	Response stream()
+	Response toResponse()
 	{
 		return xmlResponse(this);
 	}

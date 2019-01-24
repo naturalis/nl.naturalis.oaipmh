@@ -72,19 +72,19 @@ public class OAIPMHUtil {
     } else {
       echo.setMetadataPrefix(request.getMetadataPrefix());
       if (request.getFrom() != null) {
-        if (request.getDateFormatFrom() == dateTimeFormat)
+        if (request.getDateFormatFrom() == dateTimeFormat) {
           echo.setFrom(dateTimeFormatter.format(request.getFrom()));
-        else
+        } else {
           echo.setFrom(dateFormatter.format(request.getFrom()));
+        }
       }
-
       if (request.getUntil() != null) {
-        if (request.getDateFormatUntil() == dateTimeFormat)
+        if (request.getDateFormatUntil() == dateTimeFormat) {
           echo.setUntil(dateTimeFormatter.format(request.getUntil()));
-        else
+        } else {
           echo.setUntil(dateFormatter.format(request.getUntil()));
+        }
       }
-
       echo.setSet(request.getSet());
       echo.setIdentifier(request.getIdentifier());
     }
@@ -93,9 +93,7 @@ public class OAIPMHUtil {
 
   private static XMLGregorianCalendar newXMLGregorianCalendar() {
     try {
-      XMLGregorianCalendar xgc = DatatypeFactory.newInstance()
-          .newXMLGregorianCalendar(
-              new GregorianCalendar());
+      XMLGregorianCalendar xgc = DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar());
       xgc.setMillisecond(DatatypeConstants.FIELD_UNDEFINED);
       // Hack:
       xgc.setTimezone(0);

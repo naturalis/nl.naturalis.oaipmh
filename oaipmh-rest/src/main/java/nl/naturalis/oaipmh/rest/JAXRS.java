@@ -12,9 +12,8 @@ import javax.ws.rs.core.Application;
 @ApplicationPath("/")
 public class JAXRS extends Application {
 
-	public JAXRS()
-	{
-		super();
-	}
+  public JAXRS() {
+    super();
+  }
 
 }

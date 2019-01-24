@@ -20,7 +20,7 @@ import static nl.naturalis.oaipmh.util.ClassUtil.isA;
 
 public class BeanPrinter {
 
-  private static final Package PKG_JAVA_LANG = Package.getPackage("java.lang");
+  private static final Package PKG_JAVA_LANG = getPackage("java.lang");
   // Separates field name from field value
   private static final String FLD_SEP = ": ";
   // Separates map key from values in map value
@@ -421,7 +421,7 @@ public class BeanPrinter {
    */
   public void printOpaque(String packageName)
   {
-    Package p = Package.getPackage(packageName);
+    Package p = getPackage(packageName);
     if (p == null)
       throw new RuntimeException("No such package: " + packageName);
     opaquePackages.add(p);
@@ -964,6 +964,10 @@ public class BeanPrinter {
       }
     }
     return sb.toString();
+  }
+  
+  private static Package getPackage(String pkgName) {
+    return Object.class.getClassLoader().getDefinedPackage(pkgName);
   }
 
 }
