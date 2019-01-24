@@ -15,7 +15,6 @@ import nl.naturalis.oaipmh.api.RepositoryException;
 import nl.naturalis.oaipmh.api.XSDNotFoundException;
 import nl.naturalis.oaipmh.api.util.OAIPMHStreamer;
 import nl.naturalis.oaipmh.util.ConfigObject;
-import nl.naturalis.oaipmh.util.IOUtil;
 
 import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.GENEIOUS_XMLNS;
 
@@ -46,17 +45,11 @@ public abstract class GeneiousOAIRepository implements IOAIRepository {
   }
 
   @Override
-  public void getXSDForMetadataPrefix(OutputStream out, String prefix) throws RepositoryException {
+  public InputStream getXSDForMetadataPrefix(String prefix) throws RepositoryException {
     if (prefix.equals("geneious")) {
-      InputStream in = getClass().getResourceAsStream("/geneious.xsd");
-      if (in == null) {
-        throw new XSDNotFoundException(prefix);
-      }
-      IOUtil.pipe(in, out, 2048);
-      IOUtil.close(in);
-    } else {
-      throw new XSDNotFoundException(prefix);
+      return getClass().getResourceAsStream("/geneious.xsd");
     }
+    throw new XSDNotFoundException(prefix);
   }
 
   @Override

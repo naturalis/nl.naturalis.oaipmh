@@ -1,5 +1,6 @@
 package nl.naturalis.oaipmh.geneious;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.junit.Test;
@@ -14,17 +15,17 @@ import static org.junit.Assert.assertNotNull;
 
 public class XMLSerialisableRootElementFactoryTest {
 
-	@Test
-	public void testBuild() throws SAXParseException
-	{
-		XMLSerialisableRootElementFactory factory = new XMLSerialisableRootElementFactory();
-		InputStream is = getClass().getResourceAsStream("/plugin_document_xml_01.xml");
-		String xml = FileUtil.getContents(is);
-		Element root = DOMUtil.getDocumentElement(xml);
-		XMLSerialisableRootElement xsre = factory.build(root);
-		assertNotNull("01", xsre.getName());
-		assertEquals("02", "foo", xsre.getName());
-		assertEquals("03", Boolean.TRUE, xsre.isDummyCharSequence());
-	}
+  @Test
+  public void testBuild() throws SAXParseException, IOException {
+    XMLSerialisableRootElementFactory factory = new XMLSerialisableRootElementFactory();
+    try (InputStream is = getClass().getResourceAsStream("/plugin_document_xml_01.xml")) {
+      String xml = FileUtil.getContents(is);
+      Element root = DOMUtil.getDocumentElement(xml);
+      XMLSerialisableRootElement xsre = factory.build(root);
+      assertNotNull("01", xsre.getName());
+      assertEquals("02", "foo", xsre.getName());
+      assertEquals("03", Boolean.TRUE, xsre.isDummyCharSequence());
+    }
+  }
 
 }

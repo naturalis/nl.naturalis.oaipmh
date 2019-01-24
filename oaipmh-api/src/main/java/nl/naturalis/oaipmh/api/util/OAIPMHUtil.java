@@ -51,7 +51,8 @@ public class OAIPMHUtil {
   private OAIPMHUtil() {}
 
   /**
-   * Creates the outer XML elements of an OAI-PMH response.
+   * Creates the outer XML elements of an OAI-PMH response. The inner elements, which are repository-specific, are added later on to
+   * the skeleton produced by this method.
    * 
    * @param request
    * @return

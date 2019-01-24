@@ -34,7 +34,6 @@ import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormatter;
 import static nl.naturalis.oaipmh.api.util.ObjectFactories.oaiFactory;
 import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.checkRequest;
 import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.connect;
-import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.disconnect;
 
 /**
  * <p>
@@ -210,20 +209,17 @@ public abstract class ListRecordsHandler {
   private List<AnnotatedDocument> getAnnotatedDocuments() throws RepositoryException {
     List<AnnotatedDocument> records = null;
     String sql = getSQLQuery();
-    Connection conn = null;
-    try {
-      conn = connect(config);
-      Statement stmt = conn.createStatement();
-      if (logger.isDebugEnabled()) {
-        logger.debug("Executing query:\n{}", sql);
+    try (Connection conn = connect(config)) {
+      try (Statement stmt = conn.createStatement()) {
+        if (logger.isDebugEnabled()) {
+          logger.debug("Executing query:\n{}", sql);
+        }
+        try (ResultSet rs = stmt.executeQuery(sql)) {
+          records = createAnnotatedDocuments(rs);
+        }
       }
-      ResultSet rs = stmt.executeQuery(sql.toString());
-      records = createAnnotatedDocuments(rs);
-      rs.close();
     } catch (SQLException e) {
       throw new RepositoryException("Error while executing query", e);
-    } finally {
-      disconnect(conn);
     }
     for (IAnnotatedDocumentSetFilter setFilter : setFilters) {
       records = setFilter.filter(records);
@@ -288,8 +284,7 @@ public abstract class ListRecordsHandler {
     resumptionToken.setValue(token);
   }
 
-  private void addRecord(AnnotatedDocument ad, ListRecordsType listRecords)
-      throws PostProcessingException {
+  private void addRecord(AnnotatedDocument ad, ListRecordsType listRecords) throws PostProcessingException {
     RecordType record = oaiFactory.createRecordType();
     listRecords.getRecord().add(record);
     record.setHeader(createHeader(ad));

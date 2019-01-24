@@ -73,23 +73,6 @@ public class GeneiousOAIUtil {
     }
   }
 
-  /**
-   * Closes the specified database connection (null-save).
-   * 
-   * @param conn
-   */
-  public static void disconnect(Connection conn) {
-    if (conn == null)
-      return;
-    if (logger.isDebugEnabled())
-      logger.debug("Disconnecting from Geneious database");
-    try {
-      conn.close();
-    } catch (SQLException e) {
-      logger.error("Error (ignored) while disconnecting from Geneious database", e);
-      conn = null;
-    }
-  }
 
   /**
    * Determines the maturity of a Geneious document, with consensus documents having the highest maturity and dummy documents the

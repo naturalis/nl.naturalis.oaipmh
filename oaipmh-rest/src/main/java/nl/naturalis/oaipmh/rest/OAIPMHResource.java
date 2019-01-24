@@ -20,13 +20,13 @@ import org.slf4j.LoggerFactory;
 
 import nl.naturalis.oaipmh.api.IOAIRepository;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
-import nl.naturalis.oaipmh.api.RepositoryException;
 import nl.naturalis.oaipmh.api.XSDNotFoundException;
 import nl.naturalis.oaipmh.util.IOUtil;
 
 import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.createResponseSkeleton;
-import static nl.naturalis.oaipmh.rest.RESTUtil.*;
+import static nl.naturalis.oaipmh.rest.RESTUtil.plainTextResponse;
 import static nl.naturalis.oaipmh.rest.RESTUtil.serverError;
+import static nl.naturalis.oaipmh.rest.RESTUtil.streamingResponse;
 import static nl.naturalis.oaipmh.rest.RESTUtil.xmlResponse;
 
 /**
@@ -61,18 +61,6 @@ public class OAIPMHResource {
   private UriInfo uriInfo;
 
   /**
-   * Intercept requests for favicon
-   * @return
-   */
-  @GET
-  @Path("/favicon.ico")
-  public Response favicon() {
-    // return Response.noContent().build();
-    InputStream is = getClass().getResourceAsStream("/favicon.ico");
-    return streamingResponse(is, "image/x-icon");
-  }
-
-  /**
    * Show some welcome content.
    * 
    * @return
@@ -100,17 +88,11 @@ public class OAIPMHResource {
   public Response getXSD(@PathParam("group") String repoGroup, @PathParam("repo") String repoName,
       @PathParam("prefix") final String prefix) {
     try {
-      final RepositoryFactory factory = RepositoryFactory.getInstance();
-      final IOAIRepository repository = factory.build(repoGroup, repoName);
-      return xmlResponse(out -> {
-        try {
-          repository.getXSDForMetadataPrefix(out, prefix);
-        } catch (XSDNotFoundException e) {
-          throw new WebApplicationException(plainTextResponse(404, e.getMessage()));
-        } catch (RepositoryException e) {
-          throw new WebApplicationException(serverError(e));
-        }
-      });
+      RepositoryFactory factory = RepositoryFactory.getInstance();
+      IOAIRepository repository = factory.build(repoGroup, repoName);
+      return streamingResponse(repository.getXSDForMetadataPrefix(prefix), MediaType.APPLICATION_XML);
+    } catch (XSDNotFoundException e) {
+      return plainTextResponse(404, e.getMessage());
     } catch (Throwable t) {
       return serverError(t);
     }
@@ -139,6 +121,18 @@ public class OAIPMHResource {
   @Path("/{group}/{repo}")
   public Response handleRequest(@PathParam("group") String repoGroup, @PathParam("repo") String repoName) {
     return handle(repoGroup, repoName);
+  }
+
+  /**
+   * Intercept annoying requests for favicon.
+   * 
+   * @return
+   */
+  @GET
+  @Path("/favicon.ico")
+  public Response favicon() {
+    // return Response.noContent().build();
+    return streamingResponse(getClass().getResourceAsStream("/favicon.ico"), "image/x-icon");
   }
 
   private Response handle(String repoGroup, String repoName) {
