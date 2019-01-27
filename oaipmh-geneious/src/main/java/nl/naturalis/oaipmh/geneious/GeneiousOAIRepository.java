@@ -13,7 +13,7 @@ import nl.naturalis.oaipmh.api.OAIPMHException;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.RepositoryException;
 import nl.naturalis.oaipmh.api.XSDNotFoundException;
-import nl.naturalis.oaipmh.api.util.OAIPMHStreamer;
+import nl.naturalis.oaipmh.api.util.OAIPMHWriter;
 import nl.naturalis.oaipmh.util.ConfigObject;
 
 import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.GENEIOUS_XMLNS;
@@ -98,13 +98,13 @@ public abstract class GeneiousOAIRepository implements IOAIRepository {
    * @throws RepositoryException
    */
   protected void stream(OAIPMHtype oaipmh, OutputStream out) throws RepositoryException {
-    OAIPMHStreamer streamer = new OAIPMHStreamer();
-    streamer.setRootElement(oaipmh);
+    OAIPMHWriter streamer = new OAIPMHWriter();
+    streamer.setOAIPMH(oaipmh);
     streamer.addJaxbPackage("nl.naturalis.oaipmh.geneious.jaxb");
     String schemaLocation = repoBaseURL + "xsd/geneious.xsd";
     streamer.addSchemaLocation(GENEIOUS_XMLNS, schemaLocation);
     try {
-      streamer.stream(out);
+      streamer.write(out);
     } catch (JAXBException e) {
       throw new RepositoryException(e);
     }

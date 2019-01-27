@@ -57,11 +57,11 @@ public class OAIPMHUtil {
    * @param request
    * @return
    */
-  public static OAIPMHtype createResponseSkeleton(OAIPMHRequest request) {
-    OAIPMHtype response = ObjectFactories.oaiFactory.createOAIPMHtype();
-    response.setResponseDate(newXMLGregorianCalendar());
-    response.setRequest(echo(request));
-    return response;
+  public static OAIPMHtype createOAIPMHSkeleton(OAIPMHRequest request) {
+    OAIPMHtype oaipmh = ObjectFactories.oaiFactory.createOAIPMHtype();
+    oaipmh.setResponseDate(newXMLGregorianCalendar());
+    oaipmh.setRequest(echo(request));
+    return oaipmh;
   }
 
   private static RequestType echo(OAIPMHRequest request) {

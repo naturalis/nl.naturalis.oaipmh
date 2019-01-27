@@ -1,7 +1,6 @@
 package nl.naturalis.oaipmh.geneious;
 
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -36,6 +35,15 @@ public class GeneiousOAIUtil {
 
   private static final Logger logger = LoggerFactory.getLogger(GeneiousOAIUtil.class);
 
+  // TODO use connection pool
+  static {
+    try {
+      DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+    } catch (SQLException e) {
+      logger.error("Could not register mysql driver", e);
+    }
+  }
+
   private GeneiousOAIUtil() {}
 
   /**
@@ -60,19 +68,16 @@ public class GeneiousOAIUtil {
    */
   public static Connection connect(ConfigObject cfg) throws RepositoryException {
     String dsn = cfg.required("db.dsn");
-    logger.info("Connecting to Geneious database: " + dsn);
+    logger.debug("Connecting to Geneious database: " + dsn);
     String user = cfg.required("db.user");
     String password = cfg.required("db.password");
     try {
-      @SuppressWarnings("unused")
-      Driver driver = new com.mysql.jdbc.Driver();
       Connection conn = DriverManager.getConnection(dsn, user, password);
       return conn;
     } catch (SQLException e) {
       throw new RepositoryException("Failed to connect to Geneious database", e);
     }
   }
-
 
   /**
    * Determines the maturity of a Geneious document, with consensus documents having the highest maturity and dummy documents the

@@ -2,6 +2,7 @@ package nl.naturalis.oaipmh.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -49,8 +50,7 @@ public class ConfigObject {
    * Equivalent to {@code isTrueValue(value, false)}. In other words {@code null} and empty {@code String}s are considered to be
    * {@code false} .
    * 
-   * @param value
-   *          The {@code String} to convert to a boolean
+   * @param value The {@code String} to convert to a boolean
    * @return
    * 
    * @see #isTrueValue(String, boolean)
@@ -63,14 +63,12 @@ public class ConfigObject {
   }
 
   /**
-   * Determines whether the specified value is a true-ish string. Returns {@code dfault} if the string is {@code null} or empty. Returns
-   * {@code true} if the specified value is "true", "1", "yes" "on" or "ok", {@code false} otherwise. The string is trimmed first and
-   * compared case-insensitively to these values.
+   * Determines whether the specified value is a true-ish string. Returns {@code dfault} if the string is {@code null} or empty.
+   * Returns {@code true} if the specified value is "true", "1", "yes" "on" or "ok", {@code false} otherwise. The string is trimmed
+   * first and compared case-insensitively to these values.
    * 
-   * @param value
-   *          The {@code String} to convert to a boolean
-   * @param dfault
-   *          The value to return if {@code value} is null or empty
+   * @param value The {@code String} to convert to a boolean
+   * @param dfault The value to return if {@code value} is null or empty
    * 
    * @return
    */
@@ -89,8 +87,7 @@ public class ConfigObject {
    * Determines whether or not the specified system property has a true-ish value. If the property does not exist, {@code false} is
    * returned.
    * 
-   * @param propName
-   *          The name of the system property
+   * @param propName The name of the system property
    * 
    * @return
    * 
@@ -101,13 +98,11 @@ public class ConfigObject {
   }
 
   /**
-   * Determines if the specified property in the specified {@code Properties} object has a true-ish value. If the property does not exist,
-   * {@code false} is returned.
+   * Determines if the specified property in the specified {@code Properties} object has a true-ish value. If the property does not
+   * exist, {@code false} is returned.
    * 
-   * @param config
-   *          The {@code Properties} object
-   * @param propName
-   *          The name of the property
+   * @param config The {@code Properties} object
+   * @param propName The name of the property
    * 
    * @return
    */
@@ -119,10 +114,8 @@ public class ConfigObject {
    * Determines whether or not the specified system property has a true-ish value. If the property does not exist, {@code dfault} is
    * returned.
    * 
-   * @param propName
-   *          The name of the property
-   * @param dfault
-   *          The value to return if the property does not exist or is an empty string
+   * @param propName The name of the property
+   * @param dfault The value to return if the property does not exist or is an empty string
    * 
    * @return
    * 
@@ -133,15 +126,12 @@ public class ConfigObject {
   }
 
   /**
-   * Determines if the specified property in the specified {@code Properties} object has a true-ish value. If the property does not exist,
-   * {@code dfault} is returned.
+   * Determines if the specified property in the specified {@code Properties} object has a true-ish value. If the property does not
+   * exist, {@code dfault} is returned.
    * 
-   * @param config
-   *          The {@code Properties} object
-   * @param propName
-   *          The name of the property
-   * @param dfault
-   *          The value to return if the property does not exist or is an empty string
+   * @param config The {@code Properties} object
+   * @param propName The name of the property
+   * @param dfault The value to return if the property does not exist or is an empty string
    * 
    * @return
    * 
@@ -160,10 +150,10 @@ public class ConfigObject {
    */
   public ConfigObject(File propertiesFile) {
     config = new Properties();
-    try {
-      config.load(new FileInputStream(propertiesFile));
-    } catch (Throwable t) {
-      throw ExceptionUtil.smash(t);
+    try (FileInputStream fis = new FileInputStream(propertiesFile)) {
+      config.load(fis);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
   }
 
@@ -188,18 +178,17 @@ public class ConfigObject {
    */
   public ConfigObject(String path) {
     config = new Properties();
-    try {
-      config.load(new FileInputStream(path));
-    } catch (Throwable t) {
-      throw ExceptionUtil.smash(t);
+    try (FileInputStream fis = new FileInputStream(path)) {
+      config.load(fis);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
   }
 
   /**
    * Check whether or not there is property with the specified name.
    * 
-   * @param property
-   *          The name of the property to verify
+   * @param property The name of the property to verify
    * @return Whether or not there is property with the specified name
    */
   public boolean hasProperty(String property) {
@@ -233,9 +222,9 @@ public class ConfigObject {
 
   /**
    * Get the value of the specified property. Equivalent to {@code get(property, null, true)}. This method behaves differently than
-   * {@link java.util.Properties#getProperty(String) Properties.getProperty()}. The latter method returns {@code null} if the property does
-   * not exist and an empty string if it does, but is not set. This method, on the other hand, returns {@code null} in both cases. To get
-   * the same behaviour as {@code Properties.getProperty()} use {@link #get(String, boolean)}.
+   * {@link java.util.Properties#getProperty(String) Properties.getProperty()}. The latter method returns {@code null} if the
+   * property does not exist and an empty string if it does, but is not set. This method, on the other hand, returns {@code null} in
+   * both cases. To get the same behaviour as {@code Properties.getProperty()} use {@link #get(String, boolean)}.
    * 
    * @param property
    * @return
@@ -272,12 +261,10 @@ public class ConfigObject {
   /**
    * Get the value of the specified property.
    * 
-   * @param property
-   *          The property whose value to get
-   * @param dfault
-   *          The value to return if the property does not exist
-   * @param emptyIsDefault
-   *          Whether or not to return the default value {@code dfault} if the property is present but its value is an empty string
+   * @param property The property whose value to get
+   * @param dfault The value to return if the property does not exist
+   * @param emptyIsDefault Whether or not to return the default value {@code dfault} if the property is present but its value is an
+   *        empty string
    * 
    * @return The value of the property
    */
@@ -292,8 +279,7 @@ public class ConfigObject {
   /**
    * Get the value of the specified integer property. If the property does not exist, 0 (zero) is returned.
    * 
-   * @param property
-   *          The property to look up
+   * @param property The property to look up
    * @return The value of the property
    */
   public int getInt(String property) {
@@ -310,8 +296,7 @@ public class ConfigObject {
   /**
    * Get the value of the specified boolean property.
    * 
-   * @param property
-   *          The property to look up
+   * @param property The property to look up
    * 
    * @return
    * 
@@ -325,10 +310,8 @@ public class ConfigObject {
   /**
    * Get the value of the specified boolean property.
    * 
-   * @param property
-   *          The property to look up
-   * @param dfault
-   *          The value to return if the property does not exist or is an empty string.
+   * @param property The property to look up
+   * @param dfault The value to return if the property does not exist or is an empty string.
    * 
    * @return
    * 
@@ -340,17 +323,14 @@ public class ConfigObject {
   }
 
   /**
-   * Get the value of the specified property. The property is assumed to be a required property (it must exist and have a non-whitespace
-   * value). If the property does not exist a {@link MissingPropertyException} is thrown. If its value contains only whitespace, a
-   * {@link PropertyNotSetException} is thrown.
+   * Get the value of the specified property. The property is assumed to be a required property (it must exist and have a
+   * non-whitespace value). If the property does not exist a {@link MissingPropertyException} is thrown. If its value contains only
+   * whitespace, a {@link PropertyNotSetException} is thrown.
    * 
-   * @param property
-   *          The property to look up
+   * @param property The property to look up
    * @return The value of the specified property
-   * @throws MissingPropertyException
-   *           If the specified property does not exist
-   * @throws PropertyNotSetException
-   *           If the value of the property contains only whitespace
+   * @throws MissingPropertyException If the specified property does not exist
+   * @throws PropertyNotSetException If the value of the property contains only whitespace
    */
   public String required(String property) {
     if (config.containsKey(property)) {
@@ -364,14 +344,13 @@ public class ConfigObject {
   }
 
   /**
-   * Get the value of the specified property, cast to the specified type. Allowed types are: all primitive types, all primitive wrappers,
-   * and {@code String}. The property is assumed to be a required property (it must exist and have a non-whitespace value). If the property
-   * does not exist a {@link MissingPropertyException} is thrown. If its value contains only whitespace, a {@link PropertyNotSetException}
-   * is thrown.
+   * Get the value of the specified property, cast to the specified type. Allowed types are: all primitive types, all primitive
+   * wrappers, and {@code String}. The property is assumed to be a required property (it must exist and have a non-whitespace
+   * value). If the property does not exist a {@link MissingPropertyException} is thrown. If its value contains only whitespace, a
+   * {@link PropertyNotSetException} is thrown.
    * 
    * @param property
-   * @param castTo
-   *          The class to cast the property's value to.
+   * @param castTo The class to cast the property's value to.
    * @return
    */
   @SuppressWarnings("unchecked")
@@ -407,13 +386,12 @@ public class ConfigObject {
   }
 
   /**
-   * Get a {@code File} instance corresponding to the specified property. If the property does not point to an existing regular file, an
-   * {@link InvalidValueException} is thrown. The property is assumed to be a required property (it must exist and have a non-whitespace
-   * value). If the property does not exist a {@link MissingPropertyException} is thrown. If its value contains only whitespace, a
-   * {@link PropertyNotSetException} is thrown.
+   * Get a {@code File} instance corresponding to the specified property. If the property does not point to an existing regular
+   * file, an {@link InvalidValueException} is thrown. The property is assumed to be a required property (it must exist and have a
+   * non-whitespace value). If the property does not exist a {@link MissingPropertyException} is thrown. If its value contains only
+   * whitespace, a {@link PropertyNotSetException} is thrown.
    * 
-   * @param property
-   *          The path of the file
+   * @param property The path of the file
    * @return A {@code File} object corresponding to the path
    */
   public File getFile(String property) {
@@ -425,10 +403,10 @@ public class ConfigObject {
   }
 
   /**
-   * Get a {@code File} instance corresponding to the specified property. If the property does not point to an existing directory, an
-   * {@link InvalidValueException} is thrown. The property is assumed to be a required property (it must exist and have a non-whitespace
-   * value). If the property does not exist a {@link MissingPropertyException} is thrown. If its value contains only whitespace, a
-   * {@link PropertyNotSetException} is thrown.
+   * Get a {@code File} instance corresponding to the specified property. If the property does not point to an existing directory,
+   * an {@link InvalidValueException} is thrown. The property is assumed to be a required property (it must exist and have a
+   * non-whitespace value). If the property does not exist a {@link MissingPropertyException} is thrown. If its value contains only
+   * whitespace, a {@link PropertyNotSetException} is thrown.
    * 
    * @param property
    * @return
@@ -442,10 +420,10 @@ public class ConfigObject {
   }
 
   /**
-   * Get a {@code Path} instance corresponding to the specified property. If the property does not point to an existing file or directory,
-   * an {@link InvalidValueException} is thrown. The property is assumed to be a required property (it must exist and have a non-whitespace
-   * value). If the property does not exist a {@link MissingPropertyException} is thrown. If its value contains only whitespace, a
-   * {@link PropertyNotSetException} is thrown.
+   * Get a {@code Path} instance corresponding to the specified property. If the property does not point to an existing file or
+   * directory, an {@link InvalidValueException} is thrown. The property is assumed to be a required property (it must exist and
+   * have a non-whitespace value). If the property does not exist a {@link MissingPropertyException} is thrown. If its value
+   * contains only whitespace, a {@link PropertyNotSetException} is thrown.
    * 
    * @param property
    * @return
@@ -461,10 +439,8 @@ public class ConfigObject {
   /**
    * Set the value of the specified property.
    * 
-   * @param property
-   *          The property to set
-   * @param value
-   *          The value to set it to
+   * @param property The property to set
+   * @param value The value to set it to
    */
   public void set(String property, String value) {
     config.setProperty(property, value);

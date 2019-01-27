@@ -27,7 +27,7 @@ import nl.naturalis.oaipmh.api.IOAIRepository;
  * @author Ayco Holleman
  *
  */
-public class OAIPMHStreamer {
+public class OAIPMHWriter {
 
   private static final List<String> CORE_PACKAGES = Arrays.asList("org.openarchives.oai._2",
       "org.openarchives.oai._2_0.oai_dc", "org.purl.dc.elements._1");
@@ -40,9 +40,9 @@ public class OAIPMHStreamer {
   private final Set<String> pkgs;
   private final Map<String, String> schemas;
 
-  private OAIPMHtype root;
+  private OAIPMHtype oaipmh;
 
-  public OAIPMHStreamer() {
+  public OAIPMHWriter() {
     pkgs = new HashSet<>();
     pkgs.addAll(CORE_PACKAGES);
     schemas = new HashMap<>();
@@ -52,10 +52,10 @@ public class OAIPMHStreamer {
   /**
    * Sets the JAXB root object for OAI-PMH marshallling.
    * 
-   * @param root
+   * @param oaipmh
    */
-  public void setRootElement(OAIPMHtype root) {
-    this.root = root;
+  public void setOAIPMH(OAIPMHtype oaipmh) {
+    this.oaipmh = oaipmh;
   }
 
   /**
@@ -95,12 +95,12 @@ public class OAIPMHStreamer {
   }
 
   /**
-   * Writes the OAI-PMH (set via {@link #setRootElement(OAIPMHtype) setRootElement}) to the specified output stream.
+   * Writes the OAI-PMH (set via {@link #setOAIPMH(OAIPMHtype) setRootElement}) to the specified output stream.
    * 
    * @return
    * @throws JAXBException
    */
-  public void stream(OutputStream out) throws JAXBException {
+  public void write(OutputStream out) throws JAXBException {
     JAXBContext ctx = JAXBContext.newInstance(pkgs.stream().collect(Collectors.joining(":")));
     Marshaller marshaller = ctx.createMarshaller();
     StringBuilder xsds = new StringBuilder(200);
@@ -116,7 +116,7 @@ public class OAIPMHStreamer {
     }
     marshaller.setProperty(JAXB_FORMATTED_OUTPUT, true);
     marshaller.setProperty(JAXB_SCHEMA_LOCATION, xsds.toString());
-    marshaller.marshal(root, out);
+    marshaller.marshal(oaipmh, out);
   }
 
 }

@@ -126,40 +126,40 @@ public class RequestBuilder {
 
   private void setFrom() {
     String arg = getArg(FROM);
-    if (arg == null)
-      return;
-    try {
-      Date date = dateTimeFormatter.parse(arg);
-      request.setFrom(date);
-      request.setDateFormatFrom(dateTimeFormat);
-    } catch (ParseException e) {
+    if (arg != null) {
       try {
-        Date date = dateFormatter.parse(arg);
+        Date date = dateTimeFormatter.parse(arg);
         request.setFrom(date);
-        request.setDateFormatFrom(dateFormat);
-      } catch (ParseException e2) {
-        logger.error("Bad \"from\" date: {}", arg);
-        errors.add(BadArgumentError.badDate(arg));
+        request.setDateFormatFrom(dateTimeFormat);
+      } catch (ParseException e) {
+        try {
+          Date date = dateFormatter.parse(arg);
+          request.setFrom(date);
+          request.setDateFormatFrom(dateFormat);
+        } catch (ParseException e2) {
+          logger.error("Bad \"from\" date: {}", arg);
+          errors.add(BadArgumentError.badDate(arg));
+        }
       }
     }
   }
 
   private void setUntil() {
     String arg = getArg(UNTIL);
-    if (arg == null)
-      return;
-    try {
-      Date date = dateTimeFormatter.parse(arg);
-      request.setUntil(date);
-      request.setDateFormatUntil(dateTimeFormat);
-    } catch (ParseException e) {
+    if (arg != null) {
       try {
-        Date date = dateFormatter.parse(arg);
+        Date date = dateTimeFormatter.parse(arg);
         request.setUntil(date);
-        request.setDateFormatUntil(dateFormat);
-      } catch (ParseException e2) {
-        logger.error("Bad \"until\" date: {}", arg);
-        errors.add(BadArgumentError.badDate(arg));
+        request.setDateFormatUntil(dateTimeFormat);
+      } catch (ParseException e) {
+        try {
+          Date date = dateFormatter.parse(arg);
+          request.setUntil(date);
+          request.setDateFormatUntil(dateFormat);
+        } catch (ParseException e2) {
+          logger.error("Bad \"until\" date: {}", arg);
+          errors.add(BadArgumentError.badDate(arg));
+        }
       }
     }
   }
@@ -217,7 +217,7 @@ public class RequestBuilder {
     if (baseUrl == null) {
       return uriInfo.getRequestUri();
     }
-    StringBuilder sb = new StringBuilder(95);
+    StringBuilder sb = new StringBuilder(100);
     sb.append(baseUrl);
     if (!baseUrl.endsWith("/")) {
       sb.append('/');
@@ -248,7 +248,9 @@ public class RequestBuilder {
     } else {
       sb.append("absent");
     }
-    logger.debug(sb.toString());
+    if (logger.isDebugEnabled()) {
+      logger.debug(sb.toString());
+    }
     return s;
   }
 

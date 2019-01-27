@@ -23,7 +23,7 @@ import nl.naturalis.oaipmh.api.OAIPMHRequest;
 import nl.naturalis.oaipmh.api.XSDNotFoundException;
 import nl.naturalis.oaipmh.util.IOUtil;
 
-import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.createResponseSkeleton;
+import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.createOAIPMHSkeleton;
 import static nl.naturalis.oaipmh.rest.RESTUtil.plainTextResponse;
 import static nl.naturalis.oaipmh.rest.RESTUtil.serverError;
 import static nl.naturalis.oaipmh.rest.RESTUtil.streamingResponse;
@@ -124,7 +124,7 @@ public class OAIPMHResource {
   }
 
   /**
-   * Intercept annoying requests for favicon.
+   * Intercepts and ignores requests for favicon in case we are running under "/".
    * 
    * @return
    */
@@ -137,29 +137,28 @@ public class OAIPMHResource {
 
   private Response handle(String repoGroup, String repoName) {
     logRequest(repoGroup, repoName);
+    RepositoryFactory repoFactory = RepositoryFactory.getInstance();
+    IOAIRepository repo;
     try {
-      RepositoryFactory repoFactory = RepositoryFactory.getInstance();
-      IOAIRepository repository = repoFactory.build(repoGroup, repoName);
-      repository.setRepositoryBaseUrl(getRepoBaseURL(repoGroup, repoName));
-      RequestBuilder requestBuilder = RequestBuilder.newInstance();
-      requestBuilder.setResumptionTokenParser(repository.getResumptionTokenParser());
-      OAIPMHRequest request = requestBuilder.build(uriInfo);
-      if (requestBuilder.getErrors().size() != 0) {
-        OAIPMHtype skeleton = createResponseSkeleton(request);
-        skeleton.getError().addAll(requestBuilder.getErrors());
-        return xmlResponse(skeleton);
-      }
-      if (logger.isDebugEnabled()) {
-        logger.debug("Sending request to OAI repository");
-      }
-      repository.init(request);
-      return new OAIPMHStream(request, repository).toResponse();
-    } catch (Throwable t) {
-      return serverError(t);
+      repo = repoFactory.build(repoGroup, repoName);
+    } catch (RepositoryInitializationException e) {
+      return serverError(e.getMessage());
     }
+    repo.setRepositoryBaseUrl(getRepoBaseUrl(repoGroup, repoName));
+    RequestBuilder requestBuilder = RequestBuilder.newInstance();
+    requestBuilder.setResumptionTokenParser(repo.getResumptionTokenParser());
+    OAIPMHRequest request = requestBuilder.build(uriInfo);
+    if (requestBuilder.getErrors().size() != 0) {
+      OAIPMHtype oaipmh = createOAIPMHSkeleton(request);
+      oaipmh.getError().addAll(requestBuilder.getErrors());
+      return xmlResponse(oaipmh);
+    }
+    logger.debug("Sending request to OAI repository");
+    repo.init(request);
+    return new OAIPMHStreamingOutput(request, repo).toResponse();
   }
 
-  private String getRepoBaseURL(String repoGroup, String repoName) {
+  private String getRepoBaseUrl(String repoGroup, String repoName) {
     String url = Registry.getInstance().getConfig().get("baseUrl");
     if (url == null) {
       url = uriInfo.getBaseUri().toString();
@@ -178,7 +177,7 @@ public class OAIPMHResource {
   }
 
   private static void logRequest(String repoGroup, String repoName) {
-    if (logger.isDebugEnabled()) { // Make start of request easy to find in log file
+    if (logger.isDebugEnabled()) {
       logger.debug("**** [ NEW OAI-PMH REQUEST ] ****");
     }
     String msg;

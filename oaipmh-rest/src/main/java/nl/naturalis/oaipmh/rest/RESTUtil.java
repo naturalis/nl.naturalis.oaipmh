@@ -6,7 +6,6 @@ import java.io.StringWriter;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,7 @@ import nl.naturalis.oaipmh.util.BeanPrinter;
 import static nl.naturalis.oaipmh.util.ExceptionUtil.getRootCauseStackTrace;
 
 /**
- * Provides common functionality for the REST service.
+ * Provides common functionality for the OAI-PMH REST service.
  * 
  * @author Ayco Holleman
  *
@@ -98,16 +97,6 @@ public class RESTUtil {
   }
 
   /**
-   * Generate a 200 (OK) response with a Content-Type header of application/xml and the specified XML string in the response body.
-   * 
-   * @param xml
-   * @return
-   */
-  public static Response xmlResponse(StreamingOutput stream) {
-    return Response.ok(stream, MediaType.APPLICATION_XML).build();
-  }
-
-  /**
    * Generate a 200 (OK) response with a Content-Type header of application/xml and the specified JAXB object converted to XML in
    * the response body.
    * 
@@ -117,11 +106,25 @@ public class RESTUtil {
   public static Response xmlResponse(Object jaxbObject) {
     return Response.ok(jaxbObject, MediaType.APPLICATION_XML).build();
   }
-  
+
+  /**
+   * Reads the contents of the specified input stream and puts it on the HTTP outputstream.
+   * 
+   * @param is
+   * @param mediaType
+   * @return
+   */
   public static Response streamingResponse(InputStream is, MediaType mediaType) {
     return Response.ok().type(mediaType).entity(is).build();
   }
-  
+
+  /**
+   * Reads the contents of the specified input stream and puts it on the HTTP outputstream.
+   * 
+   * @param is
+   * @param mediaType
+   * @return
+   */
   public static Response streamingResponse(InputStream is, String mediaType) {
     return Response.ok().type(mediaType).entity(is).build();
   }

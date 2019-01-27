@@ -1,6 +1,7 @@
 package nl.naturalis.oaipmh.rest;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
@@ -11,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import nl.naturalis.oaipmh.api.IOAIRepository;
 import nl.naturalis.oaipmh.util.ConfigObject;
 import nl.naturalis.oaipmh.util.FileUtil;
-import nl.naturalis.oaipmh.util.IOUtil;
 
 /**
  * Factory class producing {@link IOAIRepository} instances.
@@ -74,38 +74,43 @@ public class RepositoryFactory {
   public IOAIRepository build(String repoGroup, String repoName) throws RepositoryInitializationException {
     String cacheKey = "%" + repoGroup + "/" + repoName + "%";
     logger.debug("Searching cache for requested repository (group={};name={})", repoGroup, repoName);
-    IOAIRepository repository = cache.get(cacheKey);
-    if (repository == null) {
-      ConfigObject config = getRepoConfigFromRestConfig(repoGroup);
-      if (config == null) {
-        config = getRepoConfigFromClasspath(repoGroup);
-      }
-      if (config == null) {
-        String msg = String.format("Missing configuration file for OAI repository \"%s\"", repoGroup);
-        throw new RepositoryInitializationException(msg);
-      }
-      String repoClassName;
-      if (repoName == null)
-        repoClassName = config.required("repo.impl.class");
-      else
-        repoClassName = config.required(repoName + ".repo.impl.class");
-      Class<IOAIRepository> repoClass;
-      try {
-        repoClass = (Class<IOAIRepository>) Class.forName(repoClassName);
-      } catch (ClassNotFoundException e) {
-        String fmt = "Repository implementation class (%s) not found";
-        String msg = String.format(fmt, repoClassName);
-        throw new RepositoryInitializationException(msg);
-      }
-      try {
-        repository = repoClass.getConstructor(new Class<?>[0]).newInstance();
-        repository.setConfiguration(config);
-        cache.put(cacheKey, repository);
-      } catch (Exception e) {
-        throw new RepositoryInitializationException(e);
-      }
+    IOAIRepository repo = cache.get(cacheKey);
+    if (repo != null) {
+      return repo;
     }
-    return repository;
+    ConfigObject config = getRepoConfigFromRestConfig(repoGroup);
+    if (config == null) {
+      config = getRepoConfigFromClasspath(repoGroup);
+    }
+    if (config == null) {
+      String msg = String.format("Missing configuration file for OAI repository \"%s\"", repoGroup);
+      throw new RepositoryInitializationException(msg);
+    }
+    String repoClassName;
+    if (repoName == null) {
+      repoClassName = config.required("repo.impl.class");
+    } else {
+      repoClassName = config.required(repoName + ".repo.impl.class");
+    }
+    Class<IOAIRepository> repoClass;
+    try {
+      repoClass = (Class<IOAIRepository>) Class.forName(repoClassName);
+    } catch (ClassNotFoundException e) {
+      String fmt = "Repository implementation class (%s) not found";
+      String msg = String.format(fmt, repoClassName);
+      throw new RepositoryInitializationException(msg);
+    }
+    try {
+      repo = repoClass.getConstructor(new Class<?>[0]).newInstance();
+    } catch (Throwable t) {
+      if (t instanceof RuntimeException) {
+        throw (RuntimeException) t;
+      }
+      throw new RepositoryInitializationException(t);
+    }
+    repo.setConfiguration(config);
+    cache.put(cacheKey, repo);
+    return repo;
   }
 
   private static ConfigObject getRepoConfigFromRestConfig(String repoGroup)
@@ -137,16 +142,22 @@ public class RepositoryFactory {
       return new ConfigObject(file);
     }
     logger.debug("Searching classpath for file {}", file.getAbsolutePath());
-    InputStream is = getClass().getResourceAsStream(cfgFileName);
-    if (is == null) {
-      cfgFileName = "/" + cfgFileName;
-      is = getClass().getResourceAsStream(cfgFileName);
+    try (InputStream is = getClass().getResourceAsStream(cfgFileName)) {
+      if (is != null) {
+        logConfigLocation(repoGroup, getClass().getResource(cfgFileName).toExternalForm());
+        return new ConfigObject(is);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
-    if (is != null) {
-      logConfigLocation(repoGroup, getClass().getResource(cfgFileName).toExternalForm());
-      ConfigObject cfg = new ConfigObject(is);
-      IOUtil.close(is);
-      return cfg;
+    cfgFileName = "/" + cfgFileName;
+    try (InputStream is = getClass().getResourceAsStream(cfgFileName)) {
+      if (is != null) {
+        logConfigLocation(repoGroup, getClass().getResource(cfgFileName).toExternalForm());
+        return new ConfigObject(is);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
     return null;
   }

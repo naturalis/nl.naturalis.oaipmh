@@ -29,7 +29,7 @@ import nl.naturalis.oaipmh.api.util.ResumptionToken;
 import nl.naturalis.oaipmh.geneious.jaxb.Geneious;
 import nl.naturalis.oaipmh.util.ConfigObject;
 
-import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.createResponseSkeleton;
+import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.createOAIPMHSkeleton;
 import static nl.naturalis.oaipmh.api.util.OAIPMHUtil.dateTimeFormatter;
 import static nl.naturalis.oaipmh.api.util.ObjectFactories.oaiFactory;
 import static nl.naturalis.oaipmh.geneious.GeneiousOAIUtil.checkRequest;
@@ -111,7 +111,7 @@ public abstract class ListRecordsHandler {
       logger.debug("Converting AnnotatedDocument instances to XML");
       logger.debug("N.B. set log level to TRACE to see generated XML");
     }
-    OAIPMHtype root = createResponseSkeleton(request);
+    OAIPMHtype root = createOAIPMHSkeleton(request);
     ListRecordsType listRecords = oaiFactory.createListRecordsType();
     root.setListRecords(listRecords);
     int pageSize = getPageSize();
