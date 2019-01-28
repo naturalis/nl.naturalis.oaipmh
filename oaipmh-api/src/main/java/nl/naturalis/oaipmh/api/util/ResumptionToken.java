@@ -14,16 +14,15 @@ import nl.naturalis.oaipmh.api.IOAIRepository;
 import nl.naturalis.oaipmh.api.IResumptionTokenGenerator;
 import nl.naturalis.oaipmh.api.IResumptionTokenParser;
 import nl.naturalis.oaipmh.api.OAIPMHRequest;
-import nl.naturalis.oaipmh.util.BeanPrinter;
 import nl.naturalis.oaipmh.util.StringUtil;
 
 import static nl.naturalis.oaipmh.api.Argument.FROM;
 import static nl.naturalis.oaipmh.api.Argument.UNTIL;
 
 /**
- * Default implementation of {@link IResumptionTokenParser} and {@link IResumptionTokenGenerator}. This implementation is propably suitable
- * for most {@link IOAIRepository} implementations. This implementation encodes/decodes the following information into/from the resumption
- * token:
+ * Default implementation of {@link IResumptionTokenParser} and {@link IResumptionTokenGenerator}. This implementation is propably
+ * suitable for most {@link IOAIRepository} implementations. This implementation encodes/decodes the following information
+ * into/from the resumption token:
  * <ol>
  * <li>The {@link OAIPMHRequest#getFrom() from date}
  * <li>The {@link OAIPMHRequest#getUntil() until date}
@@ -40,8 +39,9 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
   private static final Logger logger = LoggerFactory.getLogger(ResumptionToken.class);
 
   /*
-   * Use capital 'X' as delimiter between in elements in the resumption token, so it blends in nicely with the elements but can never be
-   * part of them. All elements are converted to base-36 numbers, containing any digit (0-9) and any lowercase letter (a-z).
+   * Use capital 'X' as delimiter between in elements in the resumption token, so it blends in nicely with the elements but can
+   * never be part of them. All elements are converted to base-36 numbers, containing any digit (0-9) and any lowercase letter
+   * (a-z).
    */
   private static final String DELIMITER = "X";
   private static final int RADIX = 36;
@@ -71,7 +71,7 @@ public class ResumptionToken implements IResumptionTokenParser, IResumptionToken
     logger.info("Processing resumption token: " + request.getResumptionToken());
     String[] slices = StringUtil.split(request.getResumptionToken(), DELIMITER);
     if (logger.isDebugEnabled()) {
-      logger.debug("Elements in resumption token:\n" + BeanPrinter.toString(slices));
+      logger.debug("Resumption token elements: {}", Arrays.stream(slices).collect(Collectors.joining(", ")));
     }
     if (slices.length != 5) {
       throw new BadResumptionTokenException(

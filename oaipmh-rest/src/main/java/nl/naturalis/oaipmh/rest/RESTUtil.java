@@ -1,16 +1,12 @@
 package nl.naturalis.oaipmh.rest;
 
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import nl.naturalis.oaipmh.util.BeanPrinter;
 
 import static nl.naturalis.oaipmh.util.ExceptionUtil.getRootCauseStackTrace;
 
@@ -127,19 +123,6 @@ public class RESTUtil {
    */
   public static Response streamingResponse(InputStream is, String mediaType) {
     return Response.ok().type(mediaType).entity(is).build();
-  }
-
-  /**
-   * Returns a print-out of the specified object.
-   * 
-   * @param bean
-   * @return
-   */
-  public static String dump(Object bean) {
-    StringWriter sw = new StringWriter(4096);
-    BeanPrinter bp = new BeanPrinter(new PrintWriter(sw));
-    bp.dump(bean);
-    return sw.toString();
   }
 
 }

@@ -46,13 +46,6 @@ public class AnnotatedDocumentFactory {
     ad.setDocument(doc);
     xml = rs.getString("plugin_document_xml");
     ad.setPluginDocument(parsePluginDocumentXML(xml));
-    if (logger.isTraceEnabled()) {
-      StringWriter sw = new StringWriter(2048);
-      BeanPrinter bp = new BeanPrinter(new PrintWriter(sw));
-      bp.setShowClassNames(false);
-      bp.dump(ad);
-      logger.trace("AnnotatedDocument instance created:\n{}", sw);
-    }
     return ad;
   }
 
@@ -67,12 +60,15 @@ public class AnnotatedDocumentFactory {
       logger.error(ERR_BAD_XML, "plugin_document_xml", e.getMessage(), xml);
       return null;
     }
-    if (root.getTagName().equals("XMLSerialisableRootElement"))
+    if (root.getTagName().equals("XMLSerialisableRootElement")) {
       return new XMLSerialisableRootElementFactory().build(root);
-    if (root.getTagName().equals("DefaultAlignmentDocument"))
+    }
+    if (root.getTagName().equals("DefaultAlignmentDocument")) {
       return new DefaultAlignmentDocumentFactory().build(root);
-    if (root.getTagName().equals("ABIDocument"))
+    }
+    if (root.getTagName().equals("ABIDocument")) {
       return new ABIDocumentFactory().build(root);
+    }
     return null;
   }
 
