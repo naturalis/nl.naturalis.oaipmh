@@ -12,26 +12,26 @@ import nl.naturalis.oaipmh.geneious.DocumentHiddenFields.HiddenField;
 import nl.naturalis.oaipmh.util.DOMUtil;
 
 /**
- * A factory for {@link Document} instances.
+ * A factory for {@link GeneiousDocument} instances.
  * 
  * @author Ayco Holleman
  *
  */
-public class DocumentFactory {
+public class GeneiousDocumentFactory {
 
-  private static final Logger logger = LoggerFactory.getLogger(DocumentFactory.class);
+  private static final Logger logger = LoggerFactory.getLogger(GeneiousDocumentFactory.class);
 
   private static final String ERR_BAD_XML = "Error parsing {}; {}\n\n{}";
 
   /**
-   * Creates a new {@link Document} instance from the XML in the document_xml column of the annotated_document table.
+   * Creates a new {@link GeneiousDocument} instance from the XML in the document_xml column of the annotated_document table.
    * 
    * @param xml
    * @return
    */
-  public static Document createDocument(String xml) {
-    if (logger.isTraceEnabled()) {
-      logger.trace("Parsing contents of column \"document_xml\"");
+  public static GeneiousDocument createDocument(String xml) {
+    if (logger.isDebugEnabled()) {
+      logger.debug("Parsing contents of column \"document_xml\"");
     }
     Element root;
     try {
@@ -40,8 +40,8 @@ public class DocumentFactory {
       logger.error(ERR_BAD_XML, "document_xml", e.getMessage(), xml);
       return null;
     }
-    Document doc = new Document();
-    doc.setDocumentClass(getDocumentClass(root));
+    GeneiousDocument doc = new GeneiousDocument();
+    doc.setDocumentType(getDocumentType(root));
     doc.setHiddenFields(getDocumentHiddenFields(root));
     doc.setFields(getDocumentFields(root));
     doc.setNotes(getDocumentNotes(root));
@@ -50,9 +50,9 @@ public class DocumentFactory {
     return doc;
   }
 
-  private static DocumentClass getDocumentClass(Element root) {
+  private static GeneiousDocumentType getDocumentType(Element root) {
     String s = root.getAttribute("class");
-    DocumentClass documentClass = DocumentClass.parse(s);
+    GeneiousDocumentType documentClass = GeneiousDocumentType.parse(s);
     return documentClass;
   }
 

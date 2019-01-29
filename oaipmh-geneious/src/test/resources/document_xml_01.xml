@@ -11,9 +11,7 @@
 		</cache_urn>
 		<nucleotideSequenceWithQualityCount type="int">1
 		</nucleotideSequenceWithQualityCount>
-		<description>Assembly of 2 reads:
-			e4010125023_Cyp_lon_MJ243_COI-A09_M13R_B17_040.ab1 (reversed),
-			e4010125023_Cyp_lon_MJ243_COI-A09_M13F_A17_040.ab1</description>
+		<description>FOO</description>
 		<overrideDocumentType>com.biomatters.geneious.publicapi.documents.sequence.NucleotideSequenceDocument</overrideDocumentType>
 		<cache_plugin_document_urn></cache_plugin_document_urn>
 		<strong_referenced_documents type="list">

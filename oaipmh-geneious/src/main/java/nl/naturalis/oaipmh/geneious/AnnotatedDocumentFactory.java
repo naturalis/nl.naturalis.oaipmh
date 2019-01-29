@@ -42,7 +42,7 @@ public class AnnotatedDocumentFactory {
     ad.setModified(rs.getLong("modified"));
     ad.setReferenceCount(rs.getInt("reference_count"));
     String xml = rs.getString("document_xml");
-    Document doc = DocumentFactory.createDocument(xml);
+    GeneiousDocument doc = GeneiousDocumentFactory.createDocument(xml);
     ad.setDocument(doc);
     xml = rs.getString("plugin_document_xml");
     ad.setPluginDocument(parsePluginDocumentXML(xml));

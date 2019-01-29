@@ -10,28 +10,22 @@
 	</parent>
 
 	<artifactId>oaipmh-api</artifactId>
-	<name>OAIPMH API</name>
-	<description>Java API for accessing OAI repositories</description>
+	<name>OAI-PMH service: API</name>
 
 	<dependencies>
-		<!-- MODULES -->
 		<dependency>
 			<groupId>nl.naturalis.oaipmh</groupId>
 			<artifactId>oaipmh-util</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- DROPWIZARD -->
 		<dependency>
 			<groupId>io.dropwizard</groupId>
 			<artifactId>dropwizard-core</artifactId>
 		</dependency>
-		<!-- JAVAX -->
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 		</dependency>
-		<!-- LOGGING -->
-		<!-- TEST -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

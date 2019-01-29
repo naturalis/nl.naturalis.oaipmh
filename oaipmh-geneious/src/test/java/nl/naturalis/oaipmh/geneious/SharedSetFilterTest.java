@@ -20,7 +20,7 @@ public class SharedSetFilterTest {
 		// Superseded by ad2 (discard!)
 		AnnotatedDocument ad0 = new AnnotatedDocument();
 		ad0.setId(100);
-		Document doc0 = new Document();
+		GeneiousDocument doc0 = new GeneiousDocument();
 		ad0.setDocument(doc0);
 		DocumentNotes notes0 = new DocumentNotes();
 		doc0.setNotes(notes0);
@@ -31,7 +31,7 @@ public class SharedSetFilterTest {
 		// Superseded by ad2 (discard!)
 		AnnotatedDocument ad1 = new AnnotatedDocument();
 		ad1.setId(101);
-		Document doc1 = new Document();
+		GeneiousDocument doc1 = new GeneiousDocument();
 		ad1.setDocument(doc1);
 		DocumentNotes notes1 = new DocumentNotes();
 		doc1.setNotes(notes1);
@@ -42,7 +42,7 @@ public class SharedSetFilterTest {
 		// Select! (1)
 		AnnotatedDocument ad2 = new AnnotatedDocument();
 		ad2.setId(102);
-		Document doc2 = new Document();
+		GeneiousDocument doc2 = new GeneiousDocument();
 		ad2.setDocument(doc2);
 		DocumentNotes notes2 = new DocumentNotes();
 		doc2.setNotes(notes2);
@@ -53,7 +53,7 @@ public class SharedSetFilterTest {
 		// Select! (2)
 		AnnotatedDocument ad3 = new AnnotatedDocument();
 		ad3.setId(103);
-		Document doc3 = new Document();
+		GeneiousDocument doc3 = new GeneiousDocument();
 		ad3.setDocument(doc3);
 		DocumentNotes notes3 = new DocumentNotes();
 		doc3.setNotes(notes3);
@@ -64,7 +64,7 @@ public class SharedSetFilterTest {
 		// Select! (3)
 		AnnotatedDocument ad4 = new AnnotatedDocument();
 		ad4.setId(104);
-		Document doc4 = new Document();
+		GeneiousDocument doc4 = new GeneiousDocument();
 		ad4.setDocument(doc4);
 		DocumentNotes notes4 = new DocumentNotes();
 		doc4.setNotes(notes4);
@@ -75,7 +75,7 @@ public class SharedSetFilterTest {
 		// Superseded by ad8 (discard!)
 		AnnotatedDocument ad5 = new AnnotatedDocument();
 		ad5.setId(105);
-		Document doc5 = new Document();
+		GeneiousDocument doc5 = new GeneiousDocument();
 		ad5.setDocument(doc5);
 		DocumentNotes notes5 = new DocumentNotes();
 		doc5.setNotes(notes5);
@@ -86,7 +86,7 @@ public class SharedSetFilterTest {
 		// Superseded by ad8 (discard!)
 		AnnotatedDocument ad6 = new AnnotatedDocument();
 		ad6.setId(106);
-		Document doc6 = new Document();
+		GeneiousDocument doc6 = new GeneiousDocument();
 		ad6.setDocument(doc6);
 		DocumentNotes notes6 = new DocumentNotes();
 		doc6.setNotes(notes6);
@@ -97,7 +97,7 @@ public class SharedSetFilterTest {
 		// Superseded by ad8 (discard!)
 		AnnotatedDocument ad7 = new AnnotatedDocument();
 		ad7.setId(107);
-		Document doc7 = new Document();
+		GeneiousDocument doc7 = new GeneiousDocument();
 		ad7.setDocument(doc7);
 		DocumentNotes notes7 = new DocumentNotes();
 		doc7.setNotes(notes7);
@@ -108,7 +108,7 @@ public class SharedSetFilterTest {
 		// Select! (4)
 		AnnotatedDocument ad8 = new AnnotatedDocument();
 		ad8.setId(108);
-		Document doc8 = new Document();
+		GeneiousDocument doc8 = new GeneiousDocument();
 		ad8.setDocument(doc8);
 		DocumentNotes notes8 = new DocumentNotes();
 		doc8.setNotes(notes8);
@@ -119,7 +119,7 @@ public class SharedSetFilterTest {
 		// Superseded by ad10 (discard!)
 		AnnotatedDocument ad9 = new AnnotatedDocument();
 		ad9.setId(109);
-		Document doc9 = new Document();
+		GeneiousDocument doc9 = new GeneiousDocument();
 		ad9.setDocument(doc9);
 		DocumentNotes notes9 = new DocumentNotes();
 		doc9.setNotes(notes9);
@@ -130,7 +130,7 @@ public class SharedSetFilterTest {
 		// Select! (5)
 		AnnotatedDocument ad10 = new AnnotatedDocument();
 		ad10.setId(110);
-		Document doc10 = new Document();
+		GeneiousDocument doc10 = new GeneiousDocument();
 		ad10.setDocument(doc10);
 		DocumentNotes notes10 = new DocumentNotes();
 		doc10.setNotes(notes10);

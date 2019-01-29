@@ -12,10 +12,11 @@
 	<artifactId>oaipmh-rest</artifactId>
 	<packaging>war</packaging>
 
-	<name>OAIPMH REST services</name>
-	<description>REST API of the OAI-PMH framework</description>
+	<name>OAI-PMH service: REST layer</name>
 
 	<dependencies>
+	
+		<!-- MODULES -->
 		<dependency>
 			<groupId>nl.naturalis.oaipmh</groupId>
 			<artifactId>oaipmh-util</artifactId>
@@ -32,19 +33,10 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- DROPWIZARD & JAVAEE -->
 		<dependency>
 			<groupId>io.dropwizard</groupId>
 			<artifactId>dropwizard-core</artifactId>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -54,11 +46,14 @@
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>
 		</dependency>
+		
+		<!-- TEST -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 </project>

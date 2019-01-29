@@ -1,6 +1,7 @@
 package nl.naturalis.oaipmh.geneious;
 
 import java.util.EnumMap;
+import java.util.Objects;
 
 /**
  * A {@code DocumentFields} instance maintains the values of all possibly relevant elements under the &lt;fields&gt; element
@@ -60,4 +61,18 @@ public class DocumentFields {
     return data.get(note);
   }
 
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    DocumentFields other = (DocumentFields) obj;
+    return Objects.equals(data, other.data);
+  }
+
+  public int hashCode() {
+    return Objects.hash(data);
+  }
 }

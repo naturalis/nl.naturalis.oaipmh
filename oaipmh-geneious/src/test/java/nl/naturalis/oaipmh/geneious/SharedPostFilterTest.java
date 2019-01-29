@@ -10,7 +10,7 @@ import static nl.naturalis.oaipmh.geneious.DocumentNotes.Note.RegistrationNumber
 import static org.junit.Assert.*;
 import nl.naturalis.oaipmh.geneious.AnnotatedDocument;
 import nl.naturalis.oaipmh.geneious.DefaultAlignmentDocument;
-import nl.naturalis.oaipmh.geneious.Document;
+import nl.naturalis.oaipmh.geneious.GeneiousDocument;
 import nl.naturalis.oaipmh.geneious.DocumentNotes;
 import nl.naturalis.oaipmh.geneious.SharedPostFilter;
 import nl.naturalis.oaipmh.geneious.DocumentNotes.Note;
@@ -35,7 +35,7 @@ public class SharedPostFilterTest {
 		SharedPostFilter filter = new SharedPostFilter();
 		AnnotatedDocument ad = new AnnotatedDocument();
 		assertFalse("01", filter.accept(ad));
-		Document document = new Document();
+		GeneiousDocument document = new GeneiousDocument();
 		ad.setDocument(document);
 		DocumentNotes notes = new DocumentNotes();
 		document.setNotes(notes);

@@ -10,6 +10,7 @@
 	</parent>
 	
 	<artifactId>oaipmh-util</artifactId>
-	<description>OAI-PMH utilities module</description>
+	
+	<name>OAI-PMH service: utility library</name>
 	
 </project>

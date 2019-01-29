@@ -7,7 +7,7 @@ package nl.naturalis.oaipmh.geneious;
  * @author Ayco Holleman
  *
  */
-public enum DocumentClass {
+public enum GeneiousDocumentType {
 
 	GenBankNucleotideSequence("com.biomatters.plugins.ncbi.documents.GenBankNucleotideSequence"),
 	OligoSequenceDocument("com.biomatters.geneious.publicapi.implementations.sequence.OligoSequenceDocument"),
@@ -20,9 +20,9 @@ public enum DocumentClass {
 	DefaultNucleotideGraphSequence("com.biomatters.geneious.publicapi.implementations.sequence.DefaultNucleotideGraphSequence"),
 	ABIPluginDocument("com.biomatters.plugins.abi.ABIPluginDocument");
 
-	public static DocumentClass parse(String className)
+	public static GeneiousDocumentType parse(String className)
 	{
-		for (DocumentClass type : values()) {
+		for (GeneiousDocumentType type : values()) {
 			if (type.className.equals(className))
 				return type;
 		}
@@ -31,7 +31,7 @@ public enum DocumentClass {
 
 	private final String className;
 
-	private DocumentClass(String className)
+	private GeneiousDocumentType(String className)
 	{
 		this.className = className;
 	}

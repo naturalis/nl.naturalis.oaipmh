@@ -13,7 +13,7 @@ public class AnnotatedDocument {
   private long modified;
   private String urn;
   private int referenceCount;
-  private Document document;
+  private GeneiousDocument document;
   private PluginDocument pluginDocument;
 
   /**
@@ -83,11 +83,11 @@ public class AnnotatedDocument {
     this.referenceCount = referenceCount;
   }
 
-  public Document getDocument() {
+  public GeneiousDocument getDocument() {
     return document;
   }
 
-  public void setDocument(Document document) {
+  public void setDocument(GeneiousDocument document) {
     this.document = document;
   }
 

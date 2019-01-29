@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-import org.apache.logging.log4j.util.Strings;
+import com.google.common.base.Strings;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,7 +120,7 @@ public class RepositoryFactory {
     String pattern = REPO_CONFIG_FILENAME_PATTERN;
     String key = String.format(pattern, repoGroup) + ".file";
     String val = restConfig.get(key);
-    if (Strings.isBlank(val)) {
+    if (Strings.isNullOrEmpty(val)) {
       return null;
     }
     logger.debug("Searching for {}", val);

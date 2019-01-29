@@ -13,9 +13,9 @@ import nl.naturalis.oaipmh.geneious.DocumentNotes.Note;
  * @author Ayco Holleman
  *
  */
-public class Document {
+public class GeneiousDocument {
 
-  private DocumentClass documentClass;
+  private GeneiousDocumentType type;
   private List<String> referencedDocuments;
   private DocumentHiddenFields hiddenFields;
   private DocumentFields fields;
@@ -68,8 +68,8 @@ public class Document {
    * 
    * @return
    */
-  public DocumentClass getDocumentClass() {
-    return documentClass;
+  public GeneiousDocumentType getDocumentType() {
+    return type;
   }
 
   /**
@@ -77,8 +77,8 @@ public class Document {
    * 
    * @return
    */
-  public void setDocumentClass(DocumentClass documentClass) {
-    this.documentClass = documentClass;
+  public void setDocumentType(GeneiousDocumentType documentType) {
+    this.type = documentType;
   }
 
   /**
@@ -162,12 +162,16 @@ public class Document {
     if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
-    Document other = (Document) obj;
-    return Objects.equals(documentClass, other.documentClass)
+    GeneiousDocument other = (GeneiousDocument) obj;
+    return Objects.equals(type, other.type)
         && Objects.deepEquals(referencedDocuments, other.referencedDocuments)
         && Objects.equals(hiddenFields, other.hiddenFields)
         && Objects.equals(fields, other.fields)
         && Objects.equals(notes, other.notes);
+  }
+
+  public int hashCode() {
+    return Objects.hash(type, referencedDocuments, hiddenFields, fields, notes);
   }
 
 }
