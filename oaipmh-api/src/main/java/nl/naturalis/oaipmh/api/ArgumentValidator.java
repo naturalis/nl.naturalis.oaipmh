@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 
 import org.openarchives.oai._2.OAIPMHerrorType;
 import org.openarchives.oai._2.VerbType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Abstract base class for classes that check the validity of the {@link Argument arguments} passed along with a {@link VerbType
@@ -20,9 +18,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public abstract class ArgumentValidator {
-
-  @SuppressWarnings("unused")
-  private static final Logger logger = LoggerFactory.getLogger(ArgumentValidator.class);
 
   public ArgumentValidator() {}
 
